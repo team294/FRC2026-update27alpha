@@ -9,8 +9,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import org.wpilib.driverstation.DriverStation;
-import org.wpilib.driverstation.DriverStation.Alliance;
+import org.wpilib.driverstation.MatchState;
+import org.wpilib.driverstation.RobotState;
+import org.wpilib.driverstation.Alliance;
 import org.wpilib.smartdashboard.SendableChooser;
 import org.wpilib.smartdashboard.SmartDashboard;
 import frc.robot.utilities.DataLogUtil.RotationWhenDisabled;
@@ -42,12 +43,12 @@ public class AllianceSelection {
 		SmartDashboard.putData("Alliance Selection", allianceChooser);
 
     // Set Alliance on Elastic
-    Optional<Alliance> ally = DriverStation.getAlliance();
+    Optional<Alliance> ally = MatchState.getAlliance();
     if (ally.isPresent()) {
       setAlliance(ally.get());
       DataLogUtil.writeMessageEcho("Alliance Selection: Init, Alliance from DriverStation =", alliance.name());
     } else {
-      setAlliance(Alliance.Blue);
+      setAlliance(Alliance.BLUE);
       DataLogUtil.writeMessageEcho("Alliance Selection: Init, DriverStation not present - default to Blue. ", alliance.name());
     }
   }
@@ -60,8 +61,8 @@ public class AllianceSelection {
     this.alliance = alliance;
     DataLogUtil.writeMessageEcho("Alliance Selection: SetAlliance, Alliance Chooser =", allianceChooser.getSelected().name(), ", Alliance =", alliance.name());
 
-    SmartDashboard.putBoolean("Alliance Blue", alliance != Alliance.Red);
-    SmartDashboard.putBoolean("Alliance Red", alliance != Alliance.Blue);
+    SmartDashboard.putBoolean("Alliance Blue", alliance != Alliance.RED);
+    SmartDashboard.putBoolean("Alliance Red", alliance != Alliance.BLUE);
     SmartDashboard.putString("Alliance", alliance.name());
   }
 
@@ -91,16 +92,16 @@ public class AllianceSelection {
       switch (allianceChooser.getSelected()) {
         case Auto:
           // Do not auto change alliance in Auto or Teleop mode
-          if (DriverStation.isDisabled()) {
-            Optional<Alliance> ally = DriverStation.getAlliance();
+          if (RobotState.isDisabled()) {
+            Optional<Alliance> ally = MatchState.getAlliance();
             if (ally.isPresent()) newAlliance = ally.get();
           }
           break;
         case Red:
-          newAlliance = Alliance.Red;
+          newAlliance = Alliance.RED;
           break;
         case Blue:
-          newAlliance = Alliance.Blue;
+          newAlliance = Alliance.BLUE;
           break;
       }
 

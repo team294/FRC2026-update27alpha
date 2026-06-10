@@ -2,9 +2,9 @@ package frc.robot.utilities;
 
 import static frc.robot.Constants.ElasticKeyConstants.ElasticKey.*;
 
-import org.wpilib.driverstation.DriverStation;
+import org.wpilib.driverstation.MatchState;
 import org.wpilib.system.Timer;
-import org.wpilib.driverstation.DriverStation.Alliance;
+import org.wpilib.driverstation.Alliance;
 import org.wpilib.smartdashboard.SmartDashboard;
 
 public class ShiftHelper {
@@ -26,7 +26,7 @@ public class ShiftHelper {
      * @return true = blue won, false = red won  
      */
     public boolean blueWonAuto() {
-        return DriverStation.getGameSpecificMessage().equals("B"); // TODO Test Blue won auto function
+        return MatchState.getGameData().get().equals("B"); // TODO Test Blue won auto function
     }
 
     /**
@@ -62,7 +62,7 @@ public class ShiftHelper {
 
         if (teleopTimer.get() <= 10 || teleopTimer.get() >= 130) {
             return true;
-        } else if (alliance == Alliance.Blue) {
+        } else if (alliance == Alliance.BLUE) {
             return isCurrentShiftBlue();
         } else {
             return !isCurrentShiftBlue();

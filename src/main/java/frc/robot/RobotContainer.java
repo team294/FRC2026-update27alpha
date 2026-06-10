@@ -26,10 +26,10 @@ import com.ctre.phoenix6.SignalLogger;
 import choreo.util.ChoreoAllianceFlipUtil;
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.util.datalog.DataLog;
-import org.wpilib.util.datalog.DoubleLogEntry;
+import org.wpilib.datalog.DataLog;
+import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.system.DataLogManager;
-import org.wpilib.driverstation.DriverStation.Alliance;
+import org.wpilib.driverstation.Alliance;
 import org.wpilib.driverstation.Joystick;
 import org.wpilib.system.RobotController;
 import org.wpilib.system.Timer;
@@ -118,7 +118,7 @@ public class RobotContainer {
     // Set initial robot position on field. This takes place a while after the drivetrain is created, so after any CANbus delays.
     // Set initial location to (0,0) and facing away from driver (regardless of alliance color).
     driveTrain.resetPose(new Pose2d(0.0, 0.0, 
-      allianceSelection.getAlliance() == Alliance.Red ? Rotation2d.k180deg : Rotation2d.kZero));
+      allianceSelection.getAlliance() == Alliance.RED ? Rotation2d.k180deg : Rotation2d.kZero));
   }
 
   private void configureElastic() {
@@ -413,7 +413,7 @@ public class RobotContainer {
     coP[7].onTrue(either(
       new DriveResetPose(180, false, driveTrain), 
       new DriveResetPose(0, false, driveTrain), 
-      () -> allianceSelection.getAlliance() == Alliance.Red));
+      () -> allianceSelection.getAlliance() == Alliance.RED));
 
     // execute climb when switch flipped forwards
     coP[8].onTrue(new ClimberSetPosition(ClimberPosition.CLIMB, climber).alongWith(new InstantCommand(() -> LEDEventUtil.sendEvent(LEDStripEvents.CLIMBING))));
