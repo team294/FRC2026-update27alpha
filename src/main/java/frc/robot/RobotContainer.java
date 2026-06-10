@@ -37,7 +37,7 @@ import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
 import org.wpilib.command2.CommandScheduler;
 import org.wpilib.command2.InstantCommand;
-import org.wpilib.command2.button.CommandXboxController;
+import org.wpilib.command2.button.CommandNiDsXboxController;
 import org.wpilib.command2.button.JoystickButton;
 import org.wpilib.command2.button.Trigger;
 
@@ -67,7 +67,7 @@ public class RobotContainer {
   private final Joystick leftJoystick = new Joystick(OIConstants.usbLeftJoystick);
   private final Joystick rightJoystick = new Joystick(OIConstants.usbRightJoystick);
   private final Joystick coPanel = new Joystick(OIConstants.usbCoPanel);
-  private final CommandXboxController xboxController = new CommandXboxController(OIConstants.usbXboxController);
+  private final CommandNiDsXboxController xboxController = new CommandNiDsXboxController(OIConstants.usbXboxController);
 
   // Define other utilities
   private final TrajectoryCache trajectoryCache = new TrajectoryCache();

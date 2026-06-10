@@ -5,7 +5,7 @@ import static org.wpilib.command2.Commands.*;
 import org.wpilib.math.util.MathUtil;
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.driverstation.DriverStation.Alliance;
+import org.wpilib.driverstation.Alliance;
 import org.wpilib.driverstation.Joystick;
 import org.wpilib.system.Timer;
 import org.wpilib.smartdashboard.SendableChooser;
@@ -187,14 +187,14 @@ public class AutoSelection {
 		if (autoPlan == RoutineSelectionOption.NONE.value) {
 			// Starting position = facing drivers
 			autoSelectionOption = RoutineSelectionOption.NONE;
-			autonomousCommandMain = new DriveResetPose(allianceSelection.getAlliance() == Alliance.Red ? 0 : 180, false, driveTrain);
+			autonomousCommandMain = new DriveResetPose(allianceSelection.getAlliance() == Alliance.RED ? 0 : 180, false, driveTrain);
 		}
 
 		else if (autoPlan == RoutineSelectionOption.ShootPreload.value) {
 			// Starting position = facing drivers
 			autoSelectionOption = RoutineSelectionOption.ShootPreload;
 			autonomousCommandMain = sequence(
-										new DriveResetPose(allianceSelection.getAlliance() == Alliance.Red ? 180 : 0, false, driveTrain),
+										new DriveResetPose(allianceSelection.getAlliance() == Alliance.RED ? 180 : 0, false, driveTrain),
 										new ShootPreload(EndType.waitForSetPoint, false, intake, feeder, turret, shooter, climber, driveTrain, field, allianceSelection, trajectoryCache)
 									);
 									
