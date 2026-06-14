@@ -19,25 +19,26 @@ import com.ctre.phoenix6.signals.MagnetHealthValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
-import org.wpilib.math.util.MathUtil;
 import org.wpilib.units.measure.Angle;
 import org.wpilib.units.measure.AngularVelocity;
 import org.wpilib.units.measure.Current;
 import org.wpilib.units.measure.Temperature;
 import org.wpilib.units.measure.Voltage;
-import org.wpilib.util.datalog.DataLog;
-import org.wpilib.util.datalog.DoubleLogEntry;
+import org.wpilib.datalog.DataLog;
+import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.system.DataLogManager;
-import org.wpilib.driverstation.DriverStation;
+import org.wpilib.driverstation.RobotState;
 import org.wpilib.system.RobotController;
 import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.SubsystemBase;
+
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.IntakeConstants.IntakeDeployAngle;
 import frc.robot.Constants.Ports;
 import frc.robot.utilities.DataLogUtil;
 // import frc.robot.utilities.LEDEventUtil;
 import frc.robot.utilities.Loggable;
+import frc.robot.utilities.MathBCR;
 import frc.robot.utilities.RobotPreferences;
 import frc.robot.utilities.Wait;
 import frc.robot.utilities.DataLogUtil.RotationWhenDisabled;
@@ -50,9 +51,9 @@ public class Intake extends SubsystemBase implements Loggable{
   private String subsystemName;         // Used in file logging and SmartDashboard for naming log entries
 
   // Motors and CANcoder
-  private final TalonFX intakeRollerMotor = new TalonFX(Ports.CANIntakeRollerMotor);
-  private final TalonFX intakeDeployMotor = new TalonFX(Ports.CANIntakeDeployMotor);
-  private final CANcoder intakeDeployCANcoder = new CANcoder(Ports.CANIntakeDeployEncoder);
+  private final TalonFX intakeRollerMotor = new TalonFX(Ports.CANIntakeRollerMotor, Ports.CANbusMain);
+  private final TalonFX intakeDeployMotor = new TalonFX(Ports.CANIntakeDeployMotor, Ports.CANbusMain);
+  private final CANcoder intakeDeployCANcoder = new CANcoder(Ports.CANIntakeDeployEncoder, Ports.CANbusMain);
 
   // Configurators
   private final TalonFXConfigurator intakeRollerConfigurator = intakeRollerMotor.getConfigurator();
@@ -354,7 +355,7 @@ public class Intake extends SubsystemBase implements Loggable{
     isIntakeDeployInPositionControl = true;
 
     // Keep the position in a usable range
-    intakeDeploySafeSetpointAngle = MathUtil.clamp(angle, IntakeDeployAngle.LOWER_LIMIT.value, IntakeDeployAngle.UPPER_LIMIT.value);
+    intakeDeploySafeSetpointAngle = MathBCR.clamp(angle, IntakeDeployAngle.LOWER_LIMIT.value, IntakeDeployAngle.UPPER_LIMIT.value);
 
     // Set the position by converting degrees to encoder rotations and modifying feed foward
     intakeDeployMotor.setControl(intakeDeployMMVoltageControl
@@ -588,9 +589,9 @@ public class Intake extends SubsystemBase implements Loggable{
    * @param logWhenDisabled true = log always, false = only log when enabled
    */
   public void updateLog(boolean logWhenDisabled) {
-    if (!logWhenDisabled && DriverStation.isDisabled()) return;
+    if (!logWhenDisabled && RobotState.isDisabled()) return;
 
-    long timeNow = RobotController.getFPGATime();
+    long timeNow = RobotController.getTime();
 
     dLogRollerTemp.append(intakeRollerTemp.refresh().getValueAsDouble(), timeNow);
     dLogRollerVoltage.append(intakeRollerVoltage.refresh().getValueAsDouble(), timeNow);

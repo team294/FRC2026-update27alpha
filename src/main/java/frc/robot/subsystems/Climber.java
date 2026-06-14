@@ -14,21 +14,21 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import org.wpilib.math.util.MathUtil;
 import org.wpilib.units.measure.Angle;
 import org.wpilib.units.measure.AngularVelocity;
 import org.wpilib.units.measure.Current;
 import org.wpilib.units.measure.Temperature;
 import org.wpilib.units.measure.Voltage;
-import org.wpilib.util.datalog.BooleanLogEntry;
-import org.wpilib.util.datalog.DataLog;
-import org.wpilib.util.datalog.DoubleLogEntry;
+import org.wpilib.datalog.BooleanLogEntry;
+import org.wpilib.datalog.DataLog;
+import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.hardware.discrete.DigitalInput;
-import org.wpilib.driverstation.DriverStation;
+import org.wpilib.driverstation.RobotState;
 import org.wpilib.system.RobotController;
 import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.SubsystemBase;
+
 import frc.robot.Constants.Ports;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.ClimberConstants.ClimberLimit;
@@ -36,6 +36,7 @@ import frc.robot.Constants.ClimberConstants.ClimberPosition;
 import frc.robot.Constants.ClimberConstants.ClimberSide;
 import frc.robot.utilities.DataLogUtil;
 import frc.robot.utilities.Loggable;
+import frc.robot.utilities.MathBCR;
 import frc.robot.utilities.RobotPreferences;
 import frc.robot.utilities.Wait;
 import frc.robot.utilities.DataLogUtil.RotationWhenDisabled;
@@ -46,8 +47,8 @@ public class Climber extends SubsystemBase implements Loggable {
   private String subsystemName;         // Used in file logging and SmartDashboard for naming log entries
 
   // Motors
-  private final TalonFX climberLeftMotor = new TalonFX(Ports.CANClimberMotorLeft);
-  private final TalonFX climberRightMotor = new TalonFX(Ports.CANClimberMotorRight);
+  private final TalonFX climberLeftMotor = new TalonFX(Ports.CANClimberMotorLeft, Ports.CANbusMain);
+  private final TalonFX climberRightMotor = new TalonFX(Ports.CANClimberMotorRight, Ports.CANbusMain);
 
   // Sensors
   private final DigitalInput lowerLimitLeft = new DigitalInput(Ports.DIOClimberLowerLimitLeftSensor);
@@ -238,9 +239,9 @@ public class Climber extends SubsystemBase implements Loggable {
     isClimberInPositionControl = false;
 
     if (climberCalibrated) {
-      percent = MathUtil.clamp(percent, -ClimberConstants.maxPercentOutput, ClimberConstants.maxPercentOutput);
+      percent = MathBCR.clamp(percent, -ClimberConstants.maxPercentOutput, ClimberConstants.maxPercentOutput);
     } else {
-      percent = MathUtil.clamp(percent, -ClimberConstants.maxUncalibratedPercentOutput, ClimberConstants.maxUncalibratedPercentOutput);
+      percent = MathBCR.clamp(percent, -ClimberConstants.maxUncalibratedPercentOutput, ClimberConstants.maxUncalibratedPercentOutput);
     }
 
     if (side == ClimberSide.LEFT) {
@@ -283,7 +284,7 @@ public class Climber extends SubsystemBase implements Loggable {
    */
   public void setClimberPosition(double position) {
     if (climberCalibrated) {
-      setpointPosition = MathUtil.clamp(position, ClimberPosition.LOWER_LIMIT.value, ClimberPosition.UPPER_LIMIT.value);
+      setpointPosition = MathBCR.clamp(position, ClimberPosition.LOWER_LIMIT.value, ClimberPosition.UPPER_LIMIT.value);
       isClimberInPositionControl = true;
 
       climberLeftMotor.setControl(climberMMVoltageControl.withPosition(convertClimberInchesToEncoderRotations(setpointPosition) + leftEncoderZero));
@@ -530,17 +531,17 @@ public class Climber extends SubsystemBase implements Loggable {
    * @param logWhenDisabled true = write when robot is disabled, false = only write when robot is enabled
    */
   public void updateLog(boolean logWhenDisabled) {
-    if (logWhenDisabled || !DriverStation.isDisabled()) {
-      long timeNow = RobotController.getFPGATime();
+    if (logWhenDisabled || !RobotState.isDisabled()) {
+      long timeNow = RobotController.getTime();
 
       dLogClimberLeftTemp.append(getClimberTemp(ClimberSide.LEFT), timeNow);
       dLogClimberLeftCurrent.append(getClimberAmps(ClimberSide.LEFT), timeNow);
       dLogClimberLeftVoltage.append(getClimberVoltage(ClimberSide.LEFT), timeNow);
-      dLogClimberLeftPosition.append(getClimberPositionInches(ClimberSide.LEFT));
+      dLogClimberLeftPosition.append(getClimberPositionInches(ClimberSide.LEFT), timeNow);
       dLogClimberRightTemp.append(getClimberTemp(ClimberSide.RIGHT), timeNow);
       dLogClimberRightCurrent.append(getClimberAmps(ClimberSide.RIGHT), timeNow);
       dLogClimberRightVoltage.append(getClimberVoltage(ClimberSide.RIGHT), timeNow);
-      dLogClimberRightPosition.append(getClimberPositionInches(ClimberSide.RIGHT));
+      dLogClimberRightPosition.append(getClimberPositionInches(ClimberSide.RIGHT), timeNow);
 
       dLogClimberLeftCalibrated.append(climberLeftCalibrated);
       dLogClimberRightCalibrated.append(climberRightCalibrated);

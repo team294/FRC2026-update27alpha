@@ -9,9 +9,6 @@ package frc.robot.utilities;
 
 import java.util.Objects;
 
-import org.wpilib.hardware.hal.FRCNetComm.tResourceType;
-import org.wpilib.hardware.hal.HAL;
-
 /**
  * A trapezoid-shaped velocity profile.
  *
@@ -53,7 +50,6 @@ public class TrapezoidProfileBCR {
     public double maxAcceleration;
 
     public Constraints() {
-      HAL.report(tResourceType.kResourceType_TrapezoidProfile, 1);
     }
 
     /**
@@ -64,7 +60,6 @@ public class TrapezoidProfileBCR {
     public Constraints(double maxVelocity, double maxAcceleration) {
       this.maxVelocity = maxVelocity;
       this.maxAcceleration = maxAcceleration;
-      HAL.report(tResourceType.kResourceType_TrapezoidProfile, 1);
     }
   }
 

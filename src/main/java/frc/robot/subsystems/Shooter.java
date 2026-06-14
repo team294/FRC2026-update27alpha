@@ -20,25 +20,26 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.MotorArrangementValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import org.wpilib.math.util.MathUtil;
 import org.wpilib.math.controller.PIDController;
 import org.wpilib.units.measure.Angle;
 import org.wpilib.units.measure.AngularVelocity;
 import org.wpilib.units.measure.Current;
 import org.wpilib.units.measure.Temperature;
 import org.wpilib.units.measure.Voltage;
-import org.wpilib.util.datalog.BooleanLogEntry;
-import org.wpilib.util.datalog.DataLog;
-import org.wpilib.util.datalog.DoubleLogEntry;
+import org.wpilib.datalog.BooleanLogEntry;
+import org.wpilib.datalog.DataLog;
+import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.system.DataLogManager;
-import org.wpilib.driverstation.DriverStation;
+import org.wpilib.driverstation.RobotState;
 import org.wpilib.system.RobotController;
 import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.SubsystemBase;
+
 import frc.robot.Constants.Ports;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.utilities.DataLogUtil;
 import frc.robot.utilities.Loggable;
+import frc.robot.utilities.MathBCR;
 import frc.robot.utilities.RobotPreferences;
 import frc.robot.utilities.DataLogUtil.RotationWhenDisabled;
 
@@ -51,15 +52,15 @@ public class Shooter extends SubsystemBase implements Loggable {
 
 
   // Motor, configurator, and feedforward control objects
-  private final TalonFX shooterMotor1 = new TalonFX(Ports.CANShooterMotor1);
-  private final TalonFX shooterMotor2 = new TalonFX(Ports.CANShooterMotor2);
+  private final TalonFX shooterMotor1 = new TalonFX(Ports.CANShooterMotor1, Ports.CANbusMain);
+  private final TalonFX shooterMotor2 = new TalonFX(Ports.CANShooterMotor2, Ports.CANbusMain);
   private final TalonFXConfigurator shooterMotor1Configurator;
   private final TalonFXConfigurator shooterMotor2Configurator;
   private TalonFXConfiguration shooterMotorConfiguration;
 
    // Hood Linear Actuator Servo
-  private final TalonFXS hoodMotor1 = new TalonFXS(Ports.CANHoodMotor1);
-  private final TalonFXS hoodMotor2 = new TalonFXS(Ports.CANHoodMotor2);
+  private final TalonFXS hoodMotor1 = new TalonFXS(Ports.CANHoodMotor1, Ports.CANbusMain);
+  private final TalonFXS hoodMotor2 = new TalonFXS(Ports.CANHoodMotor2, Ports.CANbusMain);
   private final TalonFXSConfigurator hoodMotor1Configurator;
   private final TalonFXSConfigurator hoodMotor2Configurator;
   private TalonFXSConfiguration hoodMotorConfiguration;
@@ -429,7 +430,7 @@ public class Shooter extends SubsystemBase implements Loggable {
   }
 
   // public void setHoodAngleSetpoint(double angle) {
-  //   double safeAngle = MathUtil.clamp(angle, ShooterConstants.hoodMinimumAngle, ShooterConstants.hoodMaximumAngle);
+  //   double safeAngle = MathBCR.clamp(angle, ShooterConstants.hoodMinimumAngle, ShooterConstants.hoodMaximumAngle);
   //   hoodAngleSetpoint = safeAngle;
   //   hood1PositionControlOn = true;
   //   hood2PositionControlOn = true;
@@ -441,24 +442,24 @@ public class Shooter extends SubsystemBase implements Loggable {
    * @param angle angle to set in degrees
    */
   public void setHoodAnglePID(double angle) {
-    double safeAngle = MathUtil.clamp(angle, ShooterConstants.hoodMinimumAngle, ShooterConstants.hoodMaximumAngle);
+    double safeAngle = MathBCR.clamp(angle, ShooterConstants.hoodMinimumAngle, ShooterConstants.hoodMaximumAngle);
     hoodAngleSetpoint = safeAngle;
     hood1PositionControlOn = true;
     hood2PositionControlOn = true;
   
     if ( Math.abs(getHoodAngle() - hoodAngleSetpoint) < ShooterConstants.hoodAngleErrorTolerance/2.0 ) {
       // If hood is very close to target position, then turn off motor.
-      hoodMotor1.set(0.0);
-      hoodMotor2.set(0.0);
+      hoodMotor1.setControl(hood2VoltageControl.withOutput(0.0));
+      hoodMotor2.setControl(hood2VoltageControl.withOutput(0.0));
     } else {
-      // hoodMotor1.set(hood1PidController.calculate(getHoodAngle(1), hoodAngleSetpoint)); 
-      // hoodMotor2.set(hood2PidController.calculate(getHoodAngle(2), hoodAngleSetpoint)); 
+      // hoodMotor1.setControl(hood2VoltageControl.withOutput(hood1PidController.calculate(getHoodAngle(1), hoodAngleSetpoint))); 
+      // hoodMotor2.setControl(hood2VoltageControl.withOutput(hood2PidController.calculate(getHoodAngle(2), hoodAngleSetpoint))); 
       //HoodFix
       // Due to error on the left (#1) hood analog sensor, calculate PID based on right hood motor
       // and set motor #1 as a follower with a fixed calibration ratio for motor/friction differences.
-      double hoodPct = hood2PidController.calculate(getHoodAngle(2), hoodAngleSetpoint);
-      hoodMotor1.set(hoodPct * ShooterConstants.hoodMotorRatio2to1);
-      hoodMotor2.set(hoodPct);
+      double hoodVolts = hood2PidController.calculate(getHoodAngle(2), hoodAngleSetpoint);
+      hoodMotor1.setControl(hood2VoltageControl.withOutput(hoodVolts * ShooterConstants.hoodMotorRatio2to1));
+      hoodMotor2.setControl(hood2VoltageControl.withOutput(hoodVolts));
     }
   }
   
@@ -567,8 +568,8 @@ public class Shooter extends SubsystemBase implements Loggable {
    * @param logWhenDisabled true = write when robot is disabled, false = only write when robot is enabled
    */
   public void updateLog(boolean logWhenDisabled) {
-    if (logWhenDisabled || !DriverStation.isDisabled()) {
-      long timeNow = RobotController.getFPGATime();
+    if (logWhenDisabled || !RobotState.isDisabled()) {
+      long timeNow = RobotController.getTime();
 
       dLogShooter1Temp.append(getShooterTemp(1), timeNow);
       dLogShooter1Voltage.append(getShooterVoltage(1), timeNow);

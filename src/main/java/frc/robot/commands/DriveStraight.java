@@ -8,15 +8,15 @@
 package frc.robot.commands;
 
 import org.wpilib.command2.Command;
-import org.wpilib.math.util.MathUtil;
 import org.wpilib.math.geometry.Rotation2d;
 import org.wpilib.math.geometry.Translation2d;
-import org.wpilib.math.kinematics.SwerveModuleState;
-import org.wpilib.util.datalog.DataLog;
-import org.wpilib.util.datalog.DoubleLogEntry;
+import org.wpilib.math.kinematics.SwerveModuleVelocity;
+import org.wpilib.datalog.DataLog;
+import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.system.RobotController;
 import org.wpilib.smartdashboard.SmartDashboard;
+
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.*;
 import frc.robot.utilities.*;
@@ -33,7 +33,7 @@ public class DriveStraight extends Command {
   private boolean fromShuffleboard;
   private double angleInput, angleTarget; // angleTarget is relative to the starting robot facing
   private Translation2d startLocation;
-  private SwerveModuleState[] desiredStates;
+  private SwerveModuleVelocity[] desiredVelocities;
   
   private boolean isOpenLoop;
 
@@ -79,8 +79,8 @@ public class DriveStraight extends Command {
     this.isOpenLoop = isOpenLoop;
     this.fromShuffleboard = false;
     this.target = target;
-    this.maxVel = MathUtil.clamp(Math.abs(maxVel), 0, SwerveConstants.kMaxSpeedMetersPerSecond);
-    this.maxAccel = MathUtil.clamp(Math.abs(maxAccel), 0, SwerveConstants.kMaxAccelerationMetersPerSecondSquare);
+    this.maxVel = MathBCR.clamp(Math.abs(maxVel), 0, SwerveConstants.kMaxSpeedMetersPerSecond);
+    this.maxAccel = MathBCR.clamp(Math.abs(maxAccel), 0, SwerveConstants.kMaxAccelerationMetersPerSecondSquare);
 
     addRequirements(driveTrain);
     initializeDataLog();
@@ -128,7 +128,7 @@ public class DriveStraight extends Command {
    */
   public void initializeDataLog() {
     // Prime data logging at boot time
-    long timeNow = RobotController.getFPGATime();
+    long timeNow = RobotController.getTime();
     dLogTargetAngle.append(-1, timeNow);
     dLogTargetPos.append(-1, timeNow);
     dLogTargetVel.append(-1, timeNow);
@@ -149,9 +149,9 @@ public class DriveStraight extends Command {
       target = SmartDashboard.getNumber("DriveStraight Manual Target Dist", 2);
       angleInput = SmartDashboard.getNumber("DriveStraight Manual Angle", 0);
       maxVel = SmartDashboard.getNumber("DriveStraight Manual MaxVel", SwerveConstants.kMaxSpeedMetersPerSecond);
-      maxVel = MathUtil.clamp(Math.abs(maxVel), 0, SwerveConstants.kMaxSpeedMetersPerSecond);
+      maxVel = MathBCR.clamp(Math.abs(maxVel), 0, SwerveConstants.kMaxSpeedMetersPerSecond);
       maxAccel = SmartDashboard.getNumber("DriveStraight Manual MaxAccel", SwerveConstants.kMaxAccelerationMetersPerSecondSquare);
-      maxAccel = MathUtil.clamp(Math.abs(maxAccel), 0, SwerveConstants.kMaxAccelerationMetersPerSecondSquare);
+      maxAccel = MathBCR.clamp(Math.abs(maxAccel), 0, SwerveConstants.kMaxAccelerationMetersPerSecondSquare);
     }
 
     // Calculate target angle
@@ -162,8 +162,8 @@ public class DriveStraight extends Command {
     }
 
     // Initialize swerve states
-    SwerveModuleState state = new SwerveModuleState(0, Rotation2d.fromDegrees(angleTarget));
-    desiredStates = new SwerveModuleState[] { state, state, state, state };
+    SwerveModuleVelocity velocity = new SwerveModuleVelocity(0, Rotation2d.fromDegrees(angleTarget));
+    desiredVelocities = new SwerveModuleVelocity[] { velocity, velocity, velocity, velocity };
 
     tStateFinal = new TrapezoidProfileBCR.State(target, 0.0);          // Initialize goal state (degrees to turn)
     tStateCurr = new TrapezoidProfileBCR.State(0.0, 0.0);     // Initialize initial state (relative turning, so assume initPos is 0 degrees)
@@ -194,30 +194,30 @@ public class DriveStraight extends Command {
     // Set wheel speeds
     // NOTE: All 4 SwerveModuleStates in the desiredStates[] array point to the same SwerveModuleState object.
     // So, they will always have the same speed, even if we only update one of the elements of the array.
-    desiredStates[0].speedMetersPerSecond = targetVel;
-    desiredStates[1].speedMetersPerSecond = targetVel;
-    desiredStates[2].speedMetersPerSecond = targetVel;
-    desiredStates[3].speedMetersPerSecond = targetVel;
-    driveTrain.setModuleStates(desiredStates, isOpenLoop); 
+    desiredVelocities[0].velocity = targetVel;
+    desiredVelocities[1].velocity = targetVel;
+    desiredVelocities[2].velocity = targetVel;
+    desiredVelocities[3].velocity = targetVel;
+    driveTrain.setModuleStates(desiredVelocities, isOpenLoop); 
     
     // Read current module states for logging
-    SwerveModuleState[] currentStates = driveTrain.getModuleStates();
-    double linearVel = (Math.abs(currentStates[0].speedMetersPerSecond)
-        + Math.abs(currentStates[1].speedMetersPerSecond) + Math.abs(currentStates[2].speedMetersPerSecond)
-        + Math.abs(currentStates[3].speedMetersPerSecond)) / 4.0;
+    SwerveModuleVelocity[] currentVelocities = driveTrain.getModuleVelocities();
+    double linearVel = (Math.abs(currentVelocities[0].velocity)
+        + Math.abs(currentVelocities[1].velocity) + Math.abs(currentVelocities[2].velocity)
+        + Math.abs(currentVelocities[3].velocity)) / 4.0;
 
     // Log data
-    long timeNow = RobotController.getFPGATime();
+    long timeNow = RobotController.getTime();
     dLogTargetAngle.append(angleTarget, timeNow);
     dLogTargetPos.append(tStateNext.position, timeNow);
     dLogTargetVel.append(targetVel, timeNow);
     dLogTargetAccel.append(targetAccel, timeNow);
     dLogRobotPos.append(currDist, timeNow);
     dLogRobotVel.append(linearVel, timeNow);
-    dLogRobotVelFL.append(currentStates[0].speedMetersPerSecond, timeNow);
-    dLogRobotVelFR.append(currentStates[1].speedMetersPerSecond, timeNow);
-    dLogRobotVelBL.append(currentStates[2].speedMetersPerSecond, timeNow);
-    dLogRobotVelBR.append(currentStates[3].speedMetersPerSecond, timeNow);
+    dLogRobotVelFL.append(currentVelocities[0].velocity, timeNow);
+    dLogRobotVelFR.append(currentVelocities[1].velocity, timeNow);
+    dLogRobotVelBL.append(currentVelocities[2].velocity, timeNow);
+    dLogRobotVelBR.append(currentVelocities[3].velocity, timeNow);
 
     if (regenerate) {
       tStateCurr = new TrapezoidProfileBCR.State(currDist, linearVel);

@@ -13,11 +13,11 @@ import choreo.trajectory.SwerveSample;
 import choreo.trajectory.Trajectory;
 import org.wpilib.math.controller.PIDController;
 import org.wpilib.math.geometry.Pose2d;
-import org.wpilib.math.kinematics.ChassisSpeeds;
-import org.wpilib.util.datalog.DataLog;
-import org.wpilib.util.datalog.DoubleLogEntry;
-import org.wpilib.util.datalog.StringLogEntry;
-import org.wpilib.util.datalog.StructLogEntry;
+import org.wpilib.math.kinematics.ChassisVelocities;
+import org.wpilib.datalog.DataLog;
+import org.wpilib.datalog.DoubleLogEntry;
+import org.wpilib.datalog.StringLogEntry;
+import org.wpilib.datalog.StructLogEntry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.system.RobotController;
 import org.wpilib.system.Timer;
@@ -34,7 +34,7 @@ public class ChoreoFollower extends Command {
   private PIDController xController;
   private PIDController yController;
   private PIDController rotationController;
-  private Consumer<ChassisSpeeds> outputChassisSpeed;
+  private Consumer<ChassisVelocities> outputChassisSpeed;
   private Supplier<Pose2d> poseSupplier;
   private BooleanSupplier mirrorTrajectory;
   private boolean mirrorTrajectoryThisInit;
@@ -77,7 +77,7 @@ public class ChoreoFollower extends Command {
    * @param xController trajectory PID X feedback controller
    * @param yController trajectory PID Y feedback controller 
    * @param rotationController rotation PID feedback controller
-   * @param outputChassisSpeeds a function that takes in a field-relative chassis speeds and controls the robot
+   * @param outputChassisVelocities a function that takes in a field-relative chassis speeds and controls the robot
    * @param poseSupplier a pose supplier to get the current robot position
    * @param mirrorTrajectory determines if the trajectory will be mirrored: when true the trajectory will mirror while 
    * internal robot odometry will remain the same, when false the trajectory will not be changed
@@ -85,14 +85,14 @@ public class ChoreoFollower extends Command {
    */
   public ChoreoFollower(StopType stopType, Trajectory<SwerveSample> trajectory, 
       PIDController xController, PIDController yController,
-      PIDController rotationController, Consumer<ChassisSpeeds> outputChassisSpeeds,
+      PIDController rotationController, Consumer<ChassisVelocities> outputChassisVelocities,
       Supplier<Pose2d> poseSupplier, BooleanSupplier mirrorTrajectory, DriveTrain driveTrain) {
     this.stopType = stopType;
     this.trajectory = trajectory;
     this.xController = xController;
     this.yController = yController;
     this.rotationController = rotationController;
-    this.outputChassisSpeed = outputChassisSpeeds;
+    this.outputChassisSpeed = outputChassisVelocities;
     this.poseSupplier = poseSupplier;
     this.mirrorTrajectory = mirrorTrajectory;
     this.driveTrain = driveTrain;
@@ -100,9 +100,9 @@ public class ChoreoFollower extends Command {
     addRequirements(driveTrain);
 
     // Prime data logging at boot time
-    long timeNow = RobotController.getFPGATime();
+    long timeNow = RobotController.getTime();
     Pose2d poseCurr = new Pose2d();  //2025 code -> poseSupplier.get();  TODO using poseSupplier.get() instead of new Pose2d() causes crashes in 2026 code.  Why?
-    ChassisSpeeds robotSpeeds = driveTrain.getRobotSpeeds();
+    ChassisVelocities robotVelocities = driveTrain.getRobotVelocities();
     dLogCurPose2D.append(poseCurr, timeNow);
     dLogTrajPose2D.append(poseCurr, timeNow);
 
@@ -115,8 +115,8 @@ public class ChoreoFollower extends Command {
     dLogTrajRotVel.append(-1, timeNow);
     dLogRobotX.append(poseCurr.getX(), timeNow);
     dLogRobotY.append(poseCurr.getY(), timeNow);
-    dLogRobotVel.append(Math.hypot(robotSpeeds.vxMetersPerSecond, robotSpeeds.vyMetersPerSecond), timeNow);
-    dLogRobotVelAng.append(Math.toDegrees(Math.atan2(robotSpeeds.vyMetersPerSecond, robotSpeeds.vxMetersPerSecond)), timeNow);
+    dLogRobotVel.append(Math.hypot(robotVelocities.vx, robotVelocities.vy), timeNow);
+    dLogRobotVelAng.append(Math.toDegrees(Math.atan2(robotVelocities.vy, robotVelocities.vx)), timeNow);
     dLogRobotRot.append(poseCurr.getRotation().getDegrees(), timeNow);
     dLogRobotRotVel.append(driveTrain.getAngularVelocity(), timeNow);
   }
@@ -139,8 +139,8 @@ public class ChoreoFollower extends Command {
     noTrajectory = finalSampleOpt.isEmpty();
     if (!noTrajectory) {
       finalPose = finalSampleOpt.get().getPose();
-      finalVelocity = Math.hypot( finalSampleOpt.get().getChassisSpeeds().vxMetersPerSecond,
-        finalSampleOpt.get().getChassisSpeeds().vyMetersPerSecond);
+      finalVelocity = Math.hypot( finalSampleOpt.get().getChassisVelocities().vx,
+        finalSampleOpt.get().getChassisVelocities().vy);
     }
 
     DataLogUtil.writeMessage("ChoreoFollower:  Init, Is Flipped =", mirrorTrajectoryThisInit, ", Stop Type =", stopType, ", Trajectory =", trajectory.name());
@@ -176,8 +176,8 @@ public class ChoreoFollower extends Command {
       rotationFeedback = rotationController.calculate(poseCurr.getRotation().getRadians(), sampleCurr.heading);
 
       // Log data for trajectory following
-      long timeNow = RobotController.getFPGATime();
-      ChassisSpeeds robotSpeeds = driveTrain.getRobotSpeeds();
+      long timeNow = RobotController.getTime();
+      ChassisVelocities robotVelocities = driveTrain.getRobotVelocities();
       dLogCurPose2D.append(poseCurr, timeNow);
       dLogTrajPose2D.append(sampleCurr.getPose(), timeNow);
 
@@ -190,8 +190,8 @@ public class ChoreoFollower extends Command {
       dLogTrajRotVel.append(Math.toDegrees(sampleCurr.omega), timeNow);
       dLogRobotX.append(poseCurr.getX(), timeNow);
       dLogRobotY.append(poseCurr.getY(), timeNow);
-      dLogRobotVel.append(Math.hypot(robotSpeeds.vxMetersPerSecond, robotSpeeds.vyMetersPerSecond), timeNow);
-      dLogRobotVelAng.append(Math.toDegrees(Math.atan2(robotSpeeds.vyMetersPerSecond, robotSpeeds.vxMetersPerSecond)), timeNow);
+      dLogRobotVel.append(Math.hypot(robotVelocities.vx, robotVelocities.vy), timeNow);
+      dLogRobotVelAng.append(Math.toDegrees(Math.atan2(robotVelocities.vy, robotVelocities.vx)), timeNow);
       dLogRobotRot.append(poseCurr.getRotation().getDegrees(), timeNow);
       dLogRobotRotVel.append(driveTrain.getAngularVelocity(), timeNow);
 
@@ -207,7 +207,7 @@ public class ChoreoFollower extends Command {
       rotationFeedback = 0;
     }
     
-    outputChassisSpeed.accept(new ChassisSpeeds(xFF + xFeedback, yFF + yFeedback, rotationFF + rotationFeedback)); 
+    outputChassisSpeed.accept(new ChassisVelocities(xFF + xFeedback, yFF + yFeedback, rotationFF + rotationFeedback)); 
   }
 
   // Called once the command ends or is interrupted.
@@ -245,8 +245,8 @@ public class ChoreoFollower extends Command {
         && Math.abs(finalPose.getY() - poseCurr.getY()) <= Constants.TrajectoryConstants.yError
         && Math.abs(MathBCR.normalizeAngle(poseCurr.getRotation().getDegrees()
             - finalPose.getRotation().getDegrees())) <= Constants.TrajectoryConstants.choreoMaxThetaErrorDegrees
-        && Math.hypot(driveTrain.getChassisSpeeds().vxMetersPerSecond,
-            driveTrain.getChassisSpeeds().vyMetersPerSecond) <= Constants.TrajectoryConstants.endVelocityError)
+        && Math.hypot(driveTrain.getChassisVelocities().vx,
+            driveTrain.getChassisVelocities().vy) <= Constants.TrajectoryConstants.endVelocityError)
         ||
         // If final point of the trajctory has a non-zero velocity,
         // then stop immediately at the end of the trajectory

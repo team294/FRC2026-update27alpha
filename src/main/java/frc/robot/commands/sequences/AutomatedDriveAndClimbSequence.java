@@ -8,10 +8,11 @@ import static org.wpilib.command2.Commands.*;
 
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.driverstation.DriverStation;
-import org.wpilib.driverstation.DriverStation.Alliance;
+import org.wpilib.driverstation.RobotState;
+import org.wpilib.driverstation.Alliance;
 import org.wpilib.command2.InstantCommand;
 import org.wpilib.command2.SequentialCommandGroup;
+
 import frc.robot.Constants.ClimberConstants.ClimberPosition;
 import frc.robot.Constants.CoordType;
 import frc.robot.Constants.FieldConstants;
@@ -47,10 +48,10 @@ public class AutomatedDriveAndClimbSequence extends SequentialCommandGroup {
           either(
             new DriveToPose(CoordType.kAbsolute, () -> (new Pose2d(FieldConstants.climbPrepBlue.getX(), FieldConstants.climbPrepBlue.getY(), new Rotation2d(0))), 0.07, 1.5, driveTrain),
             new DriveToPose(CoordType.kAbsolute, () -> new Pose2d(FieldConstants.climbPrepRed.getX(), FieldConstants.climbPrepRed.getY(), Rotation2d.k180deg), 0.07, 1.5, driveTrain),
-            () -> (alliance == Alliance.Blue)
+            () -> (alliance == Alliance.BLUE)
           ),
           none(),
-          () -> DriverStation.isTeleop()
+          () -> RobotState.isTeleop()
         )
       ),
 
@@ -58,7 +59,7 @@ public class AutomatedDriveAndClimbSequence extends SequentialCommandGroup {
       either(
         new DriveToPose(CoordType.kAbsolute, () -> new Pose2d(FieldConstants.climbExecuteBlue.getX(), FieldConstants.climbExecuteBlue.getY(), new Rotation2d(0)), 0.07, 1.0, driveTrain),
         new DriveToPose(CoordType.kAbsolute, () -> new Pose2d(FieldConstants.climbExecuteRed.getX(), FieldConstants.climbExecuteRed.getY(), Rotation2d.k180deg), 0.07, 1.0, driveTrain),
-        () -> (alliance == Alliance.Blue)
+        () -> (alliance == Alliance.BLUE)
       ),
 
       // Raise robot

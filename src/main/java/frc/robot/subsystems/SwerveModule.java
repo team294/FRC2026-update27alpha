@@ -19,10 +19,10 @@ import com.ctre.phoenix6.signals.*;
 import org.wpilib.math.controller.SimpleMotorFeedforward;
 import org.wpilib.math.geometry.Rotation2d;
 import org.wpilib.math.kinematics.SwerveModulePosition;
-import org.wpilib.math.kinematics.SwerveModuleState;
+import org.wpilib.math.kinematics.SwerveModuleVelocity;
 import org.wpilib.units.measure.*;
-import org.wpilib.util.datalog.DataLog;
-import org.wpilib.util.datalog.DoubleLogEntry;
+import org.wpilib.datalog.DataLog;
+import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.system.RobotController;
 import org.wpilib.smartdashboard.SmartDashboard;
@@ -238,7 +238,7 @@ public class SwerveModule {
     dLogDriveCurrent = new DoubleLogEntry(log, StringUtil.buildString("/DriveTrain/Swerve", swName, "/DriveCurrent"));
 
     // Prime the DataLog to reduce delay when first enabling the robot
-    long timeNow = RobotController.getFPGATime();
+    long timeNow = RobotController.getTime();
     updateSwerveLog(timeNow);
   }
 
@@ -297,11 +297,11 @@ public class SwerveModule {
     if (setCoast == isInCoastMode) return;
 
     if (setCoast) {
-      driveMotor.setNeutralMode(NeutralModeValue.Coast);
-      turningMotor.setNeutralMode(NeutralModeValue.Coast);
+      driveMotor.configNeutralMode(NeutralModeValue.Coast);
+      turningMotor.configNeutralMode(NeutralModeValue.Coast);
     } else {
-      driveMotor.setNeutralMode(NeutralModeValue.Brake);
-      turningMotor.setNeutralMode(NeutralModeValue.Brake);
+      driveMotor.configNeutralMode(NeutralModeValue.Brake);
+      turningMotor.configNeutralMode(NeutralModeValue.Brake);
     }
     isInCoastMode = setCoast;
   }
@@ -328,11 +328,11 @@ public class SwerveModule {
   // ********** Main swerve module control methods
 
   /**
-   * Gets the current state of the module.
-   * @return SwerveModuleState state
+   * Gets the current velocity of the module.
+   * @return SwerveModuleVelocity velocity
    */
-  public SwerveModuleState getState() {
-    return new SwerveModuleState(getDriveEncoderVelocity(), Rotation2d.fromDegrees(getTurningEncoderDegrees()));
+  public SwerveModuleVelocity getVelocity() {
+    return new SwerveModuleVelocity(getDriveEncoderVelocity(), Rotation2d.fromDegrees(getTurningEncoderDegrees()));
   }
 
   /**
@@ -399,23 +399,23 @@ public class SwerveModule {
   /**
    * Sets the desired state for the module, using closed loop controls on the Talons.
    * The Talons will hold this state until commanded to stop or another state.
-   * @param desiredState desired SwerveModuleState with speed and angle
+   * @param desiredVelocity desired SwerveModuleVelocity with speed and angle
    * @param isOpenLoop true = fixed drive percent output to approximate velocity, false = closed loop drive velocity control
    */
-  public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
+  public void setDesiredState(SwerveModuleVelocity desiredVelocity, boolean isOpenLoop) {
     // Optimize the reference state to avoid spinning further than 90 degrees
     // Custom optimize command, since default WPILib optimize assumes continuous controller which CTRE is not
-    desiredState = MathSwerveModuleState.optimize(desiredState, Rotation2d.fromDegrees(getTurningEncoderDegrees()));
+    desiredVelocity = MathSwerveModuleVelocity.optimize(desiredVelocity, Rotation2d.fromDegrees(getTurningEncoderDegrees()));
 
     double ff;
-    if (inVelocityMode && Math.abs(priorDriveVelocity - desiredState.speedMetersPerSecond) >= SwerveConstants.velMinDeltaUsingkA) {
+    if (inVelocityMode && Math.abs(priorDriveVelocity - desiredVelocity.velocity) >= SwerveConstants.velMinDeltaUsingkA) {
       // When in velocity mode (from prior call) and not close to desired speed, use kA
-      ff = driveFeedforward.calculateWithVelocities(priorDriveVelocity, desiredState.speedMetersPerSecond);
+      ff = driveFeedforward.calculate(priorDriveVelocity, desiredVelocity.velocity);
     } else {
       // If actual speed is close to desired speed, then do not use kA (feedback with actual velocity) 
       // in order to prevent velocity oscillation (jitter when robot is stopped or slow).
       // The velocity control kP will provide sufficient feedback to reach the right velocity.
-      ff = driveFeedforward.calculate(desiredState.speedMetersPerSecond);
+      ff = driveFeedforward.calculate(desiredVelocity.velocity);
     }
 
     // Set drive motor velocity or percent output
@@ -423,16 +423,16 @@ public class SwerveModule {
       setDriveMotorVoltageOutput(ff);
     } else {
       driveMotor.setControl(driveVelocityControl
-        .withVelocity(calculateDriveEncoderVelocityRaw(desiredState.speedMetersPerSecond))
+        .withVelocity(calculateDriveEncoderVelocityRaw(desiredVelocity.velocity))
         .withFeedForward(ff));
     }
 
     // Set turning motor target angle
-    turningMotor.setControl(turningPositionControl.withPosition(calculateTurningEncoderTargetRaw(desiredState.angle.getDegrees())));
+    turningMotor.setControl(turningPositionControl.withPosition(calculateTurningEncoderTargetRaw(desiredVelocity.angle.getDegrees())));
 
     // Save state for next call
     inVelocityMode = true;
-    priorDriveVelocity = desiredState.speedMetersPerSecond;
+    priorDriveVelocity = desiredVelocity.velocity;
   }
 
   // ********** Encoder methods

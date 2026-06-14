@@ -6,13 +6,13 @@ package frc.robot.commands;
 
 import org.wpilib.math.util.MathUtil;
 import org.wpilib.math.controller.ProfiledPIDController;
-import org.wpilib.util.datalog.BooleanLogEntry;
-import org.wpilib.util.datalog.DataLog;
-import org.wpilib.util.datalog.DoubleLogEntry;
+import org.wpilib.datalog.BooleanLogEntry;
+import org.wpilib.datalog.DataLog;
+import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.driverstation.Joystick;
 import org.wpilib.system.RobotController;
 import org.wpilib.system.DataLogManager;
-import org.wpilib.driverstation.DriverStation.Alliance;
+import org.wpilib.driverstation.Alliance;
 import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
 import frc.robot.Constants.DriveConstants;
@@ -70,7 +70,7 @@ public class DriveWithJoysticksAdvanced extends Command {
     addRequirements(driveTrain);
 
     // Prime DataLog at boot time
-    long timeNow = RobotController.getFPGATime();
+    long timeNow = RobotController.getTime();
     dLogFwdVelo.append(-1, timeNow);
     dLogLeftVelo.append(-1, timeNow);
     dLogNextTurnRate.append(-1, timeNow);
@@ -106,8 +106,8 @@ public class DriveWithJoysticksAdvanced extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    fwdVelocity = (driveTrain.isXLocked()) ? 0.0 : (allianceSelection.getAlliance() == Alliance.Blue) ? -leftJoystick.getY() : leftJoystick.getY();
-    leftVelocity = (driveTrain.isYLocked()) ? 0.0 : (allianceSelection.getAlliance() == Alliance.Blue) ? -leftJoystick.getX() : leftJoystick.getX();
+    fwdVelocity = (driveTrain.isXLocked()) ? 0.0 : (allianceSelection.getAlliance() == Alliance.BLUE) ? -leftJoystick.getY() : leftJoystick.getY();
+    leftVelocity = (driveTrain.isYLocked()) ? 0.0 : (allianceSelection.getAlliance() == Alliance.BLUE) ? -leftJoystick.getX() : leftJoystick.getX();
     turnRate = (driveTrain.isTurnLocked()) ? 0.0 : -rightJoystick.getX();
 
     if (driveTrain.isFineControlEnabled()) {
@@ -195,7 +195,7 @@ public class DriveWithJoysticksAdvanced extends Command {
     }
 
     if (DataLogUtil.isMyLogRotation(logRotationKey, RotationWhenDisabled.kNone)) {
-      long timeNow = RobotController.getFPGATime();
+      long timeNow = RobotController.getTime();
       dLogFwdVelo.append(fwdVelocity, timeNow);
       dLogLeftVelo.append(leftVelocity, timeNow);
       dLogNextTurnRate.append(turnRate, timeNow);

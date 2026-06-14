@@ -4,8 +4,8 @@
 
 package frc.robot.commands;
 
-import org.wpilib.util.datalog.DataLog;
-import org.wpilib.util.datalog.DoubleLogEntry;
+import org.wpilib.datalog.DataLog;
+import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.system.RobotController;
 import org.wpilib.command2.Command;
@@ -53,7 +53,7 @@ public class TurretManualControl extends Command {
     turretPercent *= TurretConstants.maxManualPercentOutput;
     turret.setTurretPercentOutput(turretPercent);
 
-    timeNow = RobotController.getFPGATime();
+    timeNow = RobotController.getTime();
     dLogTurretAngle.append(turret.getTurretAngle(), timeNow);
     dLogSetPercent.append(turretPercent, timeNow);
   }

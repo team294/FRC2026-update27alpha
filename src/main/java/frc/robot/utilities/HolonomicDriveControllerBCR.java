@@ -8,7 +8,7 @@ import org.wpilib.math.controller.PIDController;
 import org.wpilib.math.controller.ProfiledPIDController;
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.math.kinematics.ChassisSpeeds;
+import org.wpilib.math.kinematics.ChassisVelocities;
 import org.wpilib.math.trajectory.Trajectory;
 import org.wpilib.math.util.Units;
 
@@ -87,7 +87,7 @@ public class HolonomicDriveControllerBCR {
    * @param desiredHeading desired heading (the desired robot facing)
    * @return next output of the holonomic drive controller (field-relative speeds)
    */
-  public ChassisSpeeds calculate(
+  public ChassisVelocities calculate(
       Pose2d currentPose,
       Pose2d trajectoryPose,
       double desiredLinearVelocityMetersPerSecond,
@@ -110,7 +110,7 @@ public class HolonomicDriveControllerBCR {
     m_rotationError = desiredHeading.minus(currentPose.getRotation());
 
     if (!m_enabled) {
-      return new ChassisSpeeds(xFF, yFF, thetaFF);
+      return new ChassisVelocities(xFF, yFF, thetaFF);
     }
 
     // Calculate feedback velocities (based on position error)
@@ -120,7 +120,7 @@ public class HolonomicDriveControllerBCR {
         desiredHeading.getRadians());
 
     // Return next output
-    return new ChassisSpeeds(xFF + xFeedback, yFF + yFeedback, thetaFF + thetaFeedback);
+    return new ChassisVelocities(xFF + xFeedback, yFF + yFeedback, thetaFF + thetaFeedback);
   }
 
   /**
@@ -131,10 +131,10 @@ public class HolonomicDriveControllerBCR {
    * @param desiredHeading desired heading (the desired robot facing)
    * @return The next output of the holonomic drive controller (field-relative speeds)
    */
-  public ChassisSpeeds calculate(
+  public ChassisVelocities calculate(
       Pose2d currentPose, Trajectory.State desiredState, Rotation2d desiredHeading) {
     return calculate(
-        currentPose, desiredState.poseMeters, desiredState.velocityMetersPerSecond, desiredHeading);
+        currentPose, desiredState.pose, desiredState.velocity, desiredHeading);
   }
 
   /**

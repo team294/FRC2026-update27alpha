@@ -11,7 +11,7 @@ import choreo.trajectory.Trajectory;
 import org.wpilib.math.controller.PIDController;
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Translation2d;
-import org.wpilib.driverstation.DriverStation.Alliance;
+import org.wpilib.driverstation.Alliance;
 import org.wpilib.command2.InstantCommand;
 import org.wpilib.command2.SequentialCommandGroup;
 
@@ -62,9 +62,9 @@ public class DriveTrajectory extends SequentialCommandGroup {
         new PIDController(Constants.TrajectoryConstants.kPXController, 0.0, 0.0),
         new PIDController(Constants.TrajectoryConstants.kPYController, 0.0, 0.0), 
         thetaController, 
-        (speeds) -> {
-          Translation2d rotated = new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond).rotateBy(initialPose.getRotation());
-          driveTrain.drive(rotated.getX(), rotated.getY(), speeds.omegaRadiansPerSecond, DriveType.kFieldRelative, false);
+        (velocities) -> {
+          Translation2d rotated = new Translation2d(velocities.vx, velocities.vy).rotateBy(initialPose.getRotation());
+          driveTrain.drive(rotated.getX(), rotated.getY(), velocities.omega, DriveType.kFieldRelative, false);
         }, 
         // For relative trajectories, get the current pose relative to the initial robot Pose
         () -> driveTrain.getPose().relativeTo(initialPose), 
@@ -74,10 +74,10 @@ public class DriveTrajectory extends SequentialCommandGroup {
     } else {
       if (trajectoryType == CoordType.kAbsoluteResetPose) {
         // For AbsoluteResetPose trajectories, first command needs to be to reset the robot Pose
-        addCommands(new DriveResetPose(() -> (trajectory.getInitialPose(alliance.getAlliance() == Alliance.Red).get()), false, driveTrain));
+        addCommands(new DriveResetPose(() -> (trajectory.getInitialPose(alliance.getAlliance() == Alliance.RED).get()), false, driveTrain));
       } else if (trajectoryType == CoordType.kAbsoluteResetPoseTol) {
         // For AbsoluteResetPoseTol trajectories, first command needs to be to reset the robot Pose
-        addCommands(new DriveResetPose(() -> (trajectory.getInitialPose(alliance.getAlliance() == Alliance.Red).get()), true, driveTrain));
+        addCommands(new DriveResetPose(() -> (trajectory.getInitialPose(alliance.getAlliance() == Alliance.RED).get()), true, driveTrain));
       }
 
       ChoreoFollower = new ChoreoFollower(
@@ -86,9 +86,9 @@ public class DriveTrajectory extends SequentialCommandGroup {
         new PIDController(Constants.TrajectoryConstants.kPXController, 0.0, 0.0),
         new PIDController(Constants.TrajectoryConstants.kPYController, 0.0, 0.0), 
         thetaController, 
-        (speeds) -> driveTrain.drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, DriveType.kFieldRelative, false), 
+        (speeds) -> driveTrain.drive(speeds.vx, speeds.vy, speeds.omega, DriveType.kFieldRelative, false), 
         driveTrain::getPose,
-        () -> alliance.getAlliance() == Alliance.Red, 
+        () -> alliance.getAlliance() == Alliance.RED, 
         driveTrain
       );
     }

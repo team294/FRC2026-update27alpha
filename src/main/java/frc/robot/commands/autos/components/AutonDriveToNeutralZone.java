@@ -11,7 +11,7 @@ import choreo.trajectory.Trajectory;
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
 import org.wpilib.math.util.Units;
-import org.wpilib.driverstation.DriverStation.Alliance;
+import org.wpilib.driverstation.Alliance;
 import org.wpilib.command2.SequentialCommandGroup;
 import org.wpilib.command2.WaitCommand;
 import frc.robot.Constants.AutoConstants;
@@ -52,7 +52,7 @@ public class AutonDriveToNeutralZone extends SequentialCommandGroup {
         sequence(
           // If shooting preload, starts with front of the robot on the start line (one robot's length back)
           new AutonScore(EndType.waitForSetPoint, intake, feeder, turret, shooter, climber, driveTrain, field), // this currently will never end. don't shoot preload
-          new DriveToPose(CoordType.kAbsolute, trajectory.getInitialPose(alliance.getAlliance() == Alliance.Red).get(), driveTrain) // TODO would this make it stop? how to make it continously go into the trajectory? 
+          new DriveToPose(CoordType.kAbsolute, trajectory.getInitialPose(alliance.getAlliance() == Alliance.RED).get(), driveTrain) // TODO would this make it stop? how to make it continously go into the trajectory? 
         ),
         none(),
         () -> shootPreload == ShootPreloadType.kShootPreload

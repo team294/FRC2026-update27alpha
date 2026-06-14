@@ -11,19 +11,20 @@ import org.wpilib.math.estimator.SwerveDrivePoseEstimator;
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
 import org.wpilib.math.geometry.Translation2d;
-import org.wpilib.math.kinematics.ChassisSpeeds;
+import org.wpilib.math.kinematics.ChassisVelocities;
 import org.wpilib.math.kinematics.SwerveDriveKinematics;
 import org.wpilib.math.kinematics.SwerveModulePosition;
-import org.wpilib.math.kinematics.SwerveModuleState;
+import org.wpilib.math.kinematics.SwerveModuleVelocity;
 import org.wpilib.units.measure.Angle;
 import org.wpilib.units.measure.AngularVelocity;
-import org.wpilib.util.datalog.DataLog;
-import org.wpilib.util.datalog.DoubleLogEntry;
-import org.wpilib.util.datalog.StructLogEntry;
+import org.wpilib.datalog.DataLog;
+import org.wpilib.datalog.DoubleLogEntry;
+import org.wpilib.datalog.StructLogEntry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.driverstation.DriverStation;
+import org.wpilib.driverstation.RobotState;
 import org.wpilib.system.RobotController;
-import org.wpilib.driverstation.DriverStation.Alliance;
+import org.wpilib.driverstation.Alliance;
 import org.wpilib.smartdashboard.Field2d;
 import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
@@ -165,7 +166,7 @@ public class DriveTrain extends SubsystemBase implements Loggable {
     zeroGyro();
 
     // Create and initialize odometery. Set initial location to (0,0) and facing away from driver (regardless of alliance color)
-    Pose2d initialPose = new Pose2d(0, 0, allianceSelection.getAlliance() == Alliance.Red ? Rotation2d.k180deg : Rotation2d.kZero);
+    Pose2d initialPose = new Pose2d(0, 0, allianceSelection.getAlliance() == Alliance.RED ? Rotation2d.k180deg : Rotation2d.kZero);
     zeroGyroRotation(initialPose.getRotation().getDegrees());
     poseEstimator = new SwerveDrivePoseEstimator(kDriveKinematics, Rotation2d.fromDegrees(getGyroRotation()), getModulePositions(), initialPose);
 
@@ -386,53 +387,53 @@ public class DriveTrain extends SubsystemBase implements Loggable {
 
   /**
    * Sets the states of the swerve modules.
-   * @param desiredStates desired swerve module states (0 = FrontLeft, 1 = FrontRight, 2 = BackLeft, 3 = BackRight)
+   * @param desiredVelocities desired swerve module states (0 = FrontLeft, 1 = FrontRight, 2 = BackLeft, 3 = BackRight)
    * @param isOpenLoop true = fixed drive percent output to approximate velocity, false = closed loop drive velocity control
    */
-  public void setModuleStates(SwerveModuleState[] desiredStates, boolean isOpenLoop) {
+  public void setModuleStates(SwerveModuleVelocity[] desiredVelocities, boolean isOpenLoop) {
     // Convert states to chassisspeeds and slew limit velocities (limit acceleration) to avoid tipping the robot
-    ChassisSpeeds chassisSpeeds = kDriveKinematics.toChassisSpeeds(desiredStates);
+    ChassisVelocities chassisVelocities = kDriveKinematics.toChassisVelocities(desiredVelocities);
     double xSlewed, omegaLimited, ySlewed;
-    omegaLimited = chassisSpeeds.omegaRadiansPerSecond; // No limiting
-    xSlewed = chassisSpeeds.vxMetersPerSecond;          // No limiting
-    ySlewed = chassisSpeeds.vyMetersPerSecond;          // No limiting
+    omegaLimited = chassisVelocities.omega; // No limiting
+    xSlewed = chassisVelocities.vx;          // No limiting
+    ySlewed = chassisVelocities.vy;          // No limiting
 
     // Discretize the movement to avoid unintended robot translation while robot is rotating
-    chassisSpeeds = ChassisSpeeds.discretize(xSlewed, ySlewed, omegaLimited, SwerveConstants.dt);
+    chassisVelocities = ChassisVelocities.discretize(xSlewed, ySlewed, omegaLimited, SwerveConstants.dt);
 
     // Convert back to swerve module states
-    desiredStates = kDriveKinematics.toSwerveModuleStates(chassisSpeeds, new Translation2d());
+    desiredVelocities = kDriveKinematics.toSwerveModuleVelocities(chassisVelocities, new Translation2d());
     
     // Desaturate wheel speeds to a little below max speed. It takes a while to accelerate to
     // max speed, so reducing the max will help movement accuracy.
-    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveConstants.kMaxSpeedMetersPerSecond);
+    SwerveDriveKinematics.desaturateWheelVelocities(desiredVelocities, SwerveConstants.kMaxSpeedMetersPerSecond);
 
-    swerveFrontLeft.setDesiredState(desiredStates[0], isOpenLoop);
-    swerveFrontRight.setDesiredState(desiredStates[1], isOpenLoop);
-    swerveBackLeft.setDesiredState(desiredStates[2], isOpenLoop);
-    swerveBackRight.setDesiredState(desiredStates[3], isOpenLoop);
+    swerveFrontLeft.setDesiredState(desiredVelocities[0], isOpenLoop);
+    swerveFrontRight.setDesiredState(desiredVelocities[1], isOpenLoop);
+    swerveBackLeft.setDesiredState(desiredVelocities[2], isOpenLoop);
+    swerveBackRight.setDesiredState(desiredVelocities[3], isOpenLoop);
   }
 
   /**
-   * Reads the current swerve module states.
-   * @return module states, as measured by the encoders (0 = FrontLeft, 1 = FrontRight, 2 = BackLeft, 3 = BackRight)
+   * Reads the current swerve module velocities.
+   * @return module velocities, as measured by the encoders (0 = FrontLeft, 1 = FrontRight, 2 = BackLeft, 3 = BackRight)
    */
-  public SwerveModuleState[] getModuleStates() {
-    return new SwerveModuleState[] {
-      swerveFrontLeft.getState(), swerveFrontRight.getState(),
-      swerveBackLeft.getState(), swerveBackRight.getState()
+  public SwerveModuleVelocity[] getModuleVelocities() {
+    return new SwerveModuleVelocity[] {
+      swerveFrontLeft.getVelocity(), swerveFrontRight.getVelocity(),
+      swerveBackLeft.getVelocity(), swerveBackRight.getVelocity()
     };
   }
 
   /**
-   * Returns the speed of the chassis in X, Y, and theta <b>in the robot frame of reference</b>.
+   * Returns the velocity of the chassis in X, Y, and theta <b>in the robot frame of reference</b>.
    * <p>Speed of the robot in the x direction, in meters per second (positive = forward)
    * <p>Speed of the robot in the y direction, in meters per second (positive = move to the left)
    * <p>Angular rate of the robot, in radians per second (positive = turn to the left)
-   * @return ChassisSpeeds object representing the chassis speeds
+   * @return ChassisVelocities object representing the chassis velocities
    */
-  public ChassisSpeeds getChassisSpeeds() {
-    return kDriveKinematics.toChassisSpeeds(getModuleStates());
+  public ChassisVelocities getChassisVelocities() {
+    return kDriveKinematics.toChassisVelocities(getModuleVelocities());
   }
 
   /**
@@ -550,24 +551,24 @@ public class DriveTrain extends SubsystemBase implements Loggable {
    * @param isOpenLoop true = fixed drive percent output to approximate velocity, false = closed loop drive velocity control
    */
    public void drive(double xSpeed, double ySpeed, double rot, Translation2d centerOfRotationMeters, DriveType driveType, boolean isOpenLoop) {
-    ChassisSpeeds chassisSpeed;
+    ChassisVelocities chassisVelocity;
 
     switch(driveType) {
       default:
       case kRobotRelative:
-        chassisSpeed = new ChassisSpeeds(xSpeed, ySpeed, rot);
+        chassisVelocity = new ChassisVelocities(xSpeed, ySpeed, rot);
         break;
       case kFieldRelative:
         // TODO Should kFieldRelative use the gyro angle (same as 2025) or the odometry angle (will get updates from camera, which could be wrong)?
-        chassisSpeed = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(getGyroRotation()));
+        chassisVelocity = ChassisVelocities.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(getGyroRotation()));
         break;
       case kDriverRelative:
-        chassisSpeed = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(getGyroRotation()).plus(driverAngleToStation));
+        chassisVelocity = ChassisVelocities.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(getGyroRotation()).plus(driverAngleToStation));
         break;
     }
 
-    SwerveModuleState[] swerveModuleStates = kDriveKinematics.toSwerveModuleStates(chassisSpeed, centerOfRotationMeters);
-    setModuleStates(swerveModuleStates, isOpenLoop);
+    SwerveModuleVelocity[] swerveModuleVelocities = kDriveKinematics.toSwerveModuleVelocities(chassisVelocity, centerOfRotationMeters);
+    setModuleStates(swerveModuleVelocities, isOpenLoop);
   }
 
   // ************ Driver angle methods
@@ -586,7 +587,7 @@ public class DriveTrain extends SubsystemBase implements Loggable {
    * This is mainly for use on partial practice fields, where the driver is sitting elsewhere.
    */
   public void resetDriverAngle() {
-    driverAngleToStation = Rotation2d.fromDegrees( -getGyroRotation() + (allianceSelection.getAlliance() == Alliance.Blue ? 0 : 180 ));
+    driverAngleToStation = Rotation2d.fromDegrees( -getGyroRotation() + (allianceSelection.getAlliance() == Alliance.BLUE ? 0 : 180 ));
   }
 
 
@@ -646,14 +647,14 @@ public class DriveTrain extends SubsystemBase implements Loggable {
   }
   
   /**
-   * Returns the speed of the robot in X, Y, and theta <b>in the field frame of reference</b>.
+   * Returns the velocity of the robot in X, Y, and theta <b>in the field frame of reference</b>.
    * <p> Speed of the robot in the x direction, in meters per second (+ = away from the Blue drivestation)
    * <p> Speed of the robot in the y direction, in meters per second (+ = left when looking from the Blue drivestation)
    * <p> Angular rate of the robot, in radians per second (+ = turn to the left)
-   * @return ChassisSpeeds object representing the chassis speeds.
+   * @return ChassisVelocities object representing the chassis velocities.
    */
-  public ChassisSpeeds getRobotSpeeds() {
-    return ChassisSpeeds.fromRobotRelativeSpeeds(getChassisSpeeds(), Rotation2d.fromDegrees(getGyroRotation()));
+  public ChassisVelocities getRobotVelocities() {
+    return ChassisVelocities.fromRobotRelativeSpeeds(getChassisVelocities(), Rotation2d.fromDegrees(getGyroRotation()));
   }
 
   // ************ Information methods
@@ -688,12 +689,12 @@ public class DriveTrain extends SubsystemBase implements Loggable {
     if (DataLogUtil.isMyLogRotation(logRotationKey, RotationWhenDisabled.kNormal)) {
       checkForFaultConditions();
 
-      ChassisSpeeds robotSpeeds = getRobotSpeeds();
+      ChassisVelocities robotVelocities = getRobotVelocities();
 
       // SmartDashboard.putNumber("Drive Average Dist in Meters", Units.inchesToMeters(getAverageDistance()));
       SmartDashboard.putNumber("Drive Speed", speedAvg);
-      SmartDashboard.putNumber("Drive X Velocity", robotSpeeds.vxMetersPerSecond);
-      SmartDashboard.putNumber("Drive Y Velocity", robotSpeeds.vyMetersPerSecond);
+      SmartDashboard.putNumber("Drive X Velocity", robotVelocities.vx);
+      SmartDashboard.putNumber("Drive Y Velocity", robotVelocities.vy);
       SmartDashboard.putBoolean("Drive isGyroReading", isGyroReading());
       SmartDashboard.putBoolean("Drive isBrakeMode", !isDriveModeCoast());
       SmartDashboard.putNumber("Drive Raw Gyro", getGyroRaw());
@@ -748,11 +749,11 @@ public class DriveTrain extends SubsystemBase implements Loggable {
    */
   public void updateDriveLog(boolean logWhenDisabled) {
     Pose2d pose = getPose();
-    ChassisSpeeds robotRelativeSpeeds = getChassisSpeeds();
-    ChassisSpeeds fieldRelativeSpeeds = getRobotSpeeds();
-    long timeNow = RobotController.getFPGATime();
+    ChassisVelocities robotRelativeVelocities = getChassisVelocities();
+    ChassisVelocities fieldRelativeVelocities = getRobotVelocities();
+    long timeNow = RobotController.getTime();
     
-    if (logWhenDisabled  || !DriverStation.isDisabled()) {
+    if (logWhenDisabled  || !RobotState.isDisabled()) {
       dLogOdometryPose2D.append(pose, timeNow);
       dLogGyroAngle.append(getGyroRotation(), timeNow);
       dLogGyroRaw.append(getGyroRaw(), timeNow);
@@ -762,10 +763,10 @@ public class DriveTrain extends SubsystemBase implements Loggable {
       dLogOdometryY.append(pose.getTranslation().getY(), timeNow);
       dLogOdometryTheta.append(pose.getRotation().getDegrees(), timeNow);
       dLogDriveSpeed.append(speedAvg, timeNow);
-      dLogFieldRelativeXVelocity.append(fieldRelativeSpeeds.vxMetersPerSecond, timeNow);
-      dLogFieldRelativeYVelocity.append(fieldRelativeSpeeds.vyMetersPerSecond, timeNow);
-      dLogRobotRelativeXVelocity.append(robotRelativeSpeeds.vxMetersPerSecond, timeNow);
-      dLogRobotRelativeYVelocity.append(robotRelativeSpeeds.vyMetersPerSecond, timeNow);
+      dLogFieldRelativeXVelocity.append(fieldRelativeVelocities.vx, timeNow);
+      dLogFieldRelativeYVelocity.append(fieldRelativeVelocities.vy, timeNow);
+      dLogRobotRelativeXVelocity.append(robotRelativeVelocities.vx, timeNow);
+      dLogRobotRelativeYVelocity.append(robotRelativeVelocities.vy, timeNow);
       dLogBusVoltage.append(swerveFrontLeft.getDriveBusVoltage(), timeNow);
 
       swerveFrontLeft.updateSwerveLog(timeNow);
@@ -872,8 +873,8 @@ public class DriveTrain extends SubsystemBase implements Loggable {
     }
     
     // Update robot average speed
-    ChassisSpeeds robotSpeeds = getRobotSpeeds();
-    speedAvg = Math.hypot(robotSpeeds.vyMetersPerSecond, robotSpeeds.vxMetersPerSecond);
+    ChassisVelocities robotVelocities = getRobotVelocities();
+    speedAvg = Math.hypot(robotVelocities.vy, robotVelocities.vx);
 
     // Place robot on field object
     field2d.setRobotPose(poseEstimator.getEstimatedPosition());

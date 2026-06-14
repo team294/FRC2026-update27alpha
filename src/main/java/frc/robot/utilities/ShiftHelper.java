@@ -13,7 +13,7 @@ public class ShiftHelper {
 
     /**
      * Keeps track of shifts, publishing data to Elastic regarding whether or not shift is active.
-     * @param alliance Current Alliance (Alliance.Blue, Alliance.Red)
+     * @param alliance Current Alliance (Alliance.BLUE, Alliance.RED)
      * @param teleopTimer Timer object tracking match time
      */
     public ShiftHelper(Alliance alliance, Timer teleopTimer) {

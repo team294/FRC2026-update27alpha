@@ -6,11 +6,12 @@ package frc.robot.commands;
 
 import com.ctre.phoenix6.SignalLogger;
 
-import org.wpilib.math.util.MathUtil;
 import org.wpilib.system.Timer;
 import org.wpilib.command2.Command;
+
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.utilities.DataLogUtil;
+import frc.robot.utilities.MathBCR;
 
 public class DriveCalibration extends Command {
   private DriveTrain driveTrain;
@@ -60,7 +61,7 @@ public class DriveCalibration extends Command {
     driveTrain.setWheelFacings(angleFacing);
 
     if (timer.hasElapsed(alignTime)) {
-      percentOutput = MathUtil.clamp((currTime-alignTime) * rampRate, -maxPercentOutput, maxPercentOutput);
+      percentOutput = MathBCR.clamp((currTime-alignTime) * rampRate, -maxPercentOutput, maxPercentOutput);
       driveTrain.setDriveMotorsOutput(percentOutput);
     } else {
       driveTrain.setDriveMotorsOutput(0.0);

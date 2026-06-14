@@ -7,9 +7,9 @@
 
 package frc.robot.utilities;
 
-import org.wpilib.util.datalog.StringLogEntry;
+import org.wpilib.datalog.StringLogEntry;
 import org.wpilib.system.DataLogManager;
-import org.wpilib.driverstation.DriverStation;
+import org.wpilib.driverstation.RobotState;
 
 import static frc.robot.utilities.StringUtil.*;
 
@@ -90,7 +90,7 @@ public class DataLogUtil {
 	 */
 	public static void advanceLogRotation() {
 		rotationCurrent++;
-		if (rotationCurrent >= NUM_ROTATIONS && !DriverStation.isDisabled()) rotationCurrent = 0;
+		if (rotationCurrent >= NUM_ROTATIONS && !RobotState.isDisabled()) rotationCurrent = 0;
 		if (rotationCurrent >= NUM_ROTATIONS_DISABLED ) rotationCurrent = 0;
 
 		// if (logLevel == 3) {
@@ -126,7 +126,7 @@ public class DataLogUtil {
 	 * @return true = rotationKey is the current rotation, false = rotationKey is not the current rotation
 	 */
 	public static boolean isMyLogRotation(int logRotationKey, RotationWhenDisabled rotationWhenDisabled) {
-		if (DriverStation.isDisabled()) {
+		if (RobotState.isDisabled()) {
 			switch (rotationWhenDisabled) {
 				case kNone:
 					return false;

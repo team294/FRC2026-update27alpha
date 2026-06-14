@@ -12,7 +12,7 @@ import choreo.trajectory.SwerveSample;
 import choreo.trajectory.Trajectory;
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.driverstation.DriverStation.Alliance;
+import org.wpilib.driverstation.Alliance;
 import org.wpilib.command2.SequentialCommandGroup;
 import frc.robot.Constants.AutoConstants.BallPickupTrajType;
 import frc.robot.Constants.AutoConstants.RoutineSideType;

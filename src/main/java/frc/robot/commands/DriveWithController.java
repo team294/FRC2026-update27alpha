@@ -4,7 +4,7 @@
 
 package frc.robot.commands;
 
-import org.wpilib.driverstation.DriverStation.Alliance;
+import org.wpilib.driverstation.Alliance;
 import org.wpilib.command2.Command;
 import org.wpilib.command2.button.CommandXboxController;
 import frc.robot.Constants.OIConstants;
@@ -43,8 +43,8 @@ public class DriveWithController extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    fwdVelocity = allianceSelection.getAlliance() == Alliance.Blue ? -xboxController.getLeftY() : xboxController.getLeftY();
-    leftVelocity = allianceSelection.getAlliance() == Alliance.Blue ? -xboxController.getLeftX() : xboxController.getLeftX();
+    fwdVelocity = allianceSelection.getAlliance() == Alliance.BLUE ? -xboxController.getLeftY() : xboxController.getLeftY();
+    leftVelocity = allianceSelection.getAlliance() == Alliance.BLUE ? -xboxController.getLeftX() : xboxController.getLeftX();
     turnRate = -xboxController.getRightX();
 
     fwdVelocity = (Math.abs(fwdVelocity) < OIConstants.joystickDeadband) ? 0 : scaleJoystick(fwdVelocity) * SwerveConstants.kMaxSpeedMetersPerSecond;

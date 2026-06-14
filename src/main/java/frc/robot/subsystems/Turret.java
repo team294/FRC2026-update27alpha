@@ -16,17 +16,18 @@ import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
 import org.wpilib.math.geometry.Translation2d;
 import org.wpilib.units.measure.*;
-import org.wpilib.util.datalog.BooleanLogEntry;
-import org.wpilib.util.datalog.DataLog;
-import org.wpilib.util.datalog.DoubleLogEntry;
+import org.wpilib.datalog.BooleanLogEntry;
+import org.wpilib.datalog.DataLog;
+import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.system.DataLogManager;
-import org.wpilib.driverstation.DriverStation;
+import org.wpilib.driverstation.RobotState;
 import org.wpilib.system.RobotController;
 import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.SubsystemBase;
 
 import frc.robot.utilities.DataLogUtil;
 import frc.robot.utilities.Loggable;
+import frc.robot.utilities.MathBCR;
 import frc.robot.utilities.RobotPreferences;
 import frc.robot.utilities.Wait;
 import frc.robot.utilities.DataLogUtil.RotationWhenDisabled;
@@ -42,7 +43,7 @@ public class Turret extends SubsystemBase implements Loggable {
   private String subsystemName; // Subsystem name for use in file logging and dashboard
 
   // Create turret motor
-  private final TalonFX turretMotor = new TalonFX(Ports.CANTurretMotor);
+  private final TalonFX turretMotor = new TalonFX(Ports.CANTurretMotor, Ports.CANbusMain);
   private final TalonFXConfigurator turretMotorConfigurator = turretMotor.getConfigurator();
 
   // We create two configs for the turret motor -- one with RemoteCANcoder and one
@@ -70,10 +71,10 @@ public class Turret extends SubsystemBase implements Loggable {
   private final StatusSignal<ControlModeValue> turretControlMode;
 
   // Create CANcoder
-  private final CANcoder canCoderBelt = new CANcoder(Ports.CANTurretEncoderBelt);
+  private final CANcoder canCoderBelt = new CANcoder(Ports.CANTurretEncoderBelt, Ports.CANbusMain);
   private final CANcoderConfigurator canCoderBeltConfigurator = canCoderBelt.getConfigurator();
   private CANcoderConfiguration canCoderBeltConfig;
-  private final CANcoder canCoderGear = new CANcoder(Ports.CANTurretEncoderGear);
+  private final CANcoder canCoderGear = new CANcoder(Ports.CANTurretEncoderGear, Ports.CANbusMain);
   private final CANcoderConfigurator canCoderGearConfigurator = canCoderGear.getConfigurator();
   private CANcoderConfiguration canCoderGearConfig;
 
@@ -321,9 +322,9 @@ public class Turret extends SubsystemBase implements Loggable {
    */
   public void setTurretPercentOutput(double percent) {
     if (turretCalibrated) {
-      percent = MathUtil.clamp(percent, -TurretConstants.maxPercentOutput, TurretConstants.maxPercentOutput);
+      percent = MathBCR.clamp(percent, -TurretConstants.maxPercentOutput, TurretConstants.maxPercentOutput);
     } else {
-      percent = MathUtil.clamp(percent, -TurretConstants.maxUncalibratedPercentOutput,
+      percent = MathBCR.clamp(percent, -TurretConstants.maxUncalibratedPercentOutput,
           TurretConstants.maxUncalibratedPercentOutput);
     }
 
@@ -792,8 +793,8 @@ public class Turret extends SubsystemBase implements Loggable {
    * @param logWhenDisabled true = write when robot is disabled, false = only write when robot is enabled
    */
   public void updateTurretLog(boolean logWhenDisabled) {
-    if (logWhenDisabled || !DriverStation.isDisabled()) {
-      long timeNow = RobotController.getFPGATime();
+    if (logWhenDisabled || !RobotState.isDisabled()) {
+      long timeNow = RobotController.getTime();
 
       dLogTurretTemp.append(turretTemp.refresh().getValueAsDouble(), timeNow);
       dLogTurretPctOut.append(getTurretMotorPercentOutput(), timeNow);
@@ -866,7 +867,7 @@ public class Turret extends SubsystemBase implements Loggable {
 
     // If the driver station is disabled, then turn off any position control for the
     // turret motor
-    if (DriverStation.isDisabled()) {
+    if (RobotState.isDisabled()) {
       stopTurret();
     }
   }

@@ -7,14 +7,15 @@ import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Transform3d;
 import org.wpilib.math.numbers.N1;
 import org.wpilib.math.numbers.N3;
-import org.wpilib.util.datalog.BooleanLogEntry;
-import org.wpilib.util.datalog.DataLog;
-import org.wpilib.util.datalog.StructLogEntry;
+import org.wpilib.datalog.BooleanLogEntry;
+import org.wpilib.datalog.DataLog;
+import org.wpilib.datalog.StructLogEntry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.system.RobotController;
 import org.wpilib.system.Timer;
 import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.SubsystemBase;
+
 import frc.robot.Constants.VisionConstants;
 import frc.robot.utilities.DataLogUtil;
 import frc.robot.utilities.RobotPreferences;
@@ -71,7 +72,7 @@ public class PhotonCameraWrapper extends SubsystemBase {
     photonPoseEstimatorCamera = new PhotonPoseEstimator(aprilTagFieldLayout, robotToCam);
 
     // Prime the DataLog to reduce delay when first enabling the robot
-    long timeNow = RobotController.getFPGATime();
+    long timeNow = RobotController.getTime();
     dLogEstPose2D.append(Pose2d.kZero, timeNow);
 
     priorConnected = photonCamera.isConnected();
@@ -111,7 +112,7 @@ public class PhotonCameraWrapper extends SubsystemBase {
    * the observation. Assumes a planar field and the robot is always firmly on the ground.
    */
   public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose, PhotonPipelineResult latestResult) {
-    long timeNow = RobotController.getFPGATime();
+    long timeNow = RobotController.getTime();
 
     checkForFaultConditions();
 
@@ -198,7 +199,7 @@ public class PhotonCameraWrapper extends SubsystemBase {
       // Reset recordedStickyFault if the Sticky Faults were cleared
       recordedStickyFault = recordedStickyFault && RobotPreferences.isStickyFaultActive();
 
-      long timeNow = RobotController.getFPGATime();
+      long timeNow = RobotController.getTime();
       boolean isConnected = photonCamera.isConnected();
 
       if (!recordedStickyFault && !isConnected && timeSinceStart.hasElapsed(VisionConstants.stickyFaultCheckDelaySeconds)) {

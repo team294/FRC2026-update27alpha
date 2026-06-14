@@ -2,9 +2,6 @@ package frc.robot.utilities;
 
 import static org.wpilib.command2.Commands.*;
 
-import org.wpilib.math.util.MathUtil;
-import org.wpilib.math.geometry.Pose2d;
-import org.wpilib.math.geometry.Rotation2d;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.driverstation.Joystick;
 import org.wpilib.system.Timer;
@@ -12,9 +9,7 @@ import org.wpilib.smartdashboard.SendableChooser;
 import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.*;
 
-import frc.robot.Constants.CoordType;
 import frc.robot.Constants.EndType;
-import frc.robot.Constants.StopType;
 import frc.robot.Constants.AutoConstants.BallPickupTrajType;
 import frc.robot.Constants.AutoConstants.AutoEndType;
 import frc.robot.Constants.AutoConstants.ReturnToAllianceType;
@@ -23,9 +18,7 @@ import frc.robot.Constants.AutoConstants.ShootPreloadType;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.utilities.DataLogUtil.RotationWhenDisabled;
-import frc.robot.utilities.TrajectoryCache.TrajectoryName;
 import frc.robot.commands.autos.*;
-import frc.robot.commands.sequences.IntakeSequence;
 
 
 /**
@@ -182,7 +175,7 @@ public class AutoSelection {
 		DataLogUtil.writeMessage(true, "AutoSelect, autoPlan =", autoPlan);
 
 		waitTime = SmartDashboard.getNumber("Autonomous delay", 0);
-		waitTime = MathUtil.clamp(waitTime, 0, 15); // make sure autoDelay isn't negative and is only active during auto
+		waitTime = MathBCR.clamp(waitTime, 0, 15); // make sure autoDelay isn't negative and is only active during auto
 
 		if (autoPlan == RoutineSelectionOption.NONE.value) {
 			// Starting position = facing drivers
@@ -221,14 +214,14 @@ public class AutoSelection {
 		// else if (autoPlan == RoutineSelectionOption.DriveForwardOneMeter.value) {
 		// 	autoSelectionOption = RoutineSelectionOption.DriveForwardOneMeter;
 		// 	autonomousCommandMain = new SequentialCommandGroup(
-		// 								new DriveResetPose(allianceSelection.getAlliance() == Alliance.Red ? 0 : 180, false, driveTrain),
+		// 								new DriveResetPose(allianceSelection.getAlliance() == Alliance.RED ? 0 : 180, false, driveTrain),
 		// 								new DriveToPose(CoordType.kRelative, new Pose2d(1, 0, new Rotation2d(0)), driveTrain));
 		// }
 
 		// else if (autoPlan == RoutineSelectionOption.DriveForwardTwoMeters.value) {
 		// 	autoSelectionOption = RoutineSelectionOption.DriveForwardTwoMeters;
 		// 	autonomousCommandMain = new SequentialCommandGroup(
-		// 								new DriveResetPose(allianceSelection.getAlliance() == Alliance.Red ? 0 : 180, false, driveTrain),
+		// 								new DriveResetPose(allianceSelection.getAlliance() == Alliance.RED ? 0 : 180, false, driveTrain),
 		// 								new DriveToPose(CoordType.kRelative, new Pose2d(2, 0, new Rotation2d(0)), driveTrain));
 		// }
 

@@ -4,11 +4,12 @@
 
 package frc.robot.commands;
 
-import org.wpilib.math.util.MathUtil;
 import org.wpilib.system.Timer;
 import org.wpilib.command2.Command;
+
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.utilities.DataLogUtil;
+import frc.robot.utilities.MathBCR;
 
 public class DriveTurnCalibration extends Command {
 
@@ -48,7 +49,7 @@ public class DriveTurnCalibration extends Command {
   @Override
   public void execute() {
     double currTime = timer.get();
-    percentOutput = MathUtil.clamp(currTime*rampRate, -maxPercentOutput, maxPercentOutput);
+    percentOutput = MathBCR.clamp(currTime*rampRate, -maxPercentOutput, maxPercentOutput);
     driveTrain.setTurningMotorsOutput(percentOutput);
   }
 

@@ -6,7 +6,6 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
-import org.wpilib.math.util.MathUtil;
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Translation2d;
 import org.wpilib.smartdashboard.SmartDashboard;
@@ -22,6 +21,7 @@ import frc.robot.utilities.DataLogUtil;
 import frc.robot.utilities.Field;
 import frc.robot.utilities.LEDEventUtil;
 import frc.robot.utilities.LEDEventUtil.LEDStripEvents;
+import frc.robot.utilities.MathBCR;
 
 public class ShooterScorePrep extends Command {
   private final Shooter shooter;
@@ -150,14 +150,14 @@ public class ShooterScorePrep extends Command {
       if (!turret.getShootOnTheMoveEnabled()) {
         goalTranslation2d = field.getStaticShotTarget(turretTranslation2d);
       } else {
-        goalTranslation2d = field.getGhostShotTarget(field.getStaticShotTarget(turretTranslation2d), turretTranslation2d, driveTrain.getChassisSpeeds());
+        goalTranslation2d = field.getGhostShotTarget(field.getStaticShotTarget(turretTranslation2d), turretTranslation2d, driveTrain.getChassisVelocities());
       }
 
       distanceToTarget = goalTranslation2d.getDistance(turretTranslation2d);
       
       // Target shooter motor speed based on: A0 + (A1)(Dist) where A0, A1 are unique constants
       double calculatedVelocity = (ShooterConstants.shooterDistanceToRPMIntercept + (ShooterConstants.shooterDistanceToRPMSlope * distanceToTarget));
-      targetVelocity = MathUtil.clamp(calculatedVelocity, 0, ShooterConstants.maxShootRPM);
+      targetVelocity = MathBCR.clamp(calculatedVelocity, 0, ShooterConstants.maxShootRPM);
       
       if (goalTranslation2d == FieldConstants.leftPassBlue || goalTranslation2d == FieldConstants.rightPassRed || goalTranslation2d == FieldConstants.rightPassBlue || goalTranslation2d == FieldConstants.leftPassRed) {
         targetHoodAngle = ShooterConstants.hoodPassAngle;
@@ -199,14 +199,14 @@ public class ShooterScorePrep extends Command {
       } else {
         goalTranslation2d = field.getGhostShotTarget(field.getStaticShotTarget(turretTranslation2d),
                                                       turretTranslation2d,
-                                                      driveTrain.getRobotSpeeds());
+                                                      driveTrain.getRobotVelocities());
       }
 
       distanceToTarget = goalTranslation2d.getDistance(turretTranslation2d);
       
       // Target shooter motor speed based on: A0 + (A1)(Dist) where A0, A1 are unique constants
       double calculatedVelocity = (ShooterConstants.shooterDistanceToRPMIntercept + (ShooterConstants.shooterDistanceToRPMSlope * distanceToTarget));
-      targetVelocity = MathUtil.clamp(calculatedVelocity, 0, ShooterConstants.maxShootRPM);
+      targetVelocity = MathBCR.clamp(calculatedVelocity, 0, ShooterConstants.maxShootRPM);
       
       if (goalTranslation2d == FieldConstants.leftPassBlue || goalTranslation2d == FieldConstants.rightPassRed || goalTranslation2d == FieldConstants.rightPassBlue || goalTranslation2d == FieldConstants.leftPassRed) {
         targetHoodAngle = ShooterConstants.hoodPassAngle;

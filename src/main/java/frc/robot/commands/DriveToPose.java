@@ -6,18 +6,17 @@ package frc.robot.commands;
 
 import java.util.function.Supplier;
 
-import org.wpilib.math.util.MathUtil;
 import org.wpilib.math.controller.PIDController;
 import org.wpilib.math.controller.ProfiledPIDController;
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
 import org.wpilib.math.geometry.Transform2d;
 import org.wpilib.math.geometry.Translation2d;
-import org.wpilib.math.kinematics.ChassisSpeeds;
-import org.wpilib.util.datalog.DataLog;
-import org.wpilib.util.datalog.DoubleLogEntry;
-import org.wpilib.util.datalog.StringLogEntry;
-import org.wpilib.util.datalog.StructLogEntry;
+import org.wpilib.math.kinematics.ChassisVelocities;
+import org.wpilib.datalog.DataLog;
+import org.wpilib.datalog.DoubleLogEntry;
+import org.wpilib.datalog.StringLogEntry;
+import org.wpilib.datalog.StructLogEntry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.system.RobotController;
 import org.wpilib.system.Timer;
@@ -164,8 +163,8 @@ public class DriveToPose extends Command {
     this.openLoopSwerve = !closedLoopSwerve;
 
     trapProfileConstraints = new TrapezoidProfileBCR.Constraints(
-      MathUtil.clamp(maxVelMetersPerSecond, -SwerveConstants.kFullSpeedMetersPerSecond, SwerveConstants.kFullSpeedMetersPerSecond), 
-      MathUtil.clamp(maxAccelMetersPerSecondSquare, -SwerveConstants.kFullAccelerationMetersPerSecondSquare, SwerveConstants.kFullAccelerationMetersPerSecondSquare)
+      MathBCR.clamp(maxVelMetersPerSecond, -SwerveConstants.kFullSpeedMetersPerSecond, SwerveConstants.kFullSpeedMetersPerSecond), 
+      MathBCR.clamp(maxAccelMetersPerSecondSquare, -SwerveConstants.kFullAccelerationMetersPerSecondSquare, SwerveConstants.kFullAccelerationMetersPerSecondSquare)
     );
 
     constructorCommonCode();
@@ -320,9 +319,9 @@ public class DriveToPose extends Command {
       thetaController );
 
     // Prime logging
-    long timeNow = RobotController.getFPGATime();
+    long timeNow = RobotController.getTime();
     Pose2d robotPose = driveTrain.getPose();
-    ChassisSpeeds robotSpeeds = driveTrain.getRobotSpeeds();
+    ChassisVelocities robotVelocities = driveTrain.getRobotVelocities();
 
     dLogTime.append(-1, timeNow);
     dLogCurPose2D.append(robotPose, timeNow);
@@ -338,10 +337,10 @@ public class DriveToPose extends Command {
     dLogRobotThErr.append(-1, timeNow);
     dLogRobotX.append(robotPose.getX(), timeNow);
     dLogRobotY.append(robotPose.getY(), timeNow);
-    dLogRobotVel.append(Math.hypot(robotSpeeds.vyMetersPerSecond, robotSpeeds.vxMetersPerSecond), timeNow);
-    dLogRobotXVel.append(robotSpeeds.vxMetersPerSecond, timeNow);
-    dLogRobotYVel.append(robotSpeeds.vyMetersPerSecond, timeNow);
-    dLogRobotVelAng.append(Math.toDegrees(Math.atan2(robotSpeeds.vyMetersPerSecond, robotSpeeds.vxMetersPerSecond)), timeNow);
+    dLogRobotVel.append(Math.hypot(robotVelocities.vy, robotVelocities.vx), timeNow);
+    dLogRobotXVel.append(robotVelocities.vx, timeNow);
+    dLogRobotYVel.append(robotVelocities.vy, timeNow);
+    dLogRobotVelAng.append(Math.toDegrees(Math.atan2(robotVelocities.vy, robotVelocities.vx)), timeNow);
     dLogRobotRot.append(robotPose.getRotation().getDegrees(), timeNow);
     dLogRobotPitch.append(driveTrain.getGyroPitch(), timeNow);
   }
@@ -376,7 +375,7 @@ public class DriveToPose extends Command {
         Rotation2d angleTarget = Rotation2d.fromDegrees(SmartDashboard.getNumber("DriveToPose Rot degrees", 0));
         inputPose = new Pose2d(xPos, yPos, angleTarget);
 
-        trapProfileConstraints.maxVelocity = MathUtil.clamp(SmartDashboard.getNumber("DriveToPose VelMax mps", 0), 
+        trapProfileConstraints.maxVelocity = MathBCR.clamp(SmartDashboard.getNumber("DriveToPose VelMax mps", 0), 
           -SwerveConstants.kFullSpeedMetersPerSecond, SwerveConstants.kFullSpeedMetersPerSecond);
 
         int feedbackMode = feedbackChooser.getSelected();
@@ -424,8 +423,8 @@ public class DriveToPose extends Command {
     double goalDistance = trapezoidPath.getNorm();
     
     // Get the initial velocity in the direction of travel
-    ChassisSpeeds robotSpeed = driveTrain.getRobotSpeeds();
-    double initialVelocity = robotSpeed.vxMetersPerSecond * goalDirection.getX() + robotSpeed.vyMetersPerSecond * goalDirection.getY();
+    ChassisVelocities robotVelocities = driveTrain.getRobotVelocities();
+    double initialVelocity = robotVelocities.vx * goalDirection.getX() + robotVelocities.vy * goalDirection.getY();
 
     // Create the profile, which is linear distance (along goalDirection) relative to the initial pose
     TrapezoidProfileBCR.State initialState = new TrapezoidProfileBCR.State(0, initialVelocity);
@@ -453,14 +452,14 @@ public class DriveToPose extends Command {
     Rotation2d desiredRotation = goalPose.getRotation();
 
     // Get the field-relative chassis speeds
-    ChassisSpeeds targetChassisSpeeds = controller.calculate(robotPose, desiredPose, desiredVelocityMetersPerSecond, desiredRotation);
+    ChassisVelocities targetChassisVelocities = controller.calculate(robotPose, desiredPose, desiredVelocityMetersPerSecond, desiredRotation);
 
-    driveTrain.drive(targetChassisSpeeds.vxMetersPerSecond, targetChassisSpeeds.vyMetersPerSecond,
-        targetChassisSpeeds.omegaRadiansPerSecond, DriveType.kFieldRelative, openLoopSwerve);
+    driveTrain.drive(targetChassisVelocities.vx, targetChassisVelocities.vy,
+        targetChassisVelocities.omega, DriveType.kFieldRelative, openLoopSwerve);
 
     // Log data for path following
-    long timeNow = RobotController.getFPGATime();
-    ChassisSpeeds robotSpeeds = driveTrain.getRobotSpeeds();
+    long timeNow = RobotController.getTime();
+    ChassisVelocities robotVelocities = driveTrain.getRobotVelocities();
     dLogTime.append(curTime, timeNow);
     dLogCurPose2D.append(curRobotOdometryPose, timeNow);
     dLogTrajPose2D.append(new Pose2d(desiredPose.getTranslation().plus(initialTranslation), desiredRotation), timeNow);   // Field-relative current desired position
@@ -475,10 +474,10 @@ public class DriveToPose extends Command {
     dLogRobotThErr.append(MathBCR.angleMinus(driveTrain.getPoseAngle(), goalPose.getRotation().getDegrees()), timeNow);
     dLogRobotX.append(curRobotTranslation.getX(), timeNow);
     dLogRobotY.append(curRobotTranslation.getY(), timeNow);
-    dLogRobotVel.append(Math.hypot(robotSpeeds.vyMetersPerSecond, robotSpeeds.vxMetersPerSecond), timeNow);
-    dLogRobotXVel.append(robotSpeeds.vxMetersPerSecond, timeNow);
-    dLogRobotYVel.append(robotSpeeds.vyMetersPerSecond, timeNow);
-    dLogRobotVelAng.append(Math.toDegrees(Math.atan2(robotSpeeds.vyMetersPerSecond, robotSpeeds.vxMetersPerSecond)), timeNow);
+    dLogRobotVel.append(Math.hypot(robotVelocities.vy, robotVelocities.vx), timeNow);
+    dLogRobotXVel.append(robotVelocities.vx, timeNow);
+    dLogRobotYVel.append(robotVelocities.vy, timeNow);
+    dLogRobotVelAng.append(Math.toDegrees(Math.atan2(robotVelocities.vy, robotVelocities.vx)), timeNow);
     dLogRobotRot.append(robotPose.getRotation().getDegrees(), timeNow);
     dLogRobotPitch.append(driveTrain.getGyroPitch(), timeNow);
   }

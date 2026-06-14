@@ -8,7 +8,7 @@ import static org.wpilib.command2.Commands.*;
 
 import choreo.trajectory.SwerveSample;
 import choreo.trajectory.Trajectory;
-import org.wpilib.driverstation.DriverStation.Alliance;
+import org.wpilib.driverstation.Alliance;
 import org.wpilib.command2.SequentialCommandGroup;
 import org.wpilib.command2.WaitCommand;
 import frc.robot.Constants.AutoConstants.BallPickupTrajType;
@@ -71,7 +71,7 @@ public class AutonDriveToNeutralAndCollectBalls extends SequentialCommandGroup {
         sequence(
           // If shooting preload, starts with front of the robot on the start line (one robot's length back)
           new AutonScore(EndType.waitForSetPoint, intake, feeder, turret, shooter, climber, driveTrain, field).withTimeout(2.0),
-          new DriveToPose(CoordType.kAbsolute, trajectory.getInitialPose(alliance.getAlliance() == Alliance.Red).get(), driveTrain) // TODO would this make it stop? how to make it continously go into the trajectory? 
+          new DriveToPose(CoordType.kAbsolute, trajectory.getInitialPose(alliance.getAlliance() == Alliance.RED).get(), driveTrain) // TODO would this make it stop? how to make it continously go into the trajectory? 
         ),
         none(),
         () -> shootPreload == ShootPreloadType.kShootPreload

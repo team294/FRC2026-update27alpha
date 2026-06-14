@@ -14,7 +14,7 @@ import choreo.trajectory.Trajectory;
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
 import org.wpilib.math.geometry.Transform2d;
-import org.wpilib.driverstation.DriverStation.Alliance;
+import org.wpilib.driverstation.Alliance;
 import org.wpilib.command2.ParallelDeadlineGroup;
 import org.wpilib.command2.SequentialCommandGroup;
 import org.wpilib.command2.WaitCommand;
@@ -52,7 +52,7 @@ public class BuildCenterAuton extends SequentialCommandGroup {
   public BuildCenterAuton(EndType shootEndType, boolean collectBalls, boolean climb, Intake intake, Feeder feeder, Turret turret, Shooter shooter, Climber climber, DriveTrain driveTrain, Field field, AllianceSelection alliance, TrajectoryCache cache) {
     Trajectory<SwerveSample> driveToClimbTrajectory = collectBalls ? cache.getTrajectory(TrajectoryName.CollectDepotToClimb_LabSafe) : cache.getTrajectory(TrajectoryName.CenterShootToClimb);
     Trajectory<SwerveSample> collectTrajectory = cache.getTrajectory(TrajectoryName.CenterStartCollectUnderTower_LabSafe);
-    Pose2d initalPose2d = collectBalls ? collectTrajectory.getInitialPose(alliance.getAlliance() == Alliance.Red).get() : cache.getTrajectory(TrajectoryName.CenterShootToClimb).getInitialPose(alliance.getAlliance() == Alliance.Red).get().transformBy(new Transform2d(1.0, 0, Rotation2d.kZero));
+    Pose2d initalPose2d = collectBalls ? collectTrajectory.getInitialPose(alliance.getAlliance() == Alliance.RED).get() : cache.getTrajectory(TrajectoryName.CenterShootToClimb).getInitialPose(alliance.getAlliance() == Alliance.RED).get().transformBy(new Transform2d(1.0, 0, Rotation2d.kZero));
     addCommands(
       new DriveResetPose(initalPose2d, true, driveTrain),
       either(
@@ -90,7 +90,7 @@ public class BuildCenterAuton extends SequentialCommandGroup {
                 either(
                   new DriveToPose(CoordType.kAbsolute, () -> (new Pose2d(FieldConstants.climbPrepBlue.getX(), FieldConstants.climbPrepBlue.getY(), new Rotation2d(0))), 0.07, 1.5, driveTrain),
                   new DriveToPose(CoordType.kAbsolute, () -> new Pose2d(FieldConstants.climbPrepRed.getX(), FieldConstants.climbPrepRed.getY(), Rotation2d.k180deg), 0.07, 1.5, driveTrain),
-                  () -> (alliance.getAlliance() == Alliance.Blue)
+                  () -> (alliance.getAlliance() == Alliance.BLUE)
                 )
               ),
 

@@ -21,14 +21,15 @@ import org.wpilib.units.measure.Current;
 import org.wpilib.units.measure.Distance;
 import org.wpilib.units.measure.Temperature;
 import org.wpilib.units.measure.Voltage;
-import org.wpilib.util.datalog.BooleanLogEntry;
-import org.wpilib.util.datalog.DataLog;
-import org.wpilib.util.datalog.DoubleLogEntry;
+import org.wpilib.datalog.BooleanLogEntry;
+import org.wpilib.datalog.DataLog;
+import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.system.DataLogManager;
-import org.wpilib.driverstation.DriverStation;
+import org.wpilib.driverstation.RobotState;
 import org.wpilib.system.RobotController;
 import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.SubsystemBase;
+
 import frc.robot.Constants.CANRangeConstants;
 import frc.robot.Constants.Ports;
 import frc.robot.Constants.FeederConstants.SpindexerConstants;
@@ -50,12 +51,12 @@ public class Feeder extends SubsystemBase implements Loggable {
   
 
   // Motors
-  private final TalonFX uptakeMotor = new TalonFX(Ports.CANFeederUptakeMotor);
-  private final TalonFX spindexerMotor = new TalonFX(Ports.CANFeederSpindexerMotor);
+  private final TalonFX uptakeMotor = new TalonFX(Ports.CANFeederUptakeMotor, Ports.CANbusMain);
+  private final TalonFX spindexerMotor = new TalonFX(Ports.CANFeederSpindexerMotor, Ports.CANbusMain);
 
   // CANranges
-  private final CANrange CANRangeEntry = new CANrange(Ports.CANRangeEntry); // CANrange located on the feeder's entry point (adjacent to hopper)
-  private final CANrange CANRangeExit = new CANrange(Ports.CANRangeExit);   // CANrange located on the feeder's exit point (into shooter)
+  private final CANrange CANRangeEntry = new CANrange(Ports.CANRangeEntry, Ports.CANbusMain); // CANrange located on the feeder's entry point (adjacent to hopper)
+  private final CANrange CANRangeExit = new CANrange(Ports.CANRangeExit, Ports.CANbusMain);   // CANrange located on the feeder's exit point (into shooter)
   
   // CANrange configurators
   private final CANrangeConfigurator CANRangeEntryConfiguator = CANRangeEntry.getConfigurator();
@@ -474,9 +475,9 @@ public class Feeder extends SubsystemBase implements Loggable {
    * @param logWhenDisabled true = log always, false = only log when enabled
    */
   public void updateLog(boolean logWhenDisabled) {
-    if (!logWhenDisabled && DriverStation.isDisabled()) return;
+    if (!logWhenDisabled && RobotState.isDisabled()) return;
 
-    long timeNow = RobotController.getFPGATime();
+    long timeNow = RobotController.getTime();
 
     dLogUptakeTemp.append(uptakeTemp.refresh().getValueAsDouble(), timeNow);
     dLogUptakeVoltage.append(uptakeVoltage.refresh().getValueAsDouble(), timeNow);

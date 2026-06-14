@@ -10,7 +10,7 @@ import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
 import org.wpilib.math.geometry.Transform2d;
 import org.wpilib.system.Timer;
-import org.wpilib.driverstation.DriverStation.Alliance;
+import org.wpilib.driverstation.Alliance;
 import org.wpilib.command2.InstantCommand;
 import org.wpilib.command2.SequentialCommandGroup;
 import org.wpilib.command2.WaitUntilCommand;
@@ -50,7 +50,7 @@ public class BuildSideAuton extends SequentialCommandGroup {
     boolean leftSide = routineSide == RoutineSideType.kLeftSide;
     // Initial pose: if shooting preload = inital pose of first trajectory - robot length + front bumper thickness
     //           if not shooting preload = inital pose of first trajectory
-    Pose2d initialTrajectoryPose = cache.getTrajectory(leftSide, TrajectoryName.StartTrenchToCollectStart).getInitialPose(alliance.getAlliance() == Alliance.Red).get();
+    Pose2d initialTrajectoryPose = cache.getTrajectory(leftSide, TrajectoryName.StartTrenchToCollectStart).getInitialPose(alliance.getAlliance() == Alliance.RED).get();
     Pose2d initalRobotStartPose = shootPreload == ShootPreloadType.kShootPreload ?  
                                 initialTrajectoryPose.transformBy(new Transform2d(-RobotDimensions.robotLength + RobotDimensions.frontBumperThickness, 0, Rotation2d.kZero)) : 
                                 initialTrajectoryPose;

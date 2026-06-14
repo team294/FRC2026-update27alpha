@@ -4,8 +4,8 @@
 
 package frc.robot.commands;
 
-import org.wpilib.util.datalog.DataLog;
-import org.wpilib.util.datalog.DoubleLogEntry;
+import org.wpilib.datalog.DataLog;
+import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.system.RobotController;
 import org.wpilib.command2.Command;
@@ -35,7 +35,7 @@ public class IntakeDeployManualControl extends Command {
     addRequirements(intake);
 
     // Prime data logging at boot time
-    long timeNow = RobotController.getFPGATime();
+    long timeNow = RobotController.getTime();
     dLogPct.append(-1, timeNow);
   }
 
@@ -56,7 +56,7 @@ public class IntakeDeployManualControl extends Command {
     intake.setIntakeDeployPercentOutput(intakePercent);
 
     // Log data
-    long timeNow = RobotController.getFPGATime();
+    long timeNow = RobotController.getTime();
     dLogPct.append(intakePercent, timeNow);
   }
 

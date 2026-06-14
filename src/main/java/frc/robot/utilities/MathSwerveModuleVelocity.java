@@ -1,28 +1,28 @@
 package frc.robot.utilities;
 
 import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.math.kinematics.SwerveModuleState;
+import org.wpilib.math.kinematics.SwerveModuleVelocity;
 
-public class MathSwerveModuleState {
+public class MathSwerveModuleVelocity {
 
   /**
-   * Minimize the change in heading the desired swerve module state would require by potentially
+   * Minimize the change in heading the desired swerve module angle would require by potentially
    * reversing the direction the wheel spins. Customized from WPILib's version to include placing
    * in appropriate scope for CTRE onboard control. Resulting state always has an angle that is
    * within +/-90 degrees of the currentAngle, without any wrapping. For example, if
    * currentAngle = -550 deg, then the resulting state's angle will be between -640 and -460 deg.
-   * @param desiredState desired state
+   * @param desiredVelocity desired velocity
    * @param currentAngle current module angle
    */
-  public static SwerveModuleState optimize(SwerveModuleState desiredState, Rotation2d currentAngle) {
-    double targetAngle = placeInAppropriate180Scope(currentAngle.getDegrees(), desiredState.angle.getDegrees());
-    double targetSpeed = desiredState.speedMetersPerSecond;
+  public static SwerveModuleVelocity optimize(SwerveModuleVelocity desiredVelocity, Rotation2d currentAngle) {
+    double targetAngle = placeInAppropriate180Scope(currentAngle.getDegrees(), desiredVelocity.angle.getDegrees());
+    double targetSpeed = desiredVelocity.velocity;
     double delta = targetAngle - currentAngle.getDegrees();
     if (Math.abs(delta) > 90) {
       targetSpeed = -targetSpeed;
       targetAngle = delta > 90 ? (targetAngle -= 180) : (targetAngle += 180);
     }        
-    return new SwerveModuleState(targetSpeed, Rotation2d.fromDegrees(targetAngle));
+    return new SwerveModuleVelocity(targetSpeed, Rotation2d.fromDegrees(targetAngle));
   }
 
   /**

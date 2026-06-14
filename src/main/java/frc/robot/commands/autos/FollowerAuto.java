@@ -10,7 +10,7 @@ import choreo.trajectory.SwerveSample;
 import choreo.trajectory.Trajectory;
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.driverstation.DriverStation.Alliance;
+import org.wpilib.driverstation.Alliance;
 import org.wpilib.command2.ParallelDeadlineGroup;
 import org.wpilib.command2.SequentialCommandGroup;
 import org.wpilib.command2.WaitCommand;
@@ -53,7 +53,7 @@ public class FollowerAuto extends SequentialCommandGroup {
     addCommands(
       new ParallelDeadlineGroup(
         sequence(
-          new DriveResetPose(startTrajectory.getInitialPose(alliance.getAlliance() == Alliance.Red).get(), isScheduled(), driveTrain),
+          new DriveResetPose(startTrajectory.getInitialPose(alliance.getAlliance() == Alliance.RED).get(), isScheduled(), driveTrain),
           parallel(
             sequence(
               new WaitCommand(1.0),
@@ -73,7 +73,7 @@ public class FollowerAuto extends SequentialCommandGroup {
             either(
               new DriveToPose(CoordType.kAbsolute, () -> (new Pose2d(FieldConstants.climbPrepBlue.getX(), FieldConstants.climbPrepBlue.getY(), new Rotation2d(0))), 0.07, 1.5, driveTrain),
               new DriveToPose(CoordType.kAbsolute, () -> new Pose2d(FieldConstants.climbPrepRed.getX(), FieldConstants.climbPrepRed.getY(), Rotation2d.k180deg), 0.07, 1.5, driveTrain),
-              () -> (alliance.getAlliance() == Alliance.Blue)
+              () -> (alliance.getAlliance() == Alliance.BLUE)
             )
           )
         ),
