@@ -9,7 +9,7 @@ import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.system.RobotController;
 import org.wpilib.command2.Command;
-import org.wpilib.command2.button.CommandXboxController;
+import org.wpilib.command2.button.CommandNiDsXboxController;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.Turret;
@@ -17,7 +17,7 @@ import frc.robot.utilities.DataLogUtil;
 
 public class TurretManualControl extends Command {
   private final Turret turret;
-  private final CommandXboxController xboxController;
+  private final CommandNiDsXboxController xboxController;
 
   private final DataLog log = DataLogManager.getLog();
   private long timeNow = 0;
@@ -30,7 +30,7 @@ public class TurretManualControl extends Command {
    * @param xboxController Xbox controller
    * @param turret Turret subsystem
    */
-  public TurretManualControl(CommandXboxController xboxController, Turret turret) {
+  public TurretManualControl(CommandNiDsXboxController xboxController, Turret turret) {
     this.turret = turret;
     this.xboxController = xboxController;
     

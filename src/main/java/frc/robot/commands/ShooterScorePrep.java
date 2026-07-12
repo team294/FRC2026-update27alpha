@@ -19,8 +19,6 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import frc.robot.utilities.DataLogUtil;
 import frc.robot.utilities.Field;
-import frc.robot.utilities.LEDEventUtil;
-import frc.robot.utilities.LEDEventUtil.LEDStripEvents;
 import frc.robot.utilities.MathBCR;
 
 public class ShooterScorePrep extends Command {

@@ -6,7 +6,7 @@ package frc.robot.commands;
 
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.command2.Command;
-import org.wpilib.command2.button.CommandXboxController;
+import org.wpilib.command2.button.CommandNiDsXboxController;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.DriveTrain;
@@ -15,7 +15,7 @@ import frc.robot.utilities.AllianceSelection;
 
 public class DriveWithController extends Command {
   private DriveTrain driveTrain;
-  private CommandXboxController xboxController;
+  private CommandNiDsXboxController xboxController;
   private final AllianceSelection allianceSelection;
   
   private double fwdVelocity, leftVelocity, turnRate;
@@ -27,7 +27,7 @@ public class DriveWithController extends Command {
    *   perspective of the current Alliance's driver station. Right joystick X-axis controls robot rotation.
    * @param allianceSelection AllianceSelection utility
    */
-  public DriveWithController(DriveTrain driveTrain, CommandXboxController xboxController, AllianceSelection allianceSelection) {
+  public DriveWithController(DriveTrain driveTrain, CommandNiDsXboxController xboxController, AllianceSelection allianceSelection) {
     this.driveTrain = driveTrain;
     this.xboxController = xboxController;
     this.allianceSelection = allianceSelection;

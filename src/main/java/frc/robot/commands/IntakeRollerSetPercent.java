@@ -8,7 +8,6 @@ import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
 import frc.robot.subsystems.Intake;
 import frc.robot.utilities.DataLogUtil;
-import frc.robot.utilities.LEDEventUtil;
 
 import static frc.robot.Constants.ElasticKeyConstants.ElasticKey.*;
 

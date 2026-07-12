@@ -10,7 +10,6 @@ import frc.robot.Constants.FeederConstants;
 import frc.robot.Constants.FeederConstants.SpindexerConstants;
 import frc.robot.Constants.FeederConstants.UptakeConstants;
 import frc.robot.subsystems.Feeder;
-import frc.robot.utilities.LEDEventUtil;
 
 public class FeederFeedShooter extends Command {
   private final Feeder feeder;

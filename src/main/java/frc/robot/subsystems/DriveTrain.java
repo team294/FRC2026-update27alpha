@@ -21,7 +21,6 @@ import org.wpilib.datalog.DataLog;
 import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.datalog.StructLogEntry;
 import org.wpilib.system.DataLogManager;
-import org.wpilib.driverstation.DriverStation;
 import org.wpilib.driverstation.RobotState;
 import org.wpilib.system.RobotController;
 import org.wpilib.driverstation.Alliance;
@@ -43,7 +42,6 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import static frc.robot.Constants.DriveConstants.*;
 
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.Ports;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.VisionConstants;
@@ -391,15 +389,19 @@ public class DriveTrain extends SubsystemBase implements Loggable {
    * @param isOpenLoop true = fixed drive percent output to approximate velocity, false = closed loop drive velocity control
    */
   public void setModuleStates(SwerveModuleVelocity[] desiredVelocities, boolean isOpenLoop) {
-    // Convert states to chassisspeeds and slew limit velocities (limit acceleration) to avoid tipping the robot
+    // Convert states to chassisVelocities and slew limit velocities (limit acceleration) to avoid tipping the robot
     ChassisVelocities chassisVelocities = kDriveKinematics.toChassisVelocities(desiredVelocities);
     double xSlewed, omegaLimited, ySlewed;
     omegaLimited = chassisVelocities.omega; // No limiting
     xSlewed = chassisVelocities.vx;          // No limiting
     ySlewed = chassisVelocities.vy;          // No limiting
+    // Update chassisVelocities based on limiting
+    chassisVelocities.omega = omegaLimited;
+    chassisVelocities.vx = xSlewed;
+    chassisVelocities.vy = ySlewed;
 
     // Discretize the movement to avoid unintended robot translation while robot is rotating
-    chassisVelocities = ChassisVelocities.discretize(xSlewed, ySlewed, omegaLimited, SwerveConstants.dt);
+    chassisVelocities = chassisVelocities.discretize(SwerveConstants.dt);
 
     // Convert back to swerve module states
     desiredVelocities = kDriveKinematics.toSwerveModuleVelocities(chassisVelocities, new Translation2d());
@@ -560,10 +562,12 @@ public class DriveTrain extends SubsystemBase implements Loggable {
         break;
       case kFieldRelative:
         // TODO Should kFieldRelative use the gyro angle (same as 2025) or the odometry angle (will get updates from camera, which could be wrong)?
-        chassisVelocity = ChassisVelocities.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(getGyroRotation()));
+        chassisVelocity = new ChassisVelocities(xSpeed, ySpeed, rot);
+        chassisVelocity = chassisVelocity.toRobotRelative(Rotation2d.fromDegrees(getGyroRotation()));
         break;
       case kDriverRelative:
-        chassisVelocity = ChassisVelocities.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(getGyroRotation()).plus(driverAngleToStation));
+        chassisVelocity = new ChassisVelocities(xSpeed, ySpeed, rot);
+        chassisVelocity = chassisVelocity.toRobotRelative(Rotation2d.fromDegrees(getGyroRotation()).plus(driverAngleToStation));
         break;
     }
 
@@ -654,7 +658,7 @@ public class DriveTrain extends SubsystemBase implements Loggable {
    * @return ChassisVelocities object representing the chassis velocities.
    */
   public ChassisVelocities getRobotVelocities() {
-    return ChassisVelocities.fromRobotRelativeSpeeds(getChassisVelocities(), Rotation2d.fromDegrees(getGyroRotation()));
+    return getChassisVelocities().toFieldRelative(Rotation2d.fromDegrees(getGyroRotation()));
   }
 
   // ************ Information methods
