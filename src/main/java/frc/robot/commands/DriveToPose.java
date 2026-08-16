@@ -163,8 +163,8 @@ public class DriveToPose extends Command {
     this.openLoopSwerve = !closedLoopSwerve;
 
     trapProfileConstraints = new TrapezoidProfileBCR.Constraints(
-      MathBCR.clamp(maxVelMetersPerSecond, -SwerveConstants.kFullSpeedMetersPerSecond, SwerveConstants.kFullSpeedMetersPerSecond), 
-      MathBCR.clamp(maxAccelMetersPerSecondSquare, -SwerveConstants.kFullAccelerationMetersPerSecondSquare, SwerveConstants.kFullAccelerationMetersPerSecondSquare)
+      Math.clamp(maxVelMetersPerSecond, -SwerveConstants.kFullSpeedMetersPerSecond, SwerveConstants.kFullSpeedMetersPerSecond), 
+      Math.clamp(maxAccelMetersPerSecondSquare, -SwerveConstants.kFullAccelerationMetersPerSecondSquare, SwerveConstants.kFullAccelerationMetersPerSecondSquare)
     );
 
     constructorCommonCode();
@@ -375,7 +375,7 @@ public class DriveToPose extends Command {
         Rotation2d angleTarget = Rotation2d.fromDegrees(SmartDashboard.getNumber("DriveToPose Rot degrees", 0));
         inputPose = new Pose2d(xPos, yPos, angleTarget);
 
-        trapProfileConstraints.maxVelocity = MathBCR.clamp(SmartDashboard.getNumber("DriveToPose VelMax mps", 0), 
+        trapProfileConstraints.maxVelocity = Math.clamp(SmartDashboard.getNumber("DriveToPose VelMax mps", 0), 
           -SwerveConstants.kFullSpeedMetersPerSecond, SwerveConstants.kFullSpeedMetersPerSecond);
 
         int feedbackMode = feedbackChooser.getSelected();

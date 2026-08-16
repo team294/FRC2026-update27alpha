@@ -61,7 +61,7 @@ public class DriveCalibration extends Command {
     driveTrain.setWheelFacings(angleFacing);
 
     if (timer.hasElapsed(alignTime)) {
-      percentOutput = MathBCR.clamp((currTime-alignTime) * rampRate, -maxPercentOutput, maxPercentOutput);
+      percentOutput = Math.clamp((currTime-alignTime) * rampRate, -maxPercentOutput, maxPercentOutput);
       driveTrain.setDriveMotorsOutput(percentOutput);
     } else {
       driveTrain.setDriveMotorsOutput(0.0);

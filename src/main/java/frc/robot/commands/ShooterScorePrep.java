@@ -155,7 +155,7 @@ public class ShooterScorePrep extends Command {
       
       // Target shooter motor speed based on: A0 + (A1)(Dist) where A0, A1 are unique constants
       double calculatedVelocity = (ShooterConstants.shooterDistanceToRPMIntercept + (ShooterConstants.shooterDistanceToRPMSlope * distanceToTarget));
-      targetVelocity = MathBCR.clamp(calculatedVelocity, 0, ShooterConstants.maxShootRPM);
+      targetVelocity = Math.clamp(calculatedVelocity, 0, ShooterConstants.maxShootRPM);
       
       if (goalTranslation2d == FieldConstants.leftPassBlue || goalTranslation2d == FieldConstants.rightPassRed || goalTranslation2d == FieldConstants.rightPassBlue || goalTranslation2d == FieldConstants.leftPassRed) {
         targetHoodAngle = ShooterConstants.hoodPassAngle;
@@ -204,7 +204,7 @@ public class ShooterScorePrep extends Command {
       
       // Target shooter motor speed based on: A0 + (A1)(Dist) where A0, A1 are unique constants
       double calculatedVelocity = (ShooterConstants.shooterDistanceToRPMIntercept + (ShooterConstants.shooterDistanceToRPMSlope * distanceToTarget));
-      targetVelocity = MathBCR.clamp(calculatedVelocity, 0, ShooterConstants.maxShootRPM);
+      targetVelocity = Math.clamp(calculatedVelocity, 0, ShooterConstants.maxShootRPM);
       
       if (goalTranslation2d == FieldConstants.leftPassBlue || goalTranslation2d == FieldConstants.rightPassRed || goalTranslation2d == FieldConstants.rightPassBlue || goalTranslation2d == FieldConstants.leftPassRed) {
         targetHoodAngle = ShooterConstants.hoodPassAngle;

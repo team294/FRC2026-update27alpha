@@ -49,7 +49,7 @@ public class DriveTurnCalibration extends Command {
   @Override
   public void execute() {
     double currTime = timer.get();
-    percentOutput = MathBCR.clamp(currTime*rampRate, -maxPercentOutput, maxPercentOutput);
+    percentOutput = Math.clamp(currTime*rampRate, -maxPercentOutput, maxPercentOutput);
     driveTrain.setTurningMotorsOutput(percentOutput);
   }
 

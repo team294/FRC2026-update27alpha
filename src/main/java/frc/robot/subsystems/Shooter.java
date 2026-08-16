@@ -430,7 +430,7 @@ public class Shooter extends SubsystemBase implements Loggable {
   }
 
   // public void setHoodAngleSetpoint(double angle) {
-  //   double safeAngle = MathBCR.clamp(angle, ShooterConstants.hoodMinimumAngle, ShooterConstants.hoodMaximumAngle);
+  //   double safeAngle = Math.clamp(angle, ShooterConstants.hoodMinimumAngle, ShooterConstants.hoodMaximumAngle);
   //   hoodAngleSetpoint = safeAngle;
   //   hood1PositionControlOn = true;
   //   hood2PositionControlOn = true;
@@ -442,7 +442,7 @@ public class Shooter extends SubsystemBase implements Loggable {
    * @param angle angle to set in degrees
    */
   public void setHoodAnglePID(double angle) {
-    double safeAngle = MathBCR.clamp(angle, ShooterConstants.hoodMinimumAngle, ShooterConstants.hoodMaximumAngle);
+    double safeAngle = Math.clamp(angle, ShooterConstants.hoodMinimumAngle, ShooterConstants.hoodMaximumAngle);
     hoodAngleSetpoint = safeAngle;
     hood1PositionControlOn = true;
     hood2PositionControlOn = true;

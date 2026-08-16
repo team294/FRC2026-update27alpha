@@ -175,7 +175,7 @@ public class AutoSelection {
 		DataLogUtil.writeMessage(true, "AutoSelect, autoPlan =", autoPlan);
 
 		waitTime = SmartDashboard.getNumber("Autonomous delay", 0);
-		waitTime = MathBCR.clamp(waitTime, 0, 15); // make sure autoDelay isn't negative and is only active during auto
+		waitTime = Math.clamp(waitTime, 0, 15); // make sure autoDelay isn't negative and is only active during auto
 
 		if (autoPlan == RoutineSelectionOption.NONE.value) {
 			// Starting position = facing drivers

@@ -322,9 +322,9 @@ public class Turret extends SubsystemBase implements Loggable {
    */
   public void setTurretPercentOutput(double percent) {
     if (turretCalibrated) {
-      percent = MathBCR.clamp(percent, -TurretConstants.maxPercentOutput, TurretConstants.maxPercentOutput);
+      percent = Math.clamp(percent, -TurretConstants.maxPercentOutput, TurretConstants.maxPercentOutput);
     } else {
-      percent = MathBCR.clamp(percent, -TurretConstants.maxUncalibratedPercentOutput,
+      percent = Math.clamp(percent, -TurretConstants.maxUncalibratedPercentOutput,
           TurretConstants.maxUncalibratedPercentOutput);
     }
 

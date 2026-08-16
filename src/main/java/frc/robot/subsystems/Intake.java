@@ -355,7 +355,7 @@ public class Intake extends SubsystemBase implements Loggable{
     isIntakeDeployInPositionControl = true;
 
     // Keep the position in a usable range
-    intakeDeploySafeSetpointAngle = MathBCR.clamp(angle, IntakeDeployAngle.LOWER_LIMIT.value, IntakeDeployAngle.UPPER_LIMIT.value);
+    intakeDeploySafeSetpointAngle = Math.clamp(angle, IntakeDeployAngle.LOWER_LIMIT.value, IntakeDeployAngle.UPPER_LIMIT.value);
 
     // Set the position by converting degrees to encoder rotations and modifying feed foward
     intakeDeployMotor.setControl(intakeDeployMMVoltageControl

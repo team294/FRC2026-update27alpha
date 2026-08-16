@@ -79,8 +79,8 @@ public class DriveStraight extends Command {
     this.isOpenLoop = isOpenLoop;
     this.fromShuffleboard = false;
     this.target = target;
-    this.maxVel = MathBCR.clamp(Math.abs(maxVel), 0, SwerveConstants.kMaxSpeedMetersPerSecond);
-    this.maxAccel = MathBCR.clamp(Math.abs(maxAccel), 0, SwerveConstants.kMaxAccelerationMetersPerSecondSquare);
+    this.maxVel = Math.clamp(Math.abs(maxVel), 0, SwerveConstants.kMaxSpeedMetersPerSecond);
+    this.maxAccel = Math.clamp(Math.abs(maxAccel), 0, SwerveConstants.kMaxAccelerationMetersPerSecondSquare);
 
     addRequirements(driveTrain);
     initializeDataLog();
@@ -149,9 +149,9 @@ public class DriveStraight extends Command {
       target = SmartDashboard.getNumber("DriveStraight Manual Target Dist", 2);
       angleInput = SmartDashboard.getNumber("DriveStraight Manual Angle", 0);
       maxVel = SmartDashboard.getNumber("DriveStraight Manual MaxVel", SwerveConstants.kMaxSpeedMetersPerSecond);
-      maxVel = MathBCR.clamp(Math.abs(maxVel), 0, SwerveConstants.kMaxSpeedMetersPerSecond);
+      maxVel = Math.clamp(Math.abs(maxVel), 0, SwerveConstants.kMaxSpeedMetersPerSecond);
       maxAccel = SmartDashboard.getNumber("DriveStraight Manual MaxAccel", SwerveConstants.kMaxAccelerationMetersPerSecondSquare);
-      maxAccel = MathBCR.clamp(Math.abs(maxAccel), 0, SwerveConstants.kMaxAccelerationMetersPerSecondSquare);
+      maxAccel = Math.clamp(Math.abs(maxAccel), 0, SwerveConstants.kMaxAccelerationMetersPerSecondSquare);
     }
 
     // Calculate target angle

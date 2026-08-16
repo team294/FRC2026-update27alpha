@@ -239,9 +239,9 @@ public class Climber extends SubsystemBase implements Loggable {
     isClimberInPositionControl = false;
 
     if (climberCalibrated) {
-      percent = MathBCR.clamp(percent, -ClimberConstants.maxPercentOutput, ClimberConstants.maxPercentOutput);
+      percent = Math.clamp(percent, -ClimberConstants.maxPercentOutput, ClimberConstants.maxPercentOutput);
     } else {
-      percent = MathBCR.clamp(percent, -ClimberConstants.maxUncalibratedPercentOutput, ClimberConstants.maxUncalibratedPercentOutput);
+      percent = Math.clamp(percent, -ClimberConstants.maxUncalibratedPercentOutput, ClimberConstants.maxUncalibratedPercentOutput);
     }
 
     if (side == ClimberSide.LEFT) {
@@ -284,7 +284,7 @@ public class Climber extends SubsystemBase implements Loggable {
    */
   public void setClimberPosition(double position) {
     if (climberCalibrated) {
-      setpointPosition = MathBCR.clamp(position, ClimberPosition.LOWER_LIMIT.value, ClimberPosition.UPPER_LIMIT.value);
+      setpointPosition = Math.clamp(position, ClimberPosition.LOWER_LIMIT.value, ClimberPosition.UPPER_LIMIT.value);
       isClimberInPositionControl = true;
 
       climberLeftMotor.setControl(climberMMVoltageControl.withPosition(convertClimberInchesToEncoderRotations(setpointPosition) + leftEncoderZero));
