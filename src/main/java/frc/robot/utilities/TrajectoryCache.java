@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
-import choreo.Choreo;
-import choreo.trajectory.SwerveSample;
-import choreo.trajectory.Trajectory;
+import frc.robot.choreo.Choreo;
+import frc.robot.choreo.trajectory.SwerveSample;
+import frc.robot.choreo.trajectory.Trajectory;
 import frc.robot.Constants.FieldConstants;
 
 

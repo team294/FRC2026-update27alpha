@@ -9,8 +9,8 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import choreo.trajectory.SwerveSample;
-import choreo.trajectory.Trajectory;
+import frc.robot.choreo.trajectory.SwerveSample;
+import frc.robot.choreo.trajectory.Trajectory;
 import org.wpilib.math.controller.PIDController;
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.kinematics.ChassisVelocities;

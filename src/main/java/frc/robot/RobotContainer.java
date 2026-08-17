@@ -23,7 +23,7 @@ import frc.robot.utilities.LEDEventUtil.LEDStripEvents;
 import frc.robot.utilities.TrajectoryCache.TrajectoryName;
 
 import com.ctre.phoenix6.SignalLogger;
-import choreo.util.ChoreoAllianceFlipUtil;
+import frc.robot.choreo.util.ChoreoAllianceFlipUtil;
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
 import org.wpilib.datalog.DataLog;

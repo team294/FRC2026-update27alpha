@@ -6,8 +6,8 @@ package frc.robot.commands.autos.components;
 
 import static org.wpilib.command2.Commands.*;
 
-import choreo.trajectory.SwerveSample;
-import choreo.trajectory.Trajectory;
+import frc.robot.choreo.trajectory.SwerveSample;
+import frc.robot.choreo.trajectory.Trajectory;
 import org.wpilib.command2.ParallelDeadlineGroup;
 import org.wpilib.command2.ParallelRaceGroup;
 import org.wpilib.command2.SequentialCommandGroup;

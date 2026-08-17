@@ -8,8 +8,8 @@ import static org.wpilib.command2.Commands.either;
 import static org.wpilib.command2.Commands.none;
 import static org.wpilib.command2.Commands.sequence;
 
-import choreo.trajectory.SwerveSample;
-import choreo.trajectory.Trajectory;
+import frc.robot.choreo.trajectory.SwerveSample;
+import frc.robot.choreo.trajectory.Trajectory;
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
 import org.wpilib.driverstation.Alliance;
