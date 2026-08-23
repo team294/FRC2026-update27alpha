@@ -408,7 +408,7 @@ public class DriveTrain extends SubsystemBase implements Loggable {
     
     // Desaturate wheel speeds to a little below max speed. It takes a while to accelerate to
     // max speed, so reducing the max will help movement accuracy.
-    SwerveDriveKinematics.desaturateWheelVelocities(desiredVelocities, SwerveConstants.kMaxSpeedMetersPerSecond);
+    desiredVelocities = SwerveDriveKinematics.desaturateWheelVelocities(desiredVelocities, SwerveConstants.kMaxSpeedMetersPerSecond);
 
     swerveFrontLeft.setDesiredState(desiredVelocities[0], isOpenLoop);
     swerveFrontRight.setDesiredState(desiredVelocities[1], isOpenLoop);
