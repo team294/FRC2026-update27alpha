@@ -3,17 +3,17 @@
 package frc.robot.choreo.trajectory;
 
 import frc.robot.choreo.util.ChoreoAllianceFlipUtil;
-import edu.wpi.first.math.MathUtil;
+import org.wpilib.math.util.MathUtil;
 import org.wpilib.math.linalg.Matrix;
 import org.wpilib.math.linalg.VecBuilder;
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import org.wpilib.math.kinematics.ChassisVelocities;
 import org.wpilib.math.numbers.N1;
 import org.wpilib.math.numbers.N3;
 import org.wpilib.math.numbers.N6;
 import org.wpilib.math.system.NumericalIntegration;
-import edu.wpi.first.util.struct.Struct;
+import org.wpilib.util.struct.Struct;
 import java.nio.ByteBuffer;
 import java.util.function.BiFunction;
 
@@ -109,19 +109,19 @@ public class DifferentialSample implements TrajectorySample<DifferentialSample> 
   }
 
   /**
-   * Returns the field-relative chassis speeds of this sample.
+   * Returns the field-relative chassis velocities of this sample.
    *
-   * @return the field-relative chassis speeds of this sample.
+   * @return the field-relative chassis velocities of this sample.
    * @see edu.wpi.first.math.kinematics.DifferentialDriveKinematics#toChassisSpeeds
    */
   @Override
-  public ChassisSpeeds getChassisSpeeds() {
-    return new ChassisSpeeds((vl + vr) / 2, 0, omega);
+  public ChassisVelocities getChassisVelocities() {
+    return new ChassisVelocities((vl + vr) / 2, 0, omega);
   }
 
   @Override
   public DifferentialSample interpolate(DifferentialSample endValue, double timestamp) {
-    double scale = (timestamp - this.t) / (endValue.t - this.t);
+    double scale =  Math.clamp( (timestamp - this.t) / (endValue.t - this.t), 0, 1);
 
     // Integrate the acceleration to get the rest of the state, since linearly
     // interpolating the state gives an inaccurate result if the accelerations are changing between
@@ -156,7 +156,7 @@ public class DifferentialSample implements TrajectorySample<DifferentialSample> 
     var sample = NumericalIntegration.rkdp(f, initialState, VecBuilder.fill(al, ar, alpha), τ);
 
     return new DifferentialSample(
-        MathUtil.interpolate(this.t, endValue.t, scale),
+        MathUtil.lerp(this.t, endValue.t, scale),
         sample.get(0, 0),
         sample.get(1, 0),
         sample.get(2, 0),
@@ -166,8 +166,8 @@ public class DifferentialSample implements TrajectorySample<DifferentialSample> 
         this.al,
         this.ar,
         this.alpha,
-        MathUtil.interpolate(this.fl, endValue.fl, scale),
-        MathUtil.interpolate(this.fr, endValue.fr, scale));
+        MathUtil.lerp(this.fl, endValue.fl, scale),
+        MathUtil.lerp(this.fr, endValue.fr, scale));
   }
 
   public DifferentialSample flipped() {
@@ -210,7 +210,7 @@ public class DifferentialSample implements TrajectorySample<DifferentialSample> 
 
     @Override
     public int getSize() {
-      return Struct.kSizeDouble * 10;
+      return Struct.DOUBLE_SIZE * 10;
     }
 
     @Override
