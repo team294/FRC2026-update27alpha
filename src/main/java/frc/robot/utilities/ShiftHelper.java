@@ -26,7 +26,8 @@ public class ShiftHelper {
      * @return true = blue won, false = red won  
      */
     public boolean blueWonAuto() {
-        return MatchState.getGameData().get().equals("B"); // TODO Test Blue won auto function
+        // return MatchState.getGameData().get().equals("B"); // TODO Test Blue won auto function
+        return MatchState.getGameData().orElse("").equals("B"); // TODO Test Blue won auto function.   Replaced get() with orElse() so simulation does not crash.
     }
 
     /**
