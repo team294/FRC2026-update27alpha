@@ -33,7 +33,7 @@ import frc.robot.utilities.TrapezoidProfileBCR;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static final String bcrRobotCodeVersion = "C7";
+  public static final String bcrRobotCodeVersion = "Alpha6-A1";
 
   public enum CoordType {
     kRelative,              // Relative to current robot location/facing
@@ -64,12 +64,9 @@ public final class Constants {
   }
 
   public static final class Ports {
-    // Specify which CANbus the drivetrain is on ("rio" or "CANivore")
-    public static final String CANbusMainName = "rio";
-    public static final CANBus CANbusMain = new CANBus(CANbusMainName);
-
-    public static final String CANbusCANivoreName = "CANivore";
-    public static final CANBus CANbusCANivore = new CANBus(CANbusCANivoreName);
+    // Define CAN buses
+    public static final CANBus CANbusMain = CANBus.systemcore(0);
+    public static final CANBus CANbusDriveTrain = CANBus.systemcore(2);
 
     // Define CAN IDs
     public static final int CANDriveFrontLeftMotor = 1;

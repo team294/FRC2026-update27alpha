@@ -69,7 +69,7 @@ public class DriveTrain extends SubsystemBase implements Loggable {
   private final SwerveModule swerveBackRight;
     
   // Variables for gyro and gyro calibration
-  private final Pigeon2 pigeon = new Pigeon2(CANPigeonGyro, Ports.CANbusCANivore);
+  private final Pigeon2 pigeon = new Pigeon2(CANPigeonGyro, Ports.CANbusDriveTrain);
   private final StatusSignal<Angle> pigeonYaw = pigeon.getYaw();
   private final StatusSignal<Angle> pigeonPitch = pigeon.getPitch();
   private final StatusSignal<Angle> pigeonRoll = pigeon.getRoll();

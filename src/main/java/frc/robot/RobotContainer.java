@@ -90,7 +90,8 @@ public class RobotContainer {
     DataLogUtil.writeMessageEcho("RobotContainer: Constructor, Version =", Constants.bcrRobotCodeVersion);
     SignalLogger.enableAutoLogging(false);
 
-    RobotController.setBrownoutVoltage(5.5);      // C5:  Reducing from default (6.3? V) to reduce brownouts
+    //TODO -- Re-enable if this won't crash the Systemcore
+    // RobotController.setBrownoutVoltage(5.5);      // C5:  Reducing from default (6.3? V) to reduce brownouts
 
     // Start LEDEventUtil
     LEDEventUtil.initialize(led, LEDAnimateRobotDisabled);
@@ -339,115 +340,115 @@ public class RobotContainer {
    * Define driver joystick button mappings.
    */
   public void configureJoystickButtons() {
-    JoystickButton[] left = new JoystickButton[3];
-    JoystickButton[] right = new JoystickButton[3];
+    JoystickButton[] left = new JoystickButton[2];
+    JoystickButton[] right = new JoystickButton[2];
 
-    for (int i = 1; i < left.length; i++) {
+    for (int i = 0; i < left.length; i++) {
       left[i] = new JoystickButton(leftJoystick, i);
       right[i] = new JoystickButton(rightJoystick, i);
     }
 
     // ex: left[1].onTrue(new command(param1, param2, etc));
 
-    left[1].onTrue(new IntakeSequence(intake));
-    left[1].onFalse(new IntakeRollerStop(intake));   // new InstantCommand(() -> LEDEventUtil.sendEvent(LEDStripEvents.NEUTRAL))
+    left[0].onTrue(new IntakeSequence(intake));
+    left[0].onFalse(new IntakeRollerStop(intake));   // new InstantCommand(() -> LEDEventUtil.sendEvent(LEDStripEvents.NEUTRAL))
     
-    left[2].whileTrue(new IntakeRollerSetPercent(-IntakeConstants.rollerIntakePercent, false, intake));
+    left[1].whileTrue(new IntakeRollerSetPercent(-IntakeConstants.rollerIntakePercent, false, intake));
 
-    // right[1].onTrue(new DriveTrainSetFineControl(true, driveTrain));
-    // right[1].onFalse(new DriveTrainSetFineControl(false, driveTrain));
-    // right[1].whileTrue(new DriveTrainLockWheels(driveTrain));
-    right[1].whileTrue(new AutomatedDriveAndClimbSequence(allianceSelection.getAlliance(), driveTrain, climber, shooter, turret, intake));
+    // right[0].onTrue(new DriveTrainSetFineControl(true, driveTrain));
+    // right[0].onFalse(new DriveTrainSetFineControl(false, driveTrain));
+    // right[0].whileTrue(new DriveTrainLockWheels(driveTrain));
+    right[0].whileTrue(new AutomatedDriveAndClimbSequence(allianceSelection.getAlliance(), driveTrain, climber, shooter, turret, intake));
 
     // direction facing = new forward for joystick movement
-    right[2].onTrue(new DriveResetDriverAngle(driveTrain));
+    right[1].onTrue(new DriveResetDriverAngle(driveTrain));
   }
 
   /**
    * Define Copanel button mappings.
    *  
-   *  1  3  5  8
-   *  2  4  6  8
+   *  0  2  4  7
+   *  1  3  5  7
    *      
-   *  9  11 13 7
-   *  10 12 14 7
+   *  8  10 12 6
+   *  9  11 13 6
    * 
+   *  14 16 18
    *  15 17 19
-   *  16 18 20
-   */
+  */
   public void configureCopanel() {
-    JoystickButton[] coP = new JoystickButton[21];
+    JoystickButton[] coP = new JoystickButton[20];
 
-    for (int i = 1; i < coP.length; i++) {
+    for (int i = 0; i < coP.length; i++) {
       coP[i] = new JoystickButton(coPanel, i);
     }
 
     // ex: coP[1].onTrue(new command(param1, param2, etc));
 
     // Send intake deploy in/out manually while held, stop when released
-    coP[1].whileTrue(new IntakeDeploySetPercent(IntakeConstants.deployMaxManualPercentOutput, false, intake));
-    coP[2].whileTrue(new IntakeDeploySetPercent(-IntakeConstants.deployMaxManualPercentOutput, false, intake));
+    coP[0].whileTrue(new IntakeDeploySetPercent(IntakeConstants.deployMaxManualPercentOutput, false, intake));
+    coP[1].whileTrue(new IntakeDeploySetPercent(-IntakeConstants.deployMaxManualPercentOutput, false, intake));
 
     // Spin rollers inwards/outwards while held, stop when released
-    coP[3].whileTrue(new IntakeRollerSetPercent(IntakeConstants.rollerIntakePercent, false, intake));
-    coP[4].whileTrue(new IntakeRollerSetPercent(-IntakeConstants.rollerIntakePercent, false, intake));
+    coP[2].whileTrue(new IntakeRollerSetPercent(IntakeConstants.rollerIntakePercent, false, intake));
+    coP[3].whileTrue(new IntakeRollerSetPercent(-IntakeConstants.rollerIntakePercent, false, intake));
 
     // Spin uptake then spindexer to feed shooter while held, stop when released
-    coP[5].onTrue(
+    coP[4].onTrue(
       sequence(
         new UptakeSetVelocity(UptakeConstants.uptakeShootRPM, feeder),
         new SpindexerSetVelocity(SpindexerConstants.spindexerShootRPM, feeder)
       )
     );
-    coP[5].onFalse(new FeederStop(feeder));
+    coP[4].onFalse(new FeederStop(feeder));
 
     // Spin uptake then spindexer away from shooter while held, stop when released
-    coP[6].onTrue(
+    coP[5].onTrue(
       sequence(
         new UptakeSetVelocity(-UptakeConstants.uptakeShootRPM, feeder),
         new SpindexerSetVelocity(-SpindexerConstants.spindexerShootRPM, feeder)
       )
     );
-    coP[6].onFalse(new FeederStop(feeder));
+    coP[5].onFalse(new FeederStop(feeder));
 
     // Reset Pose
-    coP[7].onTrue(either(
+    coP[6].onTrue(either(
       new DriveResetPose(180, false, driveTrain), 
       new DriveResetPose(0, false, driveTrain), 
       () -> allianceSelection.getAlliance() == Alliance.RED));
 
     // execute climb when switch flipped forwards
-    coP[8].onTrue(new ClimberSetPosition(ClimberPosition.CLIMB, climber).alongWith(new InstantCommand(() -> LEDEventUtil.sendEvent(LEDStripEvents.CLIMBING))));
+    coP[7].onTrue(new ClimberSetPosition(ClimberPosition.CLIMB, climber).alongWith(new InstantCommand(() -> LEDEventUtil.sendEvent(LEDStripEvents.CLIMBING))));
 
     // // Manually spin turret CW/CCW while held, stopping when released
-    coP[9].whileTrue(new TurretSetPercent(turret, -TurretConstants.maxManualPercentOutput));
-    coP[10].whileTrue(new TurretSetPercent(turret, TurretConstants.maxManualPercentOutput));
+    coP[8].whileTrue(new TurretSetPercent(turret, -TurretConstants.maxManualPercentOutput));
+    coP[9].whileTrue(new TurretSetPercent(turret, TurretConstants.maxManualPercentOutput));
 
     // Manually move the hood up/down while held, stopping when released
-    coP[11].whileTrue(new HoodSetPercent(false, ShooterConstants.hoodMaximumPercentOutput, shooter, 0));
-    coP[12].whileTrue(new HoodSetPercent(false, -ShooterConstants.hoodMaximumPercentOutput, shooter, 0));
+    coP[10].whileTrue(new HoodSetPercent(false, ShooterConstants.hoodMaximumPercentOutput, shooter, 0));
+    coP[11].whileTrue(new HoodSetPercent(false, -ShooterConstants.hoodMaximumPercentOutput, shooter, 0));
 
     // // Manually recalibrate Turret, assuming it's facing straight out of back of robot
-    coP[13].onTrue(new HoodSetAngle(ShooterConstants.hoodShootAngle, EndType.waitForSetPoint, shooter));
-    coP[14].onTrue(new HoodSetAngle(ShooterConstants.hoodPassAngle, EndType.waitForSetPoint, shooter));
-    // coP[13].onTrue(new TurretManualCalibration(turret, true));
+    coP[12].onTrue(new HoodSetAngle(ShooterConstants.hoodShootAngle, EndType.waitForSetPoint, shooter));
+    coP[13].onTrue(new HoodSetAngle(ShooterConstants.hoodPassAngle, EndType.waitForSetPoint, shooter));
+    // coP[12].onTrue(new TurretManualCalibration(turret, true));
     // Removed manual calibration from copanel so that they aren't hit accidentally during checkout
 
     // Manually recalibrate intake deploy, assuming it's at intaking position
-    // coP[14].onTrue(new IntakeDeployCalibrateManual(IntakeConstants.IntakeDeployAngle.INTAKE.value, intake));
+    // coP[13].onTrue(new IntakeDeployCalibrateManual(IntakeConstants.IntakeDeployAngle.INTAKE.value, intake));
     // Removed manual calibration from copanel so that they aren't hit accidentally during checkout
 
     // Manually move left climber up/down while held, stopping when released
-    coP[15].whileTrue(new ClimberSingleSetPercent(ClimberConstants.maxManualPercentOutput, ClimberSide.LEFT, climber));
-    coP[16].whileTrue(new ClimberSingleSetPercent(-ClimberConstants.maxManualPercentOutput,ClimberSide.LEFT, climber));
+    coP[14].whileTrue(new ClimberSingleSetPercent(ClimberConstants.maxManualPercentOutput, ClimberSide.LEFT, climber));
+    coP[15].whileTrue(new ClimberSingleSetPercent(-ClimberConstants.maxManualPercentOutput,ClimberSide.LEFT, climber));
 
     // Manually move right climber up/down while held, stopping when released
-    coP[17].whileTrue(new ClimberSingleSetPercent(ClimberConstants.maxManualPercentOutput, ClimberSide.RIGHT, climber));
-    coP[18].whileTrue(new ClimberSingleSetPercent(-ClimberConstants.maxManualPercentOutput, ClimberSide.RIGHT, climber));
+    coP[16].whileTrue(new ClimberSingleSetPercent(ClimberConstants.maxManualPercentOutput, ClimberSide.RIGHT, climber));
+    coP[17].whileTrue(new ClimberSingleSetPercent(-ClimberConstants.maxManualPercentOutput, ClimberSide.RIGHT, climber));
 
     // Manually move both climbers up/down while held, stopping when released
-    coP[19].whileTrue(new ClimberSetPercent(ClimberConstants.maxManualPercentOutput, climber));
-    coP[20].whileTrue(new ClimberSetPercent(-ClimberConstants.maxManualPercentOutput, climber));
+    coP[18].whileTrue(new ClimberSetPercent(ClimberConstants.maxManualPercentOutput, climber));
+    coP[19].whileTrue(new ClimberSetPercent(-ClimberConstants.maxManualPercentOutput, climber));
   }
 
   private void configureTriggers() {
