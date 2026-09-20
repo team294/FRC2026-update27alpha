@@ -94,7 +94,7 @@ public class TurretSetAngle extends Command {
     useGetter = false;
 
     if (SmartDashboard.getNumber(TURRET_CMD_SET_ANGLE_INPUT.value, -9999.9) == -9999.9) {
-      SmartDashboard.putNumber(TURRET_CMD_SET_ANGLE_INPUT.value, 0.0);
+      Robot.dashboard.log(TURRET_CMD_SET_ANGLE_INPUT.value, 0.0);
     }
     
     if (!turret.isTurretCalibrated())  endType = EndType.immediatelyEnd;

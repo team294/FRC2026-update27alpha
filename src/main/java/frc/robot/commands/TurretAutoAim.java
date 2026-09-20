@@ -67,7 +67,7 @@ public class TurretAutoAim extends Command {
       turret.setTurretAngle(turretTargetAngle);
     }
 
-    SmartDashboard.putNumber("Turret Distance To Blue Hub", turret.getTurretAbsolutePose(robotPose2d).getTranslation().getDistance(FieldConstants.hubPositionBlue));
+    Robot.dashboard.log("Turret Distance To Blue Hub", turret.getTurretAbsolutePose(robotPose2d).getTranslation().getDistance(FieldConstants.hubPositionBlue));
   }
 
   // Returns true when the command should end.

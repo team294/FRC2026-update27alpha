@@ -31,7 +31,7 @@ public class HoodSetVoltage extends Command {
     addRequirements(shooter);
 
     if (SmartDashboard.getNumber(HOOD_CMD_SET_VOLTAGE_INPUT.value, -9999.9) == -9999.9) {
-      SmartDashboard.putNumber(HOOD_CMD_SET_VOLTAGE_INPUT.value, 0);
+      Robot.dashboard.log(HOOD_CMD_SET_VOLTAGE_INPUT.value, 0);
     }
   }
 

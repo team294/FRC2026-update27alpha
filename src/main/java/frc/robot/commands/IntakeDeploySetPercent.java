@@ -28,7 +28,7 @@ public class IntakeDeploySetPercent extends Command {
     addRequirements(intake);
 
     if (SmartDashboard.getNumber(INTAKE_DEPLOY_CMD_SET_PERCENT_INPUT.value, -9999.0) == -9999.0) {
-      SmartDashboard.putNumber(INTAKE_DEPLOY_CMD_SET_PERCENT_INPUT.value, 0);
+      Robot.dashboard.log(INTAKE_DEPLOY_CMD_SET_PERCENT_INPUT.value, 0);
     }
   }
 

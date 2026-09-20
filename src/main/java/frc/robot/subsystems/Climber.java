@@ -26,10 +26,10 @@ import org.wpilib.system.DataLogManager;
 import org.wpilib.hardware.discrete.DigitalInput;
 import org.wpilib.driverstation.RobotState;
 import org.wpilib.system.RobotController;
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.SubsystemBase;
 
 import frc.robot.Constants.Ports;
+import frc.robot.Robot;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.ClimberConstants.ClimberLimit;
 import frc.robot.Constants.ClimberConstants.ClimberPosition;
@@ -614,20 +614,20 @@ public class Climber extends SubsystemBase implements Loggable {
     if (DataLogUtil.isMyLogRotation(logRotationKey, RotationWhenDisabled.kNormal)) {
       checkForFaultConditions();
 
-      SmartDashboard.putBoolean("Climber L LOWER", isSideLimitReached(ClimberSide.LEFT, ClimberLimit.LOWER));
-      SmartDashboard.putBoolean("Climber R LOWER", isSideLimitReached(ClimberSide.RIGHT, ClimberLimit.LOWER));
-      SmartDashboard.putBoolean("Climber L UPPER", isSideLimitReached(ClimberSide.LEFT, ClimberLimit.UPPER));
-      SmartDashboard.putBoolean("Climber R UPPER", isSideLimitReached(ClimberSide.RIGHT, ClimberLimit.UPPER));
-      SmartDashboard.putBoolean("Climber Calibrated?", climberCalibrated);
-      SmartDashboard.putBoolean("Climber L Calibrated?", climberLeftCalibrated);
-      SmartDashboard.putBoolean("Climber R Calibrated?", climberRightCalibrated);
-      SmartDashboard.putNumber("Climber L Temp", getClimberTemp(ClimberSide.LEFT));
-      SmartDashboard.putNumber("Climber R Temp", getClimberTemp(ClimberSide.RIGHT));
-      SmartDashboard.putNumber("Climber L Raw Rotations", getClimberPositionRotationsRaw(ClimberSide.LEFT));
-      SmartDashboard.putNumber("Climber R Raw Rotations", getClimberPositionRotationsRaw(ClimberSide.RIGHT));
-      SmartDashboard.putNumber("Climber L Position", getClimberPositionInches(ClimberSide.LEFT));
-      SmartDashboard.putNumber("Climber R Position", getClimberPositionInches(ClimberSide.RIGHT));
-      SmartDashboard.putNumber("Climber Position", getClimberPositionInches());
+      Robot.dashboard.log("Climber L LOWER", isSideLimitReached(ClimberSide.LEFT, ClimberLimit.LOWER));
+      Robot.dashboard.log("Climber R LOWER", isSideLimitReached(ClimberSide.RIGHT, ClimberLimit.LOWER));
+      Robot.dashboard.log("Climber L UPPER", isSideLimitReached(ClimberSide.LEFT, ClimberLimit.UPPER));
+      Robot.dashboard.log("Climber R UPPER", isSideLimitReached(ClimberSide.RIGHT, ClimberLimit.UPPER));
+      Robot.dashboard.log("Climber Calibrated?", climberCalibrated);
+      Robot.dashboard.log("Climber L Calibrated?", climberLeftCalibrated);
+      Robot.dashboard.log("Climber R Calibrated?", climberRightCalibrated);
+      Robot.dashboard.log("Climber L Temp", getClimberTemp(ClimberSide.LEFT));
+      Robot.dashboard.log("Climber R Temp", getClimberTemp(ClimberSide.RIGHT));
+      Robot.dashboard.log("Climber L Raw Rotations", getClimberPositionRotationsRaw(ClimberSide.LEFT));
+      Robot.dashboard.log("Climber R Raw Rotations", getClimberPositionRotationsRaw(ClimberSide.RIGHT));
+      Robot.dashboard.log("Climber L Position", getClimberPositionInches(ClimberSide.LEFT));
+      Robot.dashboard.log("Climber R Position", getClimberPositionInches(ClimberSide.RIGHT));
+      Robot.dashboard.log("Climber Position", getClimberPositionInches());
     }
   }
 }

@@ -28,7 +28,7 @@ public class ShooterSetPercent extends Command {
     addRequirements(shooter);
 
     if (SmartDashboard.getNumber(SHOOTER_CMD_SET_PERCENT_INPUT.value, -9999.9) == -9999.9) {
-      SmartDashboard.putNumber(SHOOTER_CMD_SET_PERCENT_INPUT.value, 0);
+      Robot.dashboard.log(SHOOTER_CMD_SET_PERCENT_INPUT.value, 0);
     }
   }
 

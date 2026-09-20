@@ -123,13 +123,13 @@ public class DriveResetPose extends Command {
     addRequirements(driveTrain);
     
     if (SmartDashboard.getNumber("DriveResetPose X", -9999) == -9999) {
-      SmartDashboard.putNumber("DriveResetPose X", 0);
+      Robot.dashboard.log("DriveResetPose X", 0);
     }
     if (SmartDashboard.getNumber("DriveResetPose Y", -9999) == -9999) {
-      SmartDashboard.putNumber("DriveResetPose Y", 0);
+      Robot.dashboard.log("DriveResetPose Y", 0);
     }
     if (SmartDashboard.getNumber("DriveResetPose Angle", -9999) == -9999) {
-      SmartDashboard.putNumber("DriveResetPose Angle", 0);
+      Robot.dashboard.log("DriveResetPose Angle", 0);
     }
   }
 

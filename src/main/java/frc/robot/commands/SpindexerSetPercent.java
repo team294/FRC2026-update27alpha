@@ -28,7 +28,7 @@ public class SpindexerSetPercent extends Command {
     addRequirements(feeder);
 
     if (SmartDashboard.getNumber(SPINDEXER_CMD_SET_PERCENT_INPUT.value, -9999.9) == -9999.9) {
-      SmartDashboard.putNumber(SPINDEXER_CMD_SET_PERCENT_INPUT.value, 0.0);
+      Robot.dashboard.log(SPINDEXER_CMD_SET_PERCENT_INPUT.value, 0.0);
     }
   }
 

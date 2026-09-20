@@ -28,7 +28,7 @@ public class IntakeRollerSetPercent extends Command {
     addRequirements(intake);
 
     if (SmartDashboard.getNumber(INTAKE_ROLLER_CMD_SET_PERCENT_INPUT.value, -9999.9) == -9999.9) {
-      SmartDashboard.putNumber(INTAKE_ROLLER_CMD_SET_PERCENT_INPUT.value, 0);
+      Robot.dashboard.log(INTAKE_ROLLER_CMD_SET_PERCENT_INPUT.value, 0);
     }
   }
 

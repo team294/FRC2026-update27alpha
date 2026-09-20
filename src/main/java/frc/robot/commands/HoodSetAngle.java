@@ -77,7 +77,7 @@ public class HoodSetAngle extends Command {
     this.fromElastic = true;
 
     if (SmartDashboard.getNumber(HOOD_CMD_SET_ANGLE_INPUT.value, -9999.9) == -9999.9) {
-      SmartDashboard.putNumber(HOOD_CMD_SET_ANGLE_INPUT.value, ShooterConstants.hoodMinimumAngle);
+      Robot.dashboard.log(HOOD_CMD_SET_ANGLE_INPUT.value, ShooterConstants.hoodMinimumAngle);
     }
 
     addRequirements(shooter);

@@ -110,16 +110,16 @@ public class DriveStraight extends Command {
     initializeDataLog();
 
     if (SmartDashboard.getNumber("DriveStraight Manual Target Dist", -9999) == -9999) {
-      SmartDashboard.putNumber("DriveStraight Manual Target Dist", 2);
+      Robot.dashboard.log("DriveStraight Manual Target Dist", 2);
     }
     if (SmartDashboard.getNumber("DriveStraight Manual Angle", -9999) == -9999) {
-      SmartDashboard.putNumber("DriveStraight Manual Angle", 0);
+      Robot.dashboard.log("DriveStraight Manual Angle", 0);
     }
     if (SmartDashboard.getNumber("DriveStraight Manual MaxVel", -9999) == -9999) {
-      SmartDashboard.putNumber("DriveStraight Manual MaxVel", 0.5 * SwerveConstants.kMaxSpeedMetersPerSecond);
+      Robot.dashboard.log("DriveStraight Manual MaxVel", 0.5 * SwerveConstants.kMaxSpeedMetersPerSecond);
     }
     if (SmartDashboard.getNumber("DriveStraight Manual MaxAccel", -9999) == -9999) {
-      SmartDashboard.putNumber("DriveStraight Manual MaxAccel", 0.5 * SwerveConstants.kMaxAccelerationMetersPerSecondSquare);
+      Robot.dashboard.log("DriveStraight Manual MaxAccel", 0.5 * SwerveConstants.kMaxAccelerationMetersPerSecondSquare);
     }
   }
 

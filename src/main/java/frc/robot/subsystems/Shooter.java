@@ -32,11 +32,11 @@ import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.driverstation.RobotState;
 import org.wpilib.system.RobotController;
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.SubsystemBase;
 
 import frc.robot.Constants.Ports;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.Robot;
 import frc.robot.utilities.DataLogUtil;
 import frc.robot.utilities.Loggable;
 import frc.robot.utilities.MathBCR;
@@ -680,21 +680,21 @@ public class Shooter extends SubsystemBase implements Loggable {
     if (DataLogUtil.isMyLogRotation(logRotationKey, RotationWhenDisabled.kNormal)) {
       checkForFaultConditions();
 
-      SmartDashboard.putNumber(SHOOTER_LEFT_TEMP.value, shooter1Temperature.refresh().getValueAsDouble());
-      SmartDashboard.putNumber(SHOOTER_RIGHT_TEMP.value, shooter2Temperature.refresh().getValueAsDouble());
-      SmartDashboard.putNumber(SHOOTER_RPM.value, getShooterVelocity());
-      SmartDashboard.putNumber(SHOOTER_TARGET_RPM.value, shooterSetpointRPM);
+      Robot.dashboard.log(SHOOTER_LEFT_TEMP.value, shooter1Temperature.refresh().getValueAsDouble());
+      Robot.dashboard.log(SHOOTER_RIGHT_TEMP.value, shooter2Temperature.refresh().getValueAsDouble());
+      Robot.dashboard.log(SHOOTER_RPM.value, getShooterVelocity());
+      Robot.dashboard.log(SHOOTER_TARGET_RPM.value, shooterSetpointRPM);
       
-      SmartDashboard.putNumber(HOOD_LEFT_VOLTAGE.value, hoodMotor1.getMotorVoltage(true).getValueAsDouble());
-      SmartDashboard.putNumber(HOOD_RIGHT_VOLTAGE.value, hoodMotor2.getMotorVoltage(true).getValueAsDouble());
-      SmartDashboard.putNumber(HOOD_LEFT_ANALOG_VOLTAGE.value, getHoodAnalogVoltage(1));
-      SmartDashboard.putNumber(HOOD_RIGHT_ANALOG_VOLTAGE.value, getHoodAnalogVoltage(2));
-      SmartDashboard.putNumber(HOOD_LEFT_LENGTH.value, getHoodExtensionLength(1));
-      SmartDashboard.putNumber(HOOD_RIGHT_LENGTH.value, getHoodExtensionLength(2));
-      SmartDashboard.putNumber(HOOD_LEFT_ANGLE.value, getHoodAngle(1));
-      SmartDashboard.putNumber(HOOD_RIGHT_ANGLE.value, getHoodAngle(2));
-      SmartDashboard.putNumber(HOOD_ANGLE.value, getHoodAngle());
-      SmartDashboard.putNumber(HOOD_ANGLE_CURRENT_SETPOINT.value, hoodAngleSetpoint);
+      Robot.dashboard.log(HOOD_LEFT_VOLTAGE.value, hoodMotor1.getMotorVoltage(true).getValueAsDouble());
+      Robot.dashboard.log(HOOD_RIGHT_VOLTAGE.value, hoodMotor2.getMotorVoltage(true).getValueAsDouble());
+      Robot.dashboard.log(HOOD_LEFT_ANALOG_VOLTAGE.value, getHoodAnalogVoltage(1));
+      Robot.dashboard.log(HOOD_RIGHT_ANALOG_VOLTAGE.value, getHoodAnalogVoltage(2));
+      Robot.dashboard.log(HOOD_LEFT_LENGTH.value, getHoodExtensionLength(1));
+      Robot.dashboard.log(HOOD_RIGHT_LENGTH.value, getHoodExtensionLength(2));
+      Robot.dashboard.log(HOOD_LEFT_ANGLE.value, getHoodAngle(1));
+      Robot.dashboard.log(HOOD_RIGHT_ANGLE.value, getHoodAngle(2));
+      Robot.dashboard.log(HOOD_ANGLE.value, getHoodAngle());
+      Robot.dashboard.log(HOOD_ANGLE_CURRENT_SETPOINT.value, hoodAngleSetpoint);
     }
   }
 }

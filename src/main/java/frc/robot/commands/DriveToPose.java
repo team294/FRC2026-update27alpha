@@ -281,16 +281,16 @@ public class DriveToPose extends Command {
     constructorCommonCode();
 
     if (SmartDashboard.getNumber("DriveToPose XPos meters", -9999) == -9999) {
-      SmartDashboard.putNumber("DriveToPose XPos meters", 2);
+      Robot.dashboard.log("DriveToPose XPos meters", 2);
     }
     if (SmartDashboard.getNumber("DriveToPose YPos meters", -9999) == -9999){
-      SmartDashboard.putNumber("DriveToPose YPos meters", 2);
+      Robot.dashboard.log("DriveToPose YPos meters", 2);
     }
     if (SmartDashboard.getNumber("DriveToPose Rot degrees", -9999) == -9999) {
-      SmartDashboard.putNumber("DriveToPose Rot degrees", 0);
+      Robot.dashboard.log("DriveToPose Rot degrees", 0);
     }
     if (SmartDashboard.getNumber("DriveToPose VelMax mps", -9999) == -9999) {
-      SmartDashboard.putNumber("DriveToPose VelMax mps", 2);
+      Robot.dashboard.log("DriveToPose VelMax mps", 2);
     }
 
     // if(feedbackChooser.getSelected() == null) {

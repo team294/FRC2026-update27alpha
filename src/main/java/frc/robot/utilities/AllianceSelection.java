@@ -61,9 +61,9 @@ public class AllianceSelection {
     this.alliance = alliance;
     DataLogUtil.writeMessageEcho("Alliance Selection: SetAlliance, Alliance Chooser =", allianceChooser.getSelected().name(), ", Alliance =", alliance.name());
 
-    SmartDashboard.putBoolean("Alliance Blue", alliance != Alliance.RED);
-    SmartDashboard.putBoolean("Alliance Red", alliance != Alliance.BLUE);
-    SmartDashboard.putString("Alliance", alliance.name());
+    Robot.dashboard.log("Alliance Blue", alliance != Alliance.RED);
+    Robot.dashboard.log("Alliance Red", alliance != Alliance.BLUE);
+    Robot.dashboard.log("Alliance", alliance.name());
   }
 
   /**

@@ -36,7 +36,7 @@ public class ClimberSingleSetPercent extends Command {
         : CLIMBER_CMD_SET_PERCENT_RIGHT_INPUT.value;
 
     if (SmartDashboard.getNumber(key, -9999.9) == -9999.9) {
-      SmartDashboard.putNumber(key, 0.0);
+      Robot.dashboard.log(key, 0.0);
     }
 
     addRequirements(climber);

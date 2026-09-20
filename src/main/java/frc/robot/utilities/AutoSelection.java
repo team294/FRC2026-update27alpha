@@ -150,8 +150,8 @@ public class AutoSelection {
 		SmartDashboard.putData("Autonomous routine", autoRoutineChooser);
 
 		// Show auto parameters on dashboard
-		SmartDashboard.putNumber("Autonomous delay", 0);
-		// SmartDashboard.putBoolean("Autonomous use vision", false);
+		Robot.dashboard.log("Autonomous delay", 0);
+		// Robot.dashboard.log("Autonomous use vision", false);
 
 		// Show start position selection widget on dashboard
 		// SmartDashboard.putData("Start position", startPositionChooser);
@@ -327,7 +327,7 @@ public class AutoSelection {
 		);
 
 		String autoDescription = StringUtil.buildString(allianceSelection.getAlliance(), " ", autoSelectionOption);
-		SmartDashboard.putString("Autonomous cached", autoDescription);
+		Robot.dashboard.log("Autonomous cached", autoDescription);
 		DataLogUtil.writeMessage("AutoSelection: Built ", autoDescription);
 	}
 

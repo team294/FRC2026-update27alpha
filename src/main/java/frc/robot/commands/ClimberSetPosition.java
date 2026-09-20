@@ -60,7 +60,7 @@ public class ClimberSetPosition extends Command {
     addRequirements(climber);
 
     if (SmartDashboard.getNumber(CLIMBER_CMD_SET_POSITION_INPUT.value, -9999) == -9999) {
-      SmartDashboard.putNumber(CLIMBER_CMD_SET_POSITION_INPUT.value, ClimberPosition.LOWER_LIMIT.value);
+      Robot.dashboard.log(CLIMBER_CMD_SET_POSITION_INPUT.value, ClimberPosition.LOWER_LIMIT.value);
     }
   }
 

@@ -27,7 +27,7 @@ public class TurretSetPercent extends Command {
     fromElastic = true;
 
     if (SmartDashboard.getNumber(TURRET_CMD_SET_PERCENT_INPUT.value, -9999.9) == -9999.9) {
-      SmartDashboard.putNumber(TURRET_CMD_SET_PERCENT_INPUT.value, 0.0);
+      Robot.dashboard.log(TURRET_CMD_SET_PERCENT_INPUT.value, 0.0);
     }
     
     addRequirements(turret);

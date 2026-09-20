@@ -58,7 +58,7 @@ public class IntakeDeploySetAngle extends Command {
     addRequirements(intake);
 
     if (SmartDashboard.getNumber(INTAKE_DEPLOY_CMD_SET_ANGLE_INPUT.value, -9999) == -9999) {
-      SmartDashboard.putNumber(INTAKE_DEPLOY_CMD_SET_ANGLE_INPUT.value, IntakeDeployAngle.START_CONFIG.value);
+      Robot.dashboard.log(INTAKE_DEPLOY_CMD_SET_ANGLE_INPUT.value, IntakeDeployAngle.START_CONFIG.value);
     }
   }
 

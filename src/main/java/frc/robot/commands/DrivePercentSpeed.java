@@ -55,15 +55,15 @@ public class DrivePercentSpeed extends Command {
     addRequirements(driveTrain);
     
     if (SmartDashboard.getNumber("DrivePercentSpeed maxDistance", -9999) == -9999) {
-      SmartDashboard.putNumber("DrivePercentSpeed maxDistance", 0);
+      Robot.dashboard.log("DrivePercentSpeed maxDistance", 0);
     }
     if (SmartDashboard.getNumber("DrivePercentSpeed angle", -9999) == -9999) {
-      SmartDashboard.putNumber("DrivePercentSpeed angle", 0);
+      Robot.dashboard.log("DrivePercentSpeed angle", 0);
     }
     if (SmartDashboard.getNumber("DrivePercentSpeed percent", -9999) == -9999){
-      SmartDashboard.putNumber("DrivePercentSpeed percent", .2);
+      Robot.dashboard.log("DrivePercentSpeed percent", .2);
     }
-    SmartDashboard.putNumber("DrivePercentSpeed curDistance", 0.0);
+    Robot.dashboard.log("DrivePercentSpeed curDistance", 0.0);
   }
 
   // Called when the command is initially scheduled.
@@ -94,7 +94,7 @@ public class DrivePercentSpeed extends Command {
   public void execute() {
     // DataLogUtil.writeMessage("DrivePercentSpeed: Execute");
     curDistance = driveTrain.getPose().relativeTo(poseStart).getTranslation().getNorm();
-    SmartDashboard.putNumber("DrivePercentSpeed curDistance", curDistance);
+    Robot.dashboard.log("DrivePercentSpeed curDistance", curDistance);
     
     driveTrain.setWheelFacings(angleFacing);
     if (timer.hasElapsed(1.0)) {

@@ -113,11 +113,11 @@ public class ShooterScorePrep extends Command {
 
     if (fromElastic) {
       if (SmartDashboard.getNumber(ElasticKey.HOOD_CMD_SET_ANGLE_INPUT.value, -9999.9) == -9999.9) {
-      SmartDashboard.putNumber(ElasticKey.HOOD_CMD_SET_ANGLE_INPUT.value, ShooterConstants.hoodMinimumAngle);
+      Robot.dashboard.log(ElasticKey.HOOD_CMD_SET_ANGLE_INPUT.value, ShooterConstants.hoodMinimumAngle);
       }
 
       if (SmartDashboard.getNumber(ElasticKey.SHOOTER_CMD_SET_VELOCITY_INPUT.value, -9999.9) == -9999.9) {
-        SmartDashboard.putNumber(ElasticKey.SHOOTER_CMD_SET_VELOCITY_INPUT.value, 0);
+        Robot.dashboard.log(ElasticKey.SHOOTER_CMD_SET_VELOCITY_INPUT.value, 0);
       }
     } else {
       selfCalculate = true;

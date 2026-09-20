@@ -28,7 +28,7 @@ public class UptakeSetVelocity extends Command {
     addRequirements(feeder);
 
     if (SmartDashboard.getNumber(UPTAKE_CMD_SET_VELOCITY_INPUT.value, -9999.9) == -9999.9) {
-      SmartDashboard.putNumber(UPTAKE_CMD_SET_VELOCITY_INPUT.value, 0.0);
+      Robot.dashboard.log(UPTAKE_CMD_SET_VELOCITY_INPUT.value, 0.0);
     }
   }
 
