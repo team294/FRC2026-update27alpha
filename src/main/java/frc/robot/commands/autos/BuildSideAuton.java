@@ -52,7 +52,7 @@ public class BuildSideAuton extends SequentialCommandGroup {
     //           if not shooting preload = inital pose of first trajectory
     Pose2d initialTrajectoryPose = cache.getTrajectory(leftSide, TrajectoryName.StartTrenchToCollectStart).getInitialPose(alliance.getAlliance() == Alliance.RED).get();
     Pose2d initalRobotStartPose = shootPreload == ShootPreloadType.kShootPreload ?  
-                                initialTrajectoryPose.transformBy(new Transform2d(-RobotDimensions.robotLength + RobotDimensions.frontBumperThickness, 0, Rotation2d.kZero)) : 
+                                initialTrajectoryPose.transformBy(new Transform2d(-RobotDimensions.robotLength + RobotDimensions.frontBumperThickness, 0, Rotation2d.ZERO)) : 
                                 initialTrajectoryPose;
     
     // If we are ending auto by going to the outpost/depot, don't shoot until at the outpost/depot (minimize time wasted)

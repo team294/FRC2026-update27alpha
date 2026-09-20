@@ -52,7 +52,7 @@ public class BuildCenterAuton extends SequentialCommandGroup {
   public BuildCenterAuton(EndType shootEndType, boolean collectBalls, boolean climb, Intake intake, Feeder feeder, Turret turret, Shooter shooter, Climber climber, DriveTrain driveTrain, Field field, AllianceSelection alliance, TrajectoryCache cache) {
     Trajectory<SwerveSample> driveToClimbTrajectory = collectBalls ? cache.getTrajectory(TrajectoryName.CollectDepotToClimb_LabSafe) : cache.getTrajectory(TrajectoryName.CenterShootToClimb);
     Trajectory<SwerveSample> collectTrajectory = cache.getTrajectory(TrajectoryName.CenterStartCollectUnderTower_LabSafe);
-    Pose2d initalPose2d = collectBalls ? collectTrajectory.getInitialPose(alliance.getAlliance() == Alliance.RED).get() : cache.getTrajectory(TrajectoryName.CenterShootToClimb).getInitialPose(alliance.getAlliance() == Alliance.RED).get().transformBy(new Transform2d(1.0, 0, Rotation2d.kZero));
+    Pose2d initalPose2d = collectBalls ? collectTrajectory.getInitialPose(alliance.getAlliance() == Alliance.RED).get() : cache.getTrajectory(TrajectoryName.CenterShootToClimb).getInitialPose(alliance.getAlliance() == Alliance.RED).get().transformBy(new Transform2d(1.0, 0, Rotation2d.ZERO));
     addCommands(
       new DriveResetPose(initalPose2d, true, driveTrain),
       either(

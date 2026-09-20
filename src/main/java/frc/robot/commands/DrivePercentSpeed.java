@@ -8,10 +8,12 @@ import com.ctre.phoenix6.SignalLogger;
 
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.system.Timer;
-import org.wpilib.smartdashboard.SmartDashboard;
+import org.wpilib.tunable.TunableDouble;
+import org.wpilib.tunable.Tunables;
 import org.wpilib.command2.Command;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.utilities.DataLogUtil;
+import frc.robot.Robot;
 
 public class DrivePercentSpeed extends Command {
   private DriveTrain driveTrain;
@@ -21,6 +23,9 @@ public class DrivePercentSpeed extends Command {
   private final Timer timer = new Timer();
   private Pose2d poseStart;
   private double curDistance;
+  private TunableDouble angleFacingInput = Tunables.addDouble("DrivePercentSpeed angle", 0.0);
+  private TunableDouble percentSpeedInput = Tunables.addDouble("DrivePercentSpeed percent", 0.2);
+  private TunableDouble maxDistanceInput = Tunables.addDouble("DrivePercentSpeed maxDistance", 0.0);
 
   /**
    * Drives the robot straight at a fixed speed and stops after it travels a specified distance (or is canceled).
@@ -53,16 +58,7 @@ public class DrivePercentSpeed extends Command {
     fromShuffleboard = true;
 
     addRequirements(driveTrain);
-    
-    if (SmartDashboard.getNumber("DrivePercentSpeed maxDistance", -9999) == -9999) {
-      Robot.dashboard.log("DrivePercentSpeed maxDistance", 0);
-    }
-    if (SmartDashboard.getNumber("DrivePercentSpeed angle", -9999) == -9999) {
-      Robot.dashboard.log("DrivePercentSpeed angle", 0);
-    }
-    if (SmartDashboard.getNumber("DrivePercentSpeed percent", -9999) == -9999){
-      Robot.dashboard.log("DrivePercentSpeed percent", .2);
-    }
+
     Robot.dashboard.log("DrivePercentSpeed curDistance", 0.0);
   }
 
@@ -80,9 +76,9 @@ public class DrivePercentSpeed extends Command {
     driveTrain.enableFastLogging(true);
 
     if (fromShuffleboard) {
-      maxDistance = SmartDashboard.getNumber("DrivePercentSpeed maxDistance", 0);
-      angleFacing = SmartDashboard.getNumber("DrivePercentSpeed angle", 0);
-      percentSpeed = SmartDashboard.getNumber("DrivePercentSpeed percent", 0);
+      maxDistance = maxDistanceInput.getAsDouble();
+      angleFacing = angleFacingInput.getAsDouble();
+      percentSpeed = percentSpeedInput.getAsDouble();
     }
 
     DataLogUtil.writeMessage("DrivePercentSpeed: Init, Angle Facing Desired =", angleFacing, ", Percent Speed Deisred =", 

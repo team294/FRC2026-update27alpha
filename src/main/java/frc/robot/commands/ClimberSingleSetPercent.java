@@ -5,8 +5,10 @@ package frc.robot.commands;
 
 import static frc.robot.Constants.ElasticKeyConstants.ElasticKey.*;
 
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
+import org.wpilib.tunable.TunableDouble;
+import org.wpilib.tunable.Tunables;
+
 import frc.robot.subsystems.Climber;
 import frc.robot.utilities.DataLogUtil;
 import frc.robot.Constants.ClimberConstants.ClimberSide;
@@ -15,6 +17,8 @@ public class ClimberSingleSetPercent extends Command {
   private final Climber climber;
   private final ClimberSide side;
   private final boolean fromElastic;
+  private TunableDouble climberLeftSetPercentInput = Tunables.addDouble(CLIMBER_CMD_SET_PERCENT_LEFT_INPUT.value, 0.0);
+  private TunableDouble climberRightSetPercentInput = Tunables.addDouble(CLIMBER_CMD_SET_PERCENT_RIGHT_INPUT.value, 0.0);
   private double percent;
 
   /**
@@ -29,15 +33,6 @@ public class ClimberSingleSetPercent extends Command {
     this.side = side;
     fromElastic = true;
     this.percent = 0.0;
-
-    // Ensure Elastic input exists so SmartDashboard never returns the fallback.
-    String key = side == ClimberSide.LEFT
-        ? CLIMBER_CMD_SET_PERCENT_LEFT_INPUT.value
-        : CLIMBER_CMD_SET_PERCENT_RIGHT_INPUT.value;
-
-    if (SmartDashboard.getNumber(key, -9999.9) == -9999.9) {
-      Robot.dashboard.log(key, 0.0);
-    }
 
     addRequirements(climber);
   }
@@ -62,10 +57,9 @@ public class ClimberSingleSetPercent extends Command {
   @Override
   public void initialize() {
     if (fromElastic) {
-      String key = side == ClimberSide.LEFT
-          ? CLIMBER_CMD_SET_PERCENT_LEFT_INPUT.value
-          : CLIMBER_CMD_SET_PERCENT_RIGHT_INPUT.value;
-      percent = SmartDashboard.getNumber(key, 0.0);
+      percent = side == ClimberSide.LEFT
+        ? climberLeftSetPercentInput.getAsDouble()
+        : climberRightSetPercentInput.getAsDouble();
     }
     climber.setClimberPercentOutput(percent, side);
     DataLogUtil.writeMessage("ClimberSingleSetPercent: Init, Percent =", percent, ", Side = ", side);
