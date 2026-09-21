@@ -23,6 +23,7 @@ import org.wpilib.datalog.StructLogEntry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.driverstation.RobotState;
 import org.wpilib.system.RobotController;
+import org.wpilib.tunable.Tunables;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.smartdashboard.Field2d;
 import org.wpilib.command2.Command;
@@ -102,7 +103,7 @@ public class DriveTrain extends SubsystemBase implements Loggable {
   
   // Driver angle relative to their driver station.  If the driver is in their alliance's driver station, then this should be zero!
   // This is mainly for use on partial practice fields, where the driver is sitting elsewhere.
-  private Rotation2d driverAngleToStation = Rotation2d.kZero;       // Driver's facing relative to their driver station.  (Blue driver relative to Blue station, or Red driver relative to Red station)
+  private Rotation2d driverAngleToStation = Rotation2d.ZERO;       // Driver's facing relative to their driver station.  (Blue driver relative to Blue station, or Red driver relative to Red station)
 
   // Variables to store vision cameras
   private PhotonCameraWrapper cameraLeft;
@@ -164,7 +165,7 @@ public class DriveTrain extends SubsystemBase implements Loggable {
     zeroGyro();
 
     // Create and initialize odometery. Set initial location to (0,0) and facing away from driver (regardless of alliance color)
-    Pose2d initialPose = new Pose2d(0, 0, allianceSelection.getAlliance() == Alliance.RED ? Rotation2d.k180deg : Rotation2d.kZero);
+    Pose2d initialPose = new Pose2d(0, 0, allianceSelection.getAlliance() == Alliance.RED ? Rotation2d.k180deg : Rotation2d.ZERO);
     zeroGyroRotation(initialPose.getRotation().getDegrees());
     poseEstimator = new SwerveDrivePoseEstimator(kDriveKinematics, Rotation2d.fromDegrees(getGyroRotation()), getModulePositions(), initialPose);
 
@@ -172,7 +173,7 @@ public class DriveTrain extends SubsystemBase implements Loggable {
     this.allianceSelection.addAllianceChangeNotification(this::resetPoseForAlliance);
 
     // Create field object on Elastic
-    SmartDashboard.putData("Field", field2d);
+    Tunables.publish("Field", field2d);
 
     // Prime the DataLog to reduce delay when first enabling the robot
     updateDriveLog(true);
