@@ -15,7 +15,8 @@ import org.wpilib.datalog.DataLog;
 import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.system.RobotController;
-import org.wpilib.smartdashboard.SmartDashboard;
+import org.wpilib.tunable.TunableDouble;
+import org.wpilib.tunable.Tunables;
 
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.*;
@@ -30,11 +31,16 @@ public class DriveStraight extends Command {
   private long profileStartTime;          // Initial time (time of starting point)
   private double currDist;
   private boolean regenerate;
-  private boolean fromShuffleboard;
+  private boolean fromElastic;
   private double angleInput, angleTarget; // angleTarget is relative to the starting robot facing
   private Translation2d startLocation;
   private SwerveModuleVelocity[] desiredVelocities;
-  
+
+  private TunableDouble targetDistInput = Tunables.addDouble("DriveStraight Manual Target Dist", 2);
+  private TunableDouble targetAngleInput = Tunables.addDouble("DriveStraight Manual Angle", 0);
+  private TunableDouble targetMaxVelInput = Tunables.addDouble("DriveStraight Manual MaxVel", 0.5 * SwerveConstants.kMaxSpeedMetersPerSecond);
+  private TunableDouble targetMaxAccelInput = Tunables.addDouble("DriveStraight Manual MaxAccel", 0.5 * SwerveConstants.kMaxAccelerationMetersPerSecondSquare);
+
   private boolean isOpenLoop;
 
   private int accuracyCounter = 0;
@@ -77,7 +83,7 @@ public class DriveStraight extends Command {
     angleInput = angle;
     this.regenerate = regenerate;
     this.isOpenLoop = isOpenLoop;
-    this.fromShuffleboard = false;
+    this.fromElastic = false;
     this.target = target;
     this.maxVel = Math.clamp(Math.abs(maxVel), 0, SwerveConstants.kMaxSpeedMetersPerSecond);
     this.maxAccel = Math.clamp(Math.abs(maxAccel), 0, SwerveConstants.kMaxAccelerationMetersPerSecondSquare);
@@ -101,26 +107,13 @@ public class DriveStraight extends Command {
     angleInput = 0;
     this.regenerate = regenerate;
     this.isOpenLoop = isOpenLoop;
-    this.fromShuffleboard = true;
+    this.fromElastic = true;
     this.target = 0;
     this.maxVel = 0.5 * SwerveConstants.kMaxSpeedMetersPerSecond;
     this.maxAccel = 0.5 * SwerveConstants.kMaxAccelerationMetersPerSecondSquare;
 
     addRequirements(driveTrain);
     initializeDataLog();
-
-    if (SmartDashboard.getNumber("DriveStraight Manual Target Dist", -9999) == -9999) {
-      Robot.dashboard.log("DriveStraight Manual Target Dist", 2);
-    }
-    if (SmartDashboard.getNumber("DriveStraight Manual Angle", -9999) == -9999) {
-      Robot.dashboard.log("DriveStraight Manual Angle", 0);
-    }
-    if (SmartDashboard.getNumber("DriveStraight Manual MaxVel", -9999) == -9999) {
-      Robot.dashboard.log("DriveStraight Manual MaxVel", 0.5 * SwerveConstants.kMaxSpeedMetersPerSecond);
-    }
-    if (SmartDashboard.getNumber("DriveStraight Manual MaxAccel", -9999) == -9999) {
-      Robot.dashboard.log("DriveStraight Manual MaxAccel", 0.5 * SwerveConstants.kMaxAccelerationMetersPerSecondSquare);
-    }
   }
 
   /**
@@ -145,12 +138,12 @@ public class DriveStraight extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (fromShuffleboard) {
-      target = SmartDashboard.getNumber("DriveStraight Manual Target Dist", 2);
-      angleInput = SmartDashboard.getNumber("DriveStraight Manual Angle", 0);
-      maxVel = SmartDashboard.getNumber("DriveStraight Manual MaxVel", SwerveConstants.kMaxSpeedMetersPerSecond);
+    if (fromElastic) {
+      target = targetDistInput.getAsDouble();
+      angleInput = targetAngleInput.getAsDouble();
+      maxVel = targetMaxVelInput.getAsDouble();
       maxVel = Math.clamp(Math.abs(maxVel), 0, SwerveConstants.kMaxSpeedMetersPerSecond);
-      maxAccel = SmartDashboard.getNumber("DriveStraight Manual MaxAccel", SwerveConstants.kMaxAccelerationMetersPerSecondSquare);
+      maxAccel = targetMaxAccelInput.getAsDouble();
       maxAccel = Math.clamp(Math.abs(maxAccel), 0, SwerveConstants.kMaxAccelerationMetersPerSecondSquare);
     }
 

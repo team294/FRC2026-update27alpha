@@ -4,8 +4,10 @@
 
 package frc.robot.commands;
 
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
+import org.wpilib.tunable.TunableDouble;
+import org.wpilib.tunable.Tunables;
+
 import frc.robot.subsystems.Feeder;
 import frc.robot.utilities.DataLogUtil;
 
@@ -17,6 +19,8 @@ public class SpindexerSetVelocity extends Command {
   private final double velocityTolerance = 50.0;
   private boolean fromElastic;
 
+  private TunableDouble velocityInput = Tunables.addDouble(SPINDEXER_CMD_SET_VELOCITY_INPUT.value, 0.0);
+
   /**
    * Sets the target velocity for the spindexerMotor FROM ELASTIC. This command ends when the velocity is 
    * within the tolerance RPM of the target.
@@ -26,10 +30,6 @@ public class SpindexerSetVelocity extends Command {
     this.feeder = feeder;
     fromElastic = true;
     addRequirements(feeder);
-
-    if (SmartDashboard.getNumber(SPINDEXER_CMD_SET_VELOCITY_INPUT.value, -9999.9) == -9999.9) {
-      Robot.dashboard.log(SPINDEXER_CMD_SET_VELOCITY_INPUT.value, 0.0);
-    }
   }
 
   /**
@@ -48,7 +48,7 @@ public class SpindexerSetVelocity extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (fromElastic) velocity = SmartDashboard.getNumber(SPINDEXER_CMD_SET_VELOCITY_INPUT.value, 0.0);
+    if (fromElastic) velocity = velocityInput.getAsDouble();
     feeder.setSpindexerVelocity(velocity);
     DataLogUtil.writeMessage("SpindexerSetVelocity: Initialize, RPM =", velocity);
   }

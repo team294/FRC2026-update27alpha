@@ -4,8 +4,10 @@
 
 package frc.robot.commands;
 
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
+import org.wpilib.tunable.TunableDouble;
+import org.wpilib.tunable.Tunables;
+
 import frc.robot.subsystems.Intake;
 import frc.robot.utilities.DataLogUtil;
 
@@ -15,6 +17,8 @@ public class IntakeDeploySetPercent extends Command {
   private final Intake intake;
   private double percent = 0.0;
   private boolean endImmediately, fromElastic;
+
+  private TunableDouble percentInput = Tunables.addDouble(INTAKE_DEPLOY_CMD_SET_PERCENT_INPUT.value, 0.0);
 
   /**
    * Sets the percent output of the intakeDeployMotor FROM ELASTIC.
@@ -26,10 +30,6 @@ public class IntakeDeploySetPercent extends Command {
     this.endImmediately = endImmediately;
     this.fromElastic = true;
     addRequirements(intake);
-
-    if (SmartDashboard.getNumber(INTAKE_DEPLOY_CMD_SET_PERCENT_INPUT.value, -9999.0) == -9999.0) {
-      Robot.dashboard.log(INTAKE_DEPLOY_CMD_SET_PERCENT_INPUT.value, 0);
-    }
   }
 
   /**
@@ -49,7 +49,7 @@ public class IntakeDeploySetPercent extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (fromElastic) this.percent = SmartDashboard.getNumber(INTAKE_DEPLOY_CMD_SET_PERCENT_INPUT.value, 0);
+    if (fromElastic) this.percent = percentInput.getAsDouble();
     intake.setIntakeDeployPercentOutput(percent);
     DataLogUtil.writeMessage("IntakeDeploySetPercent: Init, Percent =", percent);
   }

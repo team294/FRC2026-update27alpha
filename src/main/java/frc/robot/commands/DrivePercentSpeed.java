@@ -19,10 +19,11 @@ public class DrivePercentSpeed extends Command {
   private DriveTrain driveTrain;
   
   private double angleFacing, percentSpeed, maxDistance;
-  private boolean fromShuffleboard;
+  private boolean fromElastic;
   private final Timer timer = new Timer();
   private Pose2d poseStart;
   private double curDistance;
+
   private TunableDouble angleFacingInput = Tunables.addDouble("DrivePercentSpeed angle", 0.0);
   private TunableDouble percentSpeedInput = Tunables.addDouble("DrivePercentSpeed percent", 0.2);
   private TunableDouble maxDistanceInput = Tunables.addDouble("DrivePercentSpeed maxDistance", 0.0);
@@ -41,7 +42,7 @@ public class DrivePercentSpeed extends Command {
     this.angleFacing = angleFacing;
     this.percentSpeed= percentSpeed;
     this.maxDistance = maxDistance;
-    fromShuffleboard = false;
+    fromElastic = false;
 
     addRequirements(driveTrain);
   }
@@ -55,7 +56,7 @@ public class DrivePercentSpeed extends Command {
   public DrivePercentSpeed(DriveTrain driveTrain){
     this.driveTrain = driveTrain;
     
-    fromShuffleboard = true;
+    fromElastic = true;
 
     addRequirements(driveTrain);
 
@@ -75,7 +76,7 @@ public class DrivePercentSpeed extends Command {
     driveTrain.setDriveModeCoast(false);
     driveTrain.enableFastLogging(true);
 
-    if (fromShuffleboard) {
+    if (fromElastic) {
       maxDistance = maxDistanceInput.getAsDouble();
       angleFacing = angleFacingInput.getAsDouble();
       percentSpeed = percentSpeedInput.getAsDouble();

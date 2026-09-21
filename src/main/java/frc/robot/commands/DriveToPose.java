@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import java.util.NoSuchElementException;
 import java.util.function.Supplier;
 
 import org.wpilib.math.controller.PIDController;
@@ -20,13 +21,15 @@ import org.wpilib.datalog.StructLogEntry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.system.RobotController;
 import org.wpilib.system.Timer;
-import org.wpilib.smartdashboard.SendableChooser;
-import org.wpilib.smartdashboard.SmartDashboard;
+import org.wpilib.tunable.Selectable;
+import org.wpilib.tunable.TunableDouble;
+import org.wpilib.tunable.Tunables;
 import org.wpilib.command2.Command;
 
 import frc.robot.Constants.CoordType;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.TrajectoryConstants;
+import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.DriveTrain.DriveType;
 import frc.robot.utilities.DataLogUtil;
@@ -62,9 +65,14 @@ public class DriveToPose extends Command {
   private Translation2d goalDirection;      // Unit vector pointing from initial pose to goal pose = direction of travel
   private TrapezoidProfileBCR profile;      // Relative linear distance/speeds from initial pose to goal pose 
 
+  private TunableDouble xPosInput = Tunables.addDouble("DriveToPose XPos meters", 2);
+  private TunableDouble yPosInput = Tunables.addDouble("DriveToPose YPos meters", 2);
+  private TunableDouble rotationInput = Tunables.addDouble("DriveToPose Rot degrees", 0);
+  private TunableDouble velMaxInput = Tunables.addDouble("DriveToPose VelMax mps", 2);
+
   private Translation2d curRobotTranslation;  // Current robot translation relative to initialTranslation
 
-  private SendableChooser<Integer> feedbackChooser = new SendableChooser<>(); // Shuffleboard chooser for turning parameters on/off for tuning the drive base
+  private Selectable<Integer> feedbackChooser = new Selectable<>(); // Shuffleboard chooser for turning parameters on/off for tuning the drive base
 
 	private static final int FEEDBACK_NORMAL = 0;         // Use position and velocity feedback
 	private static final int FEEDBACK_VELOCITY_ONLY = 1;  // Use velocity feedback only, do not use position feedback
@@ -280,24 +288,11 @@ public class DriveToPose extends Command {
 
     constructorCommonCode();
 
-    if (SmartDashboard.getNumber("DriveToPose XPos meters", -9999) == -9999) {
-      Robot.dashboard.log("DriveToPose XPos meters", 2);
-    }
-    if (SmartDashboard.getNumber("DriveToPose YPos meters", -9999) == -9999){
-      Robot.dashboard.log("DriveToPose YPos meters", 2);
-    }
-    if (SmartDashboard.getNumber("DriveToPose Rot degrees", -9999) == -9999) {
-      Robot.dashboard.log("DriveToPose Rot degrees", 0);
-    }
-    if (SmartDashboard.getNumber("DriveToPose VelMax mps", -9999) == -9999) {
-      Robot.dashboard.log("DriveToPose VelMax mps", 2);
-    }
-
     // if(feedbackChooser.getSelected() == null) {
-      feedbackChooser.setDefaultOption("Normal", FEEDBACK_NORMAL);
-      feedbackChooser.addOption("Velocity only", FEEDBACK_VELOCITY_ONLY);
-      feedbackChooser.addOption("None", FEEDBACK_NONE);
-      SmartDashboard.putData("DriveToPose Feedback", feedbackChooser);
+      feedbackChooser.addDefault("Normal", FEEDBACK_NORMAL);
+      feedbackChooser.add("Velocity only", FEEDBACK_VELOCITY_ONLY);
+      feedbackChooser.add("None", FEEDBACK_NONE);
+      Tunables.publish("DriveToPose Feedback", feedbackChooser);
     // }
   }
 
@@ -370,12 +365,12 @@ public class DriveToPose extends Command {
         break;
       // Using Shuffleboard
       case shuffleboard:
-        double xPos = SmartDashboard.getNumber("DriveToPose XPos meters", 0);
-        double yPos = SmartDashboard.getNumber("DriveToPose YPos meters", 0);
-        Rotation2d angleTarget = Rotation2d.fromDegrees(SmartDashboard.getNumber("DriveToPose Rot degrees", 0));
+        double xPos = xPosInput.getAsDouble();
+        double yPos = yPosInput.getAsDouble();
+        Rotation2d angleTarget = Rotation2d.fromDegrees(rotationInput.getAsDouble());
         inputPose = new Pose2d(xPos, yPos, angleTarget);
 
-        trapProfileConstraints.maxVelocity = Math.clamp(SmartDashboard.getNumber("DriveToPose VelMax mps", 0), 
+        trapProfileConstraints.maxVelocity = Math.clamp(velMaxInput.getAsDouble(),
           -SwerveConstants.kFullSpeedMetersPerSecond, SwerveConstants.kFullSpeedMetersPerSecond);
 
         int feedbackMode = feedbackChooser.getSelected();
@@ -444,7 +439,14 @@ public class DriveToPose extends Command {
 
     // Calculate current desired pose and velocity from the Trapezoid profile, relative to starting position
     TrapezoidProfileBCR.State desiredState = profile.calculate(curTime);
-    Pose2d desiredPose = new Pose2d( goalDirection.times(desiredState.position), goalDirection.getAngle());
+
+    Pose2d desiredPose = driveTrain.getPose();
+
+    if (!goalDirection.getAngle().isEmpty()) {
+      desiredPose = new Pose2d( goalDirection.times(desiredState.position), goalDirection.getAngle().get());
+    } else {
+      System.out.println("Exception in DriveToPose line 444: goalDirection Optional<Rotation2d> is empty!");
+    }
 
     // Fudge in some kA
     double desiredVelocityMetersPerSecond = desiredState.velocity + (desiredState.acceleration * SwerveConstants.kADriveToPose);

@@ -4,8 +4,10 @@
 
 package frc.robot.commands;
 
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
+import org.wpilib.tunable.TunableDouble;
+import org.wpilib.tunable.Tunables;
+
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.IntakeConstants.IntakeDeployAngle;
 import frc.robot.subsystems.Intake;
@@ -17,6 +19,8 @@ public class IntakeDeploySetAngle extends Command {
   private final Intake intake;
   private double targetAngle;
   private boolean fromElastic;
+
+  private TunableDouble angleInput = Tunables.addDouble(INTAKE_DEPLOY_CMD_SET_ANGLE_INPUT.value, IntakeDeployAngle.START_CONFIG.value);
 
   /**
    * Sets the target angle for the Intake Deploy and attempts to move it to that angle. It is constrained by
@@ -56,16 +60,12 @@ public class IntakeDeploySetAngle extends Command {
     this.intake = intake;
     this.fromElastic = true;
     addRequirements(intake);
-
-    if (SmartDashboard.getNumber(INTAKE_DEPLOY_CMD_SET_ANGLE_INPUT.value, -9999) == -9999) {
-      Robot.dashboard.log(INTAKE_DEPLOY_CMD_SET_ANGLE_INPUT.value, IntakeDeployAngle.START_CONFIG.value);
-    }
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (fromElastic) this.targetAngle = SmartDashboard.getNumber(INTAKE_DEPLOY_CMD_SET_ANGLE_INPUT.value, IntakeDeployAngle.START_CONFIG.value);
+    if (fromElastic) this.targetAngle = angleInput.getAsDouble();
     intake.setIntakeDeployAngle(targetAngle);
 
     intake.enableFastLogging(true);

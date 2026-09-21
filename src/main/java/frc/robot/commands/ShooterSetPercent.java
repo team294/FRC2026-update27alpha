@@ -4,8 +4,10 @@
 
 package frc.robot.commands;
 
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
+import org.wpilib.tunable.TunableDouble;
+import org.wpilib.tunable.Tunables;
+
 import frc.robot.subsystems.Shooter;
 import frc.robot.utilities.DataLogUtil;
 
@@ -15,7 +17,9 @@ public class ShooterSetPercent extends Command {
   private final Shooter shooter;
   
   private double percent = 0.0;
-  private boolean fromShuffleboard;
+  private boolean fromElastic;
+
+  private TunableDouble percentInput = Tunables.addDouble(SHOOTER_CMD_SET_PERCENT_INPUT.value, 0.0);
 
   /**
    * Sets the percent output of the shooter from Shuffleboard and ends immediately.
@@ -24,12 +28,8 @@ public class ShooterSetPercent extends Command {
   public ShooterSetPercent(Shooter shooter) {
     this.shooter = shooter;
     
-    this.fromShuffleboard = true;
+    this.fromElastic = true;
     addRequirements(shooter);
-
-    if (SmartDashboard.getNumber(SHOOTER_CMD_SET_PERCENT_INPUT.value, -9999.9) == -9999.9) {
-      Robot.dashboard.log(SHOOTER_CMD_SET_PERCENT_INPUT.value, 0);
-    }
   }
 
   /**
@@ -41,14 +41,14 @@ public class ShooterSetPercent extends Command {
     this.shooter = shooter;
     
     this.percent = percent;
-    this.fromShuffleboard = false;
+    this.fromElastic = false;
     addRequirements(shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (fromShuffleboard) percent = SmartDashboard.getNumber(SHOOTER_CMD_SET_PERCENT_INPUT.value, 0.0);
+    if (fromElastic) percent = percentInput.getAsDouble();
     shooter.setShooterPercentOutput(percent);
 
     DataLogUtil.writeMessage("Shooter Set Percent: Init, Percent =", percent);

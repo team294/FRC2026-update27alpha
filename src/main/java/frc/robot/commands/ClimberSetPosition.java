@@ -19,9 +19,10 @@ import static frc.robot.Constants.ElasticKeyConstants.ElasticKey.*;
 
 public class ClimberSetPosition extends Command {
   private final Climber climber;
-  private TunableDouble climberSetPositionInput = Tunables.addDouble(CLIMBER_CMD_SET_POSITION_INPUT.value, ClimberPosition.LOWER_LIMIT.value);
   private double targetPosition;
   private final boolean fromElastic;
+
+  private TunableDouble climberSetPositionInput = Tunables.addDouble(CLIMBER_CMD_SET_POSITION_INPUT.value, ClimberPosition.LOWER_LIMIT.value);
 
   /**
    * Sets the target position for the Climber and attempts to move it to that position.

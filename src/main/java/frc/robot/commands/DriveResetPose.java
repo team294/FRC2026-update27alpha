@@ -11,7 +11,8 @@ import java.util.function.Supplier;
 
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
-import org.wpilib.smartdashboard.SmartDashboard;
+import org.wpilib.tunable.TunableDouble;
+import org.wpilib.tunable.Tunables;
 import org.wpilib.command2.Command;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.utilities.DataLogUtil;
@@ -20,12 +21,16 @@ import frc.robot.utilities.MathBCR;
 public class DriveResetPose extends Command {
   private final DriveTrain driveTrain;
   
-  private final boolean fromShuffleboard;
+  private final boolean fromElastic;
   private final boolean onlyAngle;      // true = resent angle but not X-Y position
   private final boolean usingLambda;
   private final boolean tolerance;      // true = do not reset if within 0.5m or 15 degrees of location, false = always reset
   private double curX, curY, curAngle;  // in meters and degrees
   private Supplier<Pose2d> poseSupplier;
+
+  private TunableDouble resetXInput = Tunables.addDouble("DriveResetPose X", 0.0);
+  private TunableDouble resetYInput = Tunables.addDouble("DriveResetPose Y", 0.0);
+  private TunableDouble resetAngleInput = Tunables.addDouble("DriveResetPose Angle", 0.0);
   
   /**
 	 * Resets the pose, gyro, and encoders on the driveTrain.
@@ -42,7 +47,7 @@ public class DriveResetPose extends Command {
     curX = curXinMeters;
     curY = curYinMeters;
     curAngle = curAngleinDegrees;
-    fromShuffleboard = false;
+    fromElastic = false;
     onlyAngle = false;
     usingLambda = false;
     this.tolerance = tolerance;
@@ -77,7 +82,7 @@ public class DriveResetPose extends Command {
     this.driveTrain = driveTrain;
     
     curAngle = curAngleinDegrees;
-    fromShuffleboard = false;
+    fromElastic = false;
     onlyAngle = true;
     usingLambda = false;
     this.tolerance = tolerance;
@@ -99,7 +104,7 @@ public class DriveResetPose extends Command {
     this.driveTrain = driveTrain;
     
     poseSupplier = curPose;
-    fromShuffleboard = false;
+    fromElastic = false;
     onlyAngle = false;
     usingLambda = true;
     this.tolerance = tolerance;
@@ -115,22 +120,12 @@ public class DriveResetPose extends Command {
   public DriveResetPose(DriveTrain driveTrain){
     this.driveTrain = driveTrain;
     
-    fromShuffleboard = true;
+    fromElastic = true;
     onlyAngle = false;
     usingLambda = false;
     tolerance = false;
 
     addRequirements(driveTrain);
-    
-    if (SmartDashboard.getNumber("DriveResetPose X", -9999) == -9999) {
-      Robot.dashboard.log("DriveResetPose X", 0);
-    }
-    if (SmartDashboard.getNumber("DriveResetPose Y", -9999) == -9999) {
-      Robot.dashboard.log("DriveResetPose Y", 0);
-    }
-    if (SmartDashboard.getNumber("DriveResetPose Angle", -9999) == -9999) {
-      Robot.dashboard.log("DriveResetPose Angle", 0);
-    }
   }
 
   // Called when the command is initially scheduled.
@@ -143,10 +138,10 @@ public class DriveResetPose extends Command {
       curAngle = curPose.getRotation().getDegrees();
     }
 
-    if (fromShuffleboard) {
-      curX = SmartDashboard.getNumber("DriveResetPose X", 0);
-      curY = SmartDashboard.getNumber("DriveResetPose Y", 0);
-      curAngle = SmartDashboard.getNumber("DriveResetPose Angle", 0);
+    if (fromElastic) {
+      curX = resetXInput.getAsDouble();
+      curY = resetYInput.getAsDouble();
+      curAngle = resetAngleInput.getAsDouble();
     }
 
     if (onlyAngle) {

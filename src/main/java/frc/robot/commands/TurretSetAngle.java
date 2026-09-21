@@ -6,8 +6,10 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
+import org.wpilib.tunable.TunableDouble;
+import org.wpilib.tunable.Tunables;
+
 import frc.robot.Constants.EndType;
 import frc.robot.Constants.TurretConstants;
 import frc.robot.subsystems.Turret;
@@ -23,6 +25,8 @@ public class TurretSetAngle extends Command {
   private DoubleSupplier angleGetter;
   private final boolean useGetter;
   private double targetAngle;
+
+  private TunableDouble angleInput = Tunables.addDouble(TURRET_CMD_SET_ANGLE_INPUT.value, 0.0);
 
   private int toleranceCounter;
 
@@ -93,10 +97,6 @@ public class TurretSetAngle extends Command {
     fromDashboard = true;
     useGetter = false;
 
-    if (SmartDashboard.getNumber(TURRET_CMD_SET_ANGLE_INPUT.value, -9999.9) == -9999.9) {
-      Robot.dashboard.log(TURRET_CMD_SET_ANGLE_INPUT.value, 0.0);
-    }
-    
     if (!turret.isTurretCalibrated())  endType = EndType.immediatelyEnd;
 
     addRequirements(turret);
@@ -106,7 +106,7 @@ public class TurretSetAngle extends Command {
   @Override
   public void initialize() {
     if (fromDashboard) {
-      targetAngle = SmartDashboard.getNumber(TURRET_CMD_SET_ANGLE_INPUT.value, 0.0);
+      targetAngle = angleInput.getAsDouble();
     }
 
     if (useGetter) {
@@ -131,7 +131,6 @@ public class TurretSetAngle extends Command {
       // a value.  Then the PID controller would try to track and maybe never get in tolerance,
       // and then this command would never end.
       if (fromDashboard) {
-        targetAngle = SmartDashboard.getNumber(TURRET_CMD_SET_ANGLE_INPUT.value, 0.0);
       }
 
       if (useGetter) {

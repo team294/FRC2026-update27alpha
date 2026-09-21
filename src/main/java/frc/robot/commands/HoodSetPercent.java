@@ -4,8 +4,10 @@
 
 package frc.robot.commands;
 
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
+import org.wpilib.tunable.TunableDouble;
+import org.wpilib.tunable.Tunables;
+
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utilities.DataLogUtil;
@@ -18,6 +20,8 @@ public class HoodSetPercent extends Command {
   private final boolean endImmediately, fromElastic;
   private double percent;
   private int motorNumber;
+
+  private TunableDouble percentInput = Tunables.addDouble(HOOD_CMD_SET_PERCENT_INPUT.value, 0.0);
 
   /**
    * Set percent for hood motors to move at [0.0, 1.0] with input from Elastic
@@ -32,10 +36,6 @@ public class HoodSetPercent extends Command {
     fromElastic = true;
 
     addRequirements(shooter);
-
-    if (SmartDashboard.getNumber(HOOD_CMD_SET_PERCENT_INPUT.value, -9999.9) == -9999.9) {
-      Robot.dashboard.log(HOOD_CMD_SET_PERCENT_INPUT.value, 0);
-    }
   }
 
   /**
@@ -58,7 +58,7 @@ public class HoodSetPercent extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (fromElastic) percent = SmartDashboard.getNumber(HOOD_CMD_SET_PERCENT_INPUT.value, 0.0);
+    if (fromElastic) percent = percentInput.getAsDouble();
     
     if (motorNumber == 0) {
       shooter.setHoodVoltageBothMotors(percent * ShooterConstants.hoodVoltage);

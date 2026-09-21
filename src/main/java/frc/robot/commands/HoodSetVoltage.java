@@ -4,8 +4,10 @@
 
 package frc.robot.commands;
 
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
+import org.wpilib.tunable.TunableDouble;
+import org.wpilib.tunable.Tunables;
+
 import frc.robot.subsystems.Shooter;
 import frc.robot.utilities.DataLogUtil;
 
@@ -19,6 +21,8 @@ public class HoodSetVoltage extends Command {
   private double voltage;
   private int motorNumber;
 
+  private TunableDouble voltageInput = Tunables.addDouble(HOOD_CMD_SET_VOLTAGE_INPUT.value, 0.0);
+
   /**
    * Set voltage for hood motors to move at [0.0, 4.92] with input from Elastic
    * @param shooter Shooter subsystem
@@ -29,10 +33,6 @@ public class HoodSetVoltage extends Command {
     this.motorNumber = motorNumber;
     fromElastic = true;
     addRequirements(shooter);
-
-    if (SmartDashboard.getNumber(HOOD_CMD_SET_VOLTAGE_INPUT.value, -9999.9) == -9999.9) {
-      Robot.dashboard.log(HOOD_CMD_SET_VOLTAGE_INPUT.value, 0);
-    }
   }
 
   /**
@@ -52,7 +52,7 @@ public class HoodSetVoltage extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (fromElastic) voltage = SmartDashboard.getNumber(HOOD_CMD_SET_VOLTAGE_INPUT.value, 0.0);
+    if (fromElastic) voltage = voltageInput.getAsDouble();
 
     if (motorNumber == 0) {
       shooter.setHoodVoltageBothMotors(voltage);

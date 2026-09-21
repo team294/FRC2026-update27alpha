@@ -4,8 +4,10 @@
 
 package frc.robot.commands;
 
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
+import org.wpilib.tunable.TunableDouble;
+import org.wpilib.tunable.Tunables;
+
 import frc.robot.subsystems.Turret;
 import frc.robot.utilities.DataLogUtil;
 
@@ -16,6 +18,8 @@ public class TurretSetPercent extends Command {
   private double percent;
   private final boolean fromElastic;
 
+  private TunableDouble percentInput = Tunables.addDouble(TURRET_CMD_SET_PERCENT_INPUT.value, 0.0);
+
   /**
    * Set turret percent output using a value from Elastic.
    * Command runs forever, but stops the turret if interrupted.
@@ -25,10 +29,6 @@ public class TurretSetPercent extends Command {
   public TurretSetPercent(Turret turret) {
     this.turret = turret;
     fromElastic = true;
-
-    if (SmartDashboard.getNumber(TURRET_CMD_SET_PERCENT_INPUT.value, -9999.9) == -9999.9) {
-      Robot.dashboard.log(TURRET_CMD_SET_PERCENT_INPUT.value, 0.0);
-    }
     
     addRequirements(turret);
   }
@@ -51,7 +51,7 @@ public class TurretSetPercent extends Command {
   @Override
   public void initialize() {
     if (fromElastic) {
-      percent = SmartDashboard.getNumber(TURRET_CMD_SET_PERCENT_INPUT.value, 0.0);
+      percent = percentInput.getAsDouble();
     }
 
     turret.setTurretPercentOutput(percent);
