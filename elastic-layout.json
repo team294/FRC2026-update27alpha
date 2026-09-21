@@ -25,7 +25,7 @@
                 "height": 128.0,
                 "type": "ComboBox Chooser",
                 "properties": {
-                  "topic": "/SmartDashboard/Autonomous routine",
+                  "topic": "/Tunables/Autonomous routine",
                   "period": 0.06,
                   "sort_options": false
                 }
@@ -38,7 +38,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Autonomous cached",
+                  "topic": "/Telemetry/SmartDashboard/Autonomous cached",
                   "period": 0.06,
                   "data_type": "string",
                   "show_submit_button": false
@@ -52,7 +52,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Autonomous delay",
+                  "topic": "/Tunables/Autonomous delay",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": true
@@ -79,7 +79,7 @@
                 "height": 128.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/SmartDashboard/Intake Deploy CANcoder Connected?",
+                  "topic": "/Telemetry/SmartDashboard/Intake Deploy CANcoder Connected?",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -96,7 +96,7 @@
                 "height": 128.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/SmartDashboard/Intake Deploy Calibrated?",
+                  "topic": "/Telemetry/SmartDashboard/Intake Deploy Calibrated?",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -113,7 +113,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Intake Deploy Recalibrate Manual Input (Degrees)",
+                  "topic": "/Tunables/Intake Deploy Recalibrate Manual Input (Degrees)",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": true
@@ -127,7 +127,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Intake Deploy Recalibrate",
+                  "topic": "/Tunables/Intake Deploy Recalibrate",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -154,7 +154,7 @@
                 "height": 128.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/SmartDashboard/Turret CANcoder Connected?",
+                  "topic": "/Telemetry/SmartDashboard/Turret CANcoder Connected?",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -171,7 +171,7 @@
                 "height": 128.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/SmartDashboard/Turret Using CANCoder?",
+                  "topic": "/Telemetry/SmartDashboard/Turret Using CANCoder?",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -188,7 +188,7 @@
                 "height": 128.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/SmartDashboard/Turret Calibrated?",
+                  "topic": "/Telemetry/SmartDashboard/Turret Calibrated?",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -205,7 +205,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Turret Recalibrate Advanced",
+                  "topic": "/Tunables/Turret Recalibrate Advanced",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -219,7 +219,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Turret Recalibrate Basic",
+                  "topic": "/Tunables/Turret Recalibrate Basic",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -237,7 +237,7 @@
             "height": 384.0,
             "type": "Field",
             "properties": {
-              "topic": "/SmartDashboard/Field",
+              "topic": "/Tunables/Field",
               "period": 0.06,
               "field_game": "Rebuilt",
               "robot_width": 0.85,
@@ -258,7 +258,7 @@
             "height": 128.0,
             "type": "Command",
             "properties": {
-              "topic": "/SmartDashboard/Clear Sticky Faults",
+              "topic": "/Tunables/Clear Sticky Faults",
               "period": 0.06,
               "show_type": false,
               "maximize_button_space": true
@@ -272,7 +272,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/problemSubsystem",
+              "topic": "/Telemetry/SmartDashboard/problemSubsystem",
               "period": 0.06,
               "data_type": "string",
               "show_submit_button": false
@@ -286,7 +286,7 @@
             "height": 128.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/SmartDashboard/problemExists",
+              "topic": "/Telemetry/SmartDashboard/problemExists",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4294198070,
@@ -303,7 +303,7 @@
             "height": 128.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/SmartDashboard/RobotPrefs Initialized",
+              "topic": "/Telemetry/SmartDashboard/RobotPrefs Initialized",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
@@ -320,7 +320,7 @@
             "height": 128.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/SmartDashboard/Drive isGyroReading",
+              "topic": "/Telemetry/SmartDashboard/Drive isGyroReading",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
@@ -337,7 +337,7 @@
             "height": 384.0,
             "type": "Match Time",
             "properties": {
-              "topic": "/SmartDashboard/Shift Timer",
+              "topic": "/Telemetry/SmartDashboard/Shift Timer",
               "period": 0.06,
               "data_type": "double",
               "time_display_mode": "Minutes and Seconds",
@@ -353,7 +353,7 @@
             "height": 128.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/SmartDashboard/PhotonVision LeftCamera Connected",
+              "topic": "/Telemetry/SmartDashboard/PhotonVision LeftCamera Connected",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
@@ -370,7 +370,7 @@
             "height": 128.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/SmartDashboard/PhotonVision RightCamera Connected",
+              "topic": "/Telemetry/SmartDashboard/PhotonVision RightCamera Connected",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
@@ -387,7 +387,7 @@
             "height": 128.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/SmartDashboard/Feeder Object Detected Exit",
+              "topic": "/Telemetry/SmartDashboard/Feeder Object Detected Exit",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4294963456,
@@ -404,7 +404,7 @@
             "height": 128.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/SmartDashboard/Alliance Blue",
+              "topic": "/Telemetry/SmartDashboard/Alliance Blue",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4279456444,
@@ -421,7 +421,7 @@
             "height": 128.0,
             "type": "ComboBox Chooser",
             "properties": {
-              "topic": "/SmartDashboard/Alliance Selection",
+              "topic": "/Tunables/Alliance Selection",
               "period": 0.06,
               "sort_options": false
             }
@@ -434,7 +434,7 @@
             "height": 128.0,
             "type": "Command",
             "properties": {
-              "topic": "/SmartDashboard/Stop All Motors",
+              "topic": "/Tunables/Stop All Motors",
               "period": 0.06,
               "show_type": false,
               "maximize_button_space": true
@@ -448,7 +448,7 @@
             "height": 128.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/SmartDashboard/Uptake Entry Triggered?",
+              "topic": "/Telemetry/SmartDashboard/Uptake Entry Triggered?",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4294963456,
@@ -465,7 +465,7 @@
             "height": 256.0,
             "type": "Match Time",
             "properties": {
-              "topic": "/SmartDashboard/Teleop Timer",
+              "topic": "/Telemetry/SmartDashboard/Teleop Timer",
               "period": 0.06,
               "data_type": "double",
               "time_display_mode": "Minutes and Seconds",
@@ -481,7 +481,7 @@
             "height": 128.0,
             "type": "Single Color View",
             "properties": {
-              "topic": "/SmartDashboard/LED State",
+              "topic": "/Telemetry/SmartDashboard/LED State",
               "period": 0.06,
               "data_type": "string"
             }
@@ -494,7 +494,7 @@
             "height": 1024.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/SmartDashboard/Trench Safe",
+              "topic": "/Telemetry/SmartDashboard/Trench Safe",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
@@ -529,7 +529,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Swerve distanceBL",
+                  "topic": "/Telemetry/SmartDashboard/Swerve distanceBL",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -543,7 +543,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Swerve CCangle BL",
+                  "topic": "/Telemetry/SmartDashboard/Swerve CCangle BL",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -557,7 +557,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Swerve FXangle dpsBL",
+                  "topic": "/Telemetry/SmartDashboard/Swerve FXangle dpsBL",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -571,7 +571,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Swerve drive temp BL",
+                  "topic": "/Telemetry/SmartDashboard/Swerve drive temp BL",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -585,7 +585,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Swerve distanceBR",
+                  "topic": "/Telemetry/SmartDashboard/Swerve distanceBR",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -599,7 +599,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Swerve FXangle dpsBR",
+                  "topic": "/Telemetry/SmartDashboard/Swerve FXangle dpsBR",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -613,7 +613,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Swerve CCangle BR",
+                  "topic": "/Telemetry/SmartDashboard/Swerve CCangle BR",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -627,7 +627,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Swerve drive temp BR",
+                  "topic": "/Telemetry/SmartDashboard/Swerve drive temp BR",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -654,7 +654,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Drive Calibration",
+                  "topic": "/Tunables/Drive Calibration",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -668,7 +668,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Drive Turn Calibration",
+                  "topic": "/Tunables/Drive Turn Calibration",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -682,7 +682,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Drive Toggle Coast",
+                  "topic": "/Tunables/Drive Toggle Coast",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -696,7 +696,7 @@
                 "height": 128.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/SmartDashboard/Drive isBrakeMode",
+                  "topic": "/Tunables/Drive isBrakeMode",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -726,7 +726,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Drive Mode",
+                  "topic": "/Telemetry/SmartDashboard/Drive Mode",
                   "period": 0.06,
                   "data_type": "string",
                   "show_submit_button": false
@@ -740,7 +740,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Drive Speed",
+                  "topic": "/Telemetry/SmartDashboard/Drive Speed",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -754,7 +754,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Drive X Velocity",
+                  "topic": "/Telemetry/SmartDashboard/Drive X Velocity",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -768,7 +768,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Drive Y Velocity",
+                  "topic": "/Telemetry/SmartDashboard/Drive Y Velocity",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -782,7 +782,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Drive Gyro Rotation",
+                  "topic": "/Telemetry/SmartDashboard/Drive Gyro Rotation",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -796,7 +796,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Drive AngVel",
+                  "topic": "/Telemetry/SmartDashboard/Drive AngVel",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -810,7 +810,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Drive Pitch",
+                  "topic": "/Telemetry/SmartDashboard/Drive Pitch",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -824,7 +824,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Drive Odometry X",
+                  "topic": "/Telemetry/SmartDashboard/Drive Odometry X",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -838,7 +838,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Drive Odometry Y",
+                  "topic": "/Telemetry/SmartDashboard/Drive Odometry Y",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -852,7 +852,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Drive Bus Volt",
+                  "topic": "/Telemetry/SmartDashboard/Drive Bus Volt",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -866,7 +866,7 @@
                 "height": 128.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/SmartDashboard/Drive isGyroReading",
+                  "topic": "/Telemetry/martDashboard/Drive isGyroReading",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -896,7 +896,7 @@
                 "height": 128.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/SmartDashboard/PhotonVision LeftCamera Connected",
+                  "topic": "/Telemetry/SmartDashboard/PhotonVision LeftCamera Connected",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -913,7 +913,7 @@
                 "height": 128.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/SmartDashboard/PhotonVision RightCamera Connected",
+                  "topic": "/Telemetry/SmartDashboard/PhotonVision RightCamera Connected",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -930,7 +930,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Vision Enable Odometry Updates",
+                  "topic": "/Tunables/Vision Enable Odometry Updates",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -944,7 +944,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Vision Disable Odometry Updates",
+                  "topic": "/Tunables/Vision Disable Odometry Updates",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -971,7 +971,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/DrivePercentSpeed angle",
+                  "topic": "/Tunables/DrivePercentSpeed angle",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -985,7 +985,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/DrivePercentSpeed percent",
+                  "topic": "/Tunables/DrivePercentSpeed percent",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -999,7 +999,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/DrivePercentSpeed maxDistance",
+                  "topic": "/Tunables/DrivePercentSpeed maxDistance",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1013,7 +1013,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/DrivePercentSpeed curDistance",
+                  "topic": "/Telemetry/SmartDashboard/DrivePercentSpeed curDistance",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1027,7 +1027,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Drive Percent Speed",
+                  "topic": "/Tunables/Drive Percent Speed",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -1054,7 +1054,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/DriveResetPose Angle",
+                  "topic": "/Tunables/DriveResetPose Angle",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": true
@@ -1068,7 +1068,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/DriveResetPose X",
+                  "topic": "/Tunables/DriveResetPose X",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": true
@@ -1082,7 +1082,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/DriveResetPose Y",
+                  "topic": "/Tunables/DriveResetPose Y",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": true
@@ -1096,7 +1096,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Drive Reset Pose",
+                  "topic": "/Tunables/Drive Reset Pose",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -1123,7 +1123,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/DriveStraight Manual Angle",
+                  "topic": "/Tunables/DriveStraight Manual Angle",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1137,7 +1137,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/DriveStraight Manual Target Dist",
+                  "topic": "/Tunables/DriveStraight Manual Target Dist",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1151,7 +1151,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/DriveStraight Manual MaxVel",
+                  "topic": "/Tunables/DriveStraight Manual MaxVel",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1165,7 +1165,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/DriveStraight Manual MaxAccel",
+                  "topic": "/Tunables/DriveStraight Manual MaxAccel",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1179,7 +1179,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Drive Straight",
+                  "topic": "/Tunables/Drive Straight",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -1206,7 +1206,7 @@
                 "height": 128.0,
                 "type": "ComboBox Chooser",
                 "properties": {
-                  "topic": "/SmartDashboard/DriveToPose Feedback",
+                  "topic": "/Tunables/DriveToPose Feedback",
                   "period": 0.06,
                   "sort_options": false
                 }
@@ -1219,7 +1219,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/DriveToPose VelMax mps",
+                  "topic": "/Tunables/DriveToPose VelMax mps",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1233,7 +1233,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/DriveToPose Rot degrees",
+                  "topic": "/Tunables/DriveToPose Rot degrees",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1247,7 +1247,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/DriveToPose XPos meters",
+                  "topic": "/Tunables/DriveToPose XPos meters",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1261,21 +1261,21 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/DriveToPose YPos meters",
+                  "topic": "/Tunables/DriveToPose YPos meters",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
                 }
               },
               {
-                "title": " ",
+                "title": "DriveToPose Absolute",
                 "x": 0.0,
                 "y": 0.0,
                 "width": 256.0,
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Drive To Pose Absolute",
+                  "topic": "/Tunables/Drive To Pose Absolute",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -1302,7 +1302,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Swerve distanceFL",
+                  "topic": "/Telemetry/SmartDashboard/Swerve distanceFL",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1316,7 +1316,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Swerve CCangle FL",
+                  "topic": "/Telemetry/SmartDashboard/Swerve CCangle FL",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1330,7 +1330,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Swerve FXangle dpsFL",
+                  "topic": "/Telemetry/SmartDashboard/Swerve FXangle dpsFL",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1344,7 +1344,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Swerve drive temp FL",
+                  "topic": "/Telemetry/SmartDashboard/Swerve drive temp FL",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1358,7 +1358,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Swerve distanceFR",
+                  "topic": "/Telemetry/SmartDashboard/Swerve distanceFR",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1372,7 +1372,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Swerve CCangle FR",
+                  "topic": "/Telemetry/SmartDashboard/Swerve CCangle FR",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1386,7 +1386,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Swerve FXangle dpsFR",
+                  "topic": "/Telemetry/SmartDashboard/Swerve FXangle dpsFR",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1400,7 +1400,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Swerve drive temp FR",
+                  "topic": "/Telemetry/SmartDashboard/Swerve drive temp FR",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1427,7 +1427,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Swerve drive temp BL",
+                  "topic": "/Telemetry/SmartDashboard/Swerve drive temp BL",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -1440,7 +1440,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Swerve drive temp BR",
+                  "topic": "/Telemetry/SmartDashboard/Swerve drive temp BR",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -1453,7 +1453,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Swerve drive temp FL",
+                  "topic": "/Telemetry/SmartDashboard/Swerve drive temp FL",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -1466,7 +1466,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Swerve drive temp FR",
+                  "topic": "/Telemetry/SmartDashboard/Swerve drive temp FR",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -1483,7 +1483,7 @@
             "height": 256.0,
             "type": "Command",
             "properties": {
-              "topic": "/SmartDashboard/Stop All Motors",
+              "topic": "/Tunables/Stop All Motors",
               "period": 0.06,
               "show_type": false,
               "maximize_button_space": true
@@ -1515,7 +1515,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Intake Deploy Set Angle Input",
+                  "topic": "/Tunables/Intake Deploy Set Angle Input",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": true
@@ -1529,7 +1529,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Intake Deploy Set Angle",
+                  "topic": "/Tunables/Intake Deploy Set Angle",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -1543,7 +1543,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Intake Deploy Set Percent Input",
+                  "topic": "/Tunables/Intake Deploy Set Percent Input",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": true
@@ -1557,7 +1557,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Intake Deploy Set Percent",
+                  "topic": "/Tunables/Intake Deploy Set Percent",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -1571,7 +1571,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Intake Deploy Recalibrate Manual Input (Degrees)",
+                  "topic": "/Tunables/Intake Deploy Recalibrate Manual Input (Degrees)",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": true
@@ -1585,7 +1585,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Intake Deploy Recalibrate",
+                  "topic": "/Tunables/Intake Deploy Recalibrate",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -1612,7 +1612,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Intake Roller Set Percent Input",
+                  "topic": "/Tunables/Intake Roller Set Percent Input",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": true
@@ -1626,7 +1626,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Intake Roller Set Percent",
+                  "topic": "/Tunables/Intake Roller Set Percent",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -1653,7 +1653,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Spindexer Set Velocity Input",
+                  "topic": "/Tunables/Spindexer Set Velocity Input",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": true
@@ -1667,7 +1667,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Spindexer Set Velocity",
+                  "topic": "/Tunables/Spindexer Set Velocity",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -1681,7 +1681,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Spindexer Set Percent Input",
+                  "topic": "/Tunables/Spindexer Set Percent Input",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": true
@@ -1695,7 +1695,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Spindexer Set Percent",
+                  "topic": "/Tunables/Spindexer Set Percent",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -1722,7 +1722,7 @@
                 "height": 128.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/SmartDashboard/Intake Deploy CANcoder Connected?",
+                  "topic": "/Telemetry/SmartDashboard/Intake Deploy CANcoder Connected?",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -1739,7 +1739,7 @@
                 "height": 128.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/SmartDashboard/Intake Deploy Calibrated?",
+                  "topic": "/Telemetry/SmartDashboard/Intake Deploy Calibrated?",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -1756,7 +1756,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Intake Deploy Raw Rotations",
+                  "topic": "/Telemetry/SmartDashboard/Intake Deploy Raw Rotations",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1770,7 +1770,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Intake Deploy Target Angle",
+                  "topic": "/Telemetry/SmartDashboard/Intake Deploy Target Angle",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1784,7 +1784,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Intake Deploy Angle",
+                  "topic": "/Telemetry/SmartDashboard/Intake Deploy Angle",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1811,7 +1811,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Spindexer Target RPM",
+                  "topic": "/Telemetry/SmartDashboard/Spindexer Target RPM",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1825,7 +1825,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Spindexer RPM",
+                  "topic": "/Telemetry/SmartDashboard/Spindexer RPM",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1839,7 +1839,7 @@
                 "height": 128.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/SmartDashboard/Uptake Entry Triggered?",
+                  "topic": "/Telemetry/SmartDashboard/Uptake Entry Triggered?",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4294963456,
@@ -1869,7 +1869,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Uptake Set Velocity Input",
+                  "topic": "/Tunables/Uptake Set Velocity Input",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": true
@@ -1883,7 +1883,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Uptake Set Velocity",
+                  "topic": "/Tunables/Uptake Set Velocity",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -1897,7 +1897,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Uptake Set Percent Input",
+                  "topic": "/Tunables/Uptake Set Percent Input",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": true
@@ -1911,7 +1911,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Uptake Set Percent",
+                  "topic": "/Tunables/Uptake Set Percent",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -1938,7 +1938,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Uptake Target RPM",
+                  "topic": "/Telemetry/SmartDashboard/Uptake Target RPM",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1952,7 +1952,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Uptake RPM",
+                  "topic": "/Telemetry/SmartDashboard/Uptake RPM",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1966,7 +1966,7 @@
                 "height": 128.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/SmartDashboard/Uptake Exit Triggered?",
+                  "topic": "/Telemetry/SmartDashboard/Uptake Exit Triggered?",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4294963456,
@@ -1996,7 +1996,7 @@
                 "height": 128.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/SmartDashboard/Climber L UPPER",
+                  "topic": "/Telemetry/SmartDashboard/Climber L UPPER",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -2013,7 +2013,7 @@
                 "height": 128.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/SmartDashboard/Climber L LOWER",
+                  "topic": "/Telemetry/SmartDashboard/Climber L LOWER",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -2043,7 +2043,7 @@
                 "height": 128.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/SmartDashboard/Climber R UPPER",
+                  "topic": "/Telemetry/SmartDashboard/Climber R UPPER",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -2060,7 +2060,7 @@
                 "height": 128.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/SmartDashboard/Climber R LOWER",
+                  "topic": "/Telemetry/SmartDashboard/Climber R LOWER",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -2090,7 +2090,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Climber R Set Percent Input",
+                  "topic": "/Tunables/Climber R Set Percent Input",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": true
@@ -2104,7 +2104,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Climber R Set Percent",
+                  "topic": "/Tunables/Climber R Set Percent",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -2118,7 +2118,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Climber R Stop",
+                  "topic": "/Tunables/Climber R Stop",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -2145,7 +2145,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Climber L Set Percent Input",
+                  "topic": "/Tunables/Climber L Set Percent Input",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": true
@@ -2159,7 +2159,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Climber L Set Percent",
+                  "topic": "/Tunables/Climber L Set Percent",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -2173,7 +2173,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Climber L Stop",
+                  "topic": "/Tunables/Climber L Stop",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -2200,7 +2200,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Climber Set Percent Input",
+                  "topic": "/Tunables/Climber Set Percent Input",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": true
@@ -2214,7 +2214,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Climber Set Percent",
+                  "topic": "/Tunables/Climber Set Percent",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -2241,7 +2241,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Intake Deploy Temp",
+                  "topic": "/Telemetry/SmartDashboard/Intake Deploy Temp",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -2254,7 +2254,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Intake Roller Temp",
+                  "topic": "/Telemetry/SmartDashboard/Intake Roller Temp",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -2267,7 +2267,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Spindexer Temp",
+                  "topic": "/Telemetry/SmartDashboard/Spindexer Temp",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -2280,7 +2280,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Uptake Temp",
+                  "topic": "/Telemetry/SmartDashboard/Uptake Temp",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -2293,7 +2293,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Turret Temp",
+                  "topic": "/Telemetry/SmartDashboard/Turret Temp",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -2306,7 +2306,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Shooter L Temp",
+                  "topic": "/Telemetry/SmartDashboard/Shooter L Temp",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -2319,7 +2319,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Shooter R Temp",
+                  "topic": "/Telemetry/SmartDashboard/Shooter R Temp",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -2332,7 +2332,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Climber L Temp",
+                  "topic": "/Telemetry/SmartDashboard/Climber L Temp",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -2345,7 +2345,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Climber R Temp",
+                  "topic": "/Telemetry/SmartDashboard/Climber R Temp",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -2362,7 +2362,7 @@
             "height": 256.0,
             "type": "Command",
             "properties": {
-              "topic": "/SmartDashboard/Stop All Motors",
+              "topic": "/Tunables/Stop All Motors",
               "period": 0.06,
               "show_type": false,
               "maximize_button_space": true
@@ -2376,7 +2376,7 @@
             "height": 128.0,
             "type": "Command",
             "properties": {
-              "topic": "/SmartDashboard/Intake Deploy Stop",
+              "topic": "/Tunables/Intake Deploy Stop",
               "period": 0.06,
               "show_type": false,
               "maximize_button_space": true
@@ -2390,7 +2390,7 @@
             "height": 128.0,
             "type": "Command",
             "properties": {
-              "topic": "/SmartDashboard/Intake Roller Stop",
+              "topic": "/Tunables/Intake Roller Stop",
               "period": 0.06,
               "show_type": false,
               "maximize_button_space": true
@@ -2404,7 +2404,7 @@
             "height": 128.0,
             "type": "Command",
             "properties": {
-              "topic": "/SmartDashboard/Spindexer Stop",
+              "topic": "/Tunables/Spindexer Stop",
               "period": 0.06,
               "show_type": false,
               "maximize_button_space": true
@@ -2418,7 +2418,7 @@
             "height": 128.0,
             "type": "Command",
             "properties": {
-              "topic": "/SmartDashboard/Uptake Stop",
+              "topic": "/Tunables/Uptake Stop",
               "period": 0.06,
               "show_type": false,
               "maximize_button_space": true
@@ -2432,7 +2432,7 @@
             "height": 128.0,
             "type": "Command",
             "properties": {
-              "topic": "/SmartDashboard/Climber Stop",
+              "topic": "/Tunables/Climber Stop",
               "period": 0.06,
               "show_type": false,
               "maximize_button_space": true
@@ -2464,7 +2464,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Turret Set Angle Input",
+                  "topic": "/Tunables/Turret Set Angle Input",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": true
@@ -2478,7 +2478,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Turret Set Angle",
+                  "topic": "/Tunables/Turret Set Angle",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -2492,7 +2492,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Turret Set Percent Input",
+                  "topic": "/Tunables/Turret Set Percent Input",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": true
@@ -2506,7 +2506,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Turret Set Percent",
+                  "topic": "/Tunables/Turret Set Percent",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -2520,7 +2520,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Turret Recalibrate Advanced",
+                  "topic": "/Tunables/Turret Recalibrate Advanced",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -2534,7 +2534,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Turret Recalibrate Basic",
+                  "topic": "/Tunables/Turret Recalibrate Basic",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -2561,7 +2561,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Shooter Set Velocity Input",
+                  "topic": "/Tunables/Shooter Set Velocity Input",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": true
@@ -2575,7 +2575,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Shooter Set Velocity",
+                  "topic": "/Tunables/Shooter Set Velocity",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -2589,7 +2589,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Shooter Set Percent Input",
+                  "topic": "/Tunables/Shooter Set Percent Input",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": true
@@ -2603,7 +2603,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Shooter Set Percent",
+                  "topic": "/Tunables/Shooter Set Percent",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -2630,7 +2630,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Shooter Target RPM",
+                  "topic": "/Telemetry/SmartDashboard/Shooter Target RPM",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -2643,7 +2643,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Shooter RPM",
+                  "topic": "/Telemetry/SmartDashboard/Shooter RPM",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -2669,7 +2669,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Turret Angle",
+                  "topic": "/Telemetry/SmartDashboard/Turret Angle",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -2682,7 +2682,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Turret Target Angle",
+                  "topic": "/Telemetry/SmartDashboard/Turret Target Angle",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -2695,7 +2695,7 @@
                 "height": 128.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/SmartDashboard/Turret CANcoder Connected?",
+                  "topic": "/Telemetry/SmartDashboard/Turret CANcoder Connected?",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -2712,7 +2712,7 @@
                 "height": 128.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/SmartDashboard/Turret Using CANCoder?",
+                  "topic": "/Telemetry/SmartDashboard/Turret Using CANCoder?",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -2729,7 +2729,7 @@
                 "height": 128.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/SmartDashboard/Turret Calibrated?",
+                  "topic": "/Telemetry/SmartDashboard/Turret Calibrated?",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -2759,7 +2759,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Hood L Angle",
+                  "topic": "/Telemetry/SmartDashboard/Hood L Angle",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -2772,7 +2772,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Hood L Voltage",
+                  "topic": "/Telemetry/SmartDashboard/Hood L Voltage",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -2785,7 +2785,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Hood L Analog Voltage",
+                  "topic": "/Telemetry/SmartDashboard/Hood L Analog Voltage",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -2798,7 +2798,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Hood L Extension Length (in)",
+                  "topic": "/Telemetry/SmartDashboard/Hood L Extension Length (in)",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -2824,7 +2824,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Hood Set Voltage Input",
+                  "topic": "/Tunables/Hood Set Voltage Input",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": true
@@ -2838,7 +2838,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Hood Set Voltage (both motors)",
+                  "topic": "/Tunables/Hood Set Voltage (both motors)",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -2852,7 +2852,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Hood L Set Voltage",
+                  "topic": "/Tunables/Hood L Set Voltage",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -2866,7 +2866,7 @@
                 "height": 128.0,
                 "type": "Command",
                 "properties": {
-                  "topic": "/SmartDashboard/Hood R Set Voltage",
+                  "topic": "/Tunables/Hood R Set Voltage",
                   "period": 0.06,
                   "show_type": false,
                   "maximize_button_space": true
@@ -2893,7 +2893,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Hood R Angle",
+                  "topic": "/Telemetry/SmartDashboard/Hood R Angle",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -2906,7 +2906,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Hood R Voltage",
+                  "topic": "/Telemetry/SmartDashboard/Hood R Voltage",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -2919,7 +2919,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Hood R Analog Voltage",
+                  "topic": "/Telemetry/SmartDashboard/Hood R Analog Voltage",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -2932,7 +2932,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Hood R Extension Length (in)",
+                  "topic": "/Telemetry/SmartDashboard/Hood R Extension Length (in)",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -2958,7 +2958,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Intake Deploy Temp",
+                  "topic": "/Telemetry/SmartDashboard/Intake Deploy Temp",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -2971,7 +2971,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Intake Roller Temp",
+                  "topic": "/Telemetry/SmartDashboard/Intake Roller Temp",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -2984,7 +2984,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Spindexer Temp",
+                  "topic": "/Telemetry/SmartDashboard/Spindexer Temp",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -2997,7 +2997,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Uptake Temp",
+                  "topic": "/Telemetry/SmartDashboard/Uptake Temp",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -3010,7 +3010,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Turret Temp",
+                  "topic": "/Telemetry/SmartDashboard/Turret Temp",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -3023,7 +3023,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Shooter L Temp",
+                  "topic": "/Telemetry/SmartDashboard/Shooter L Temp",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -3036,7 +3036,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Shooter R Temp",
+                  "topic": "/Telemetry/SmartDashboard/Shooter R Temp",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -3049,7 +3049,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Climber L Temp",
+                  "topic": "/Telemetry/SmartDashboard/Climber L Temp",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -3062,7 +3062,7 @@
                 "height": 128.0,
                 "type": "Large Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Climber R Temp",
+                  "topic": "/Telemetry/SmartDashboard/Climber R Temp",
                   "period": 0.06,
                   "data_type": "double"
                 }
@@ -3079,7 +3079,7 @@
             "height": 128.0,
             "type": "Command",
             "properties": {
-              "topic": "/SmartDashboard/Shooter Stop",
+              "topic": "/Tunables/Shooter Stop",
               "period": 0.06,
               "show_type": false,
               "maximize_button_space": true
@@ -3093,7 +3093,7 @@
             "height": 256.0,
             "type": "Command",
             "properties": {
-              "topic": "/SmartDashboard/Stop All Motors",
+              "topic": "/Tunables/Stop All Motors",
               "period": 0.06,
               "show_type": false,
               "maximize_button_space": true
@@ -3107,7 +3107,7 @@
             "height": 128.0,
             "type": "Command",
             "properties": {
-              "topic": "/SmartDashboard/Turret Stop",
+              "topic": "/Tunables/Turret Stop",
               "period": 0.06,
               "show_type": false,
               "maximize_button_space": true
@@ -3121,7 +3121,7 @@
             "height": 128.0,
             "type": "Command",
             "properties": {
-              "topic": "/SmartDashboard/Hood Stop",
+              "topic": "/Tunables/Hood Stop",
               "period": 0.06,
               "show_type": false,
               "maximize_button_space": true
@@ -3135,7 +3135,7 @@
             "height": 128.0,
             "type": "Command",
             "properties": {
-              "topic": "/SmartDashboard/Hood Set Angle (Wait for Angle)",
+              "topic": "/Tunables/Hood Set Angle (Wait for Angle)",
               "period": 0.06,
               "show_type": false,
               "maximize_button_space": true
@@ -3149,7 +3149,7 @@
             "height": 128.0,
             "type": "Command",
             "properties": {
-              "topic": "/SmartDashboard/Hood Set Angle (Run Forever)",
+              "topic": "/Tunables/Hood Set Angle (Run Forever)",
               "period": 0.06,
               "show_type": false,
               "maximize_button_space": true
@@ -3163,7 +3163,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Hood Set Angle Input",
+              "topic": "/Tunables/Hood Set Angle Input",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": true
