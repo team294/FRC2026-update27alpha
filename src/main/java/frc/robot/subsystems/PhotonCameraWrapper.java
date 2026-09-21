@@ -73,7 +73,7 @@ public class PhotonCameraWrapper extends SubsystemBase {
 
     // Prime the DataLog to reduce delay when first enabling the robot
     long timeNow = RobotController.getTime();
-    dLogEstPose2D.append(Pose2d.kZero, timeNow);
+    dLogEstPose2D.append(Pose2d.ZERO, timeNow);
 
     priorConnected = photonCamera.isConnected();
     dLogConnected.append(priorConnected, timeNow);
