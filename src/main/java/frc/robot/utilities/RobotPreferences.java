@@ -7,7 +7,7 @@
 
 package frc.robot.utilities;
 
-import org.wpilib.util.Preferences;
+import org.wpilib.preferences.Preferences;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Robot;
 
