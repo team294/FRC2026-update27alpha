@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import java.util.NoSuchElementException;
 import java.util.function.Supplier;
 
 import org.wpilib.math.controller.PIDController;
@@ -29,7 +28,6 @@ import org.wpilib.command2.Command;
 import frc.robot.Constants.CoordType;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.TrajectoryConstants;
-import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.DriveTrain.DriveType;
 import frc.robot.utilities.DataLogUtil;
