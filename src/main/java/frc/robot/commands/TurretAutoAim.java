@@ -12,12 +12,12 @@ import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Turret;
 import frc.robot.utilities.DataLogUtil;
-import frc.robot.utilities.Field;
+import frc.robot.utilities.FieldUtil;
 
 public class TurretAutoAim extends Command {
   private final Turret turret;
   private final DriveTrain driveTrain;
-  private final Field field;
+  private final FieldUtil field;
 
   private Pose2d robotPose2d;
   private double turretTargetAngle;
@@ -28,7 +28,7 @@ public class TurretAutoAim extends Command {
    * @param driveTrain DriveTrain subsystem
    * @param field Field utility
   */
-  public TurretAutoAim(Turret turret, DriveTrain driveTrain, Field field) {
+  public TurretAutoAim(Turret turret, DriveTrain driveTrain, FieldUtil field) {
     this.turret = turret;
     this.driveTrain = driveTrain;
     this.field = field;

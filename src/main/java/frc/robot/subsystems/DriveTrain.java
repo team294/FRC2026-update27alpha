@@ -131,14 +131,14 @@ public class DriveTrain extends SubsystemBase implements Loggable {
    * @param allianceSelection BCR AllianceSelection object
    * @param field BCR Field object to supply AprilTag layout
    */
-  public DriveTrain(AllianceSelection allianceSelection, Field field) {
+  public DriveTrain(AllianceSelection allianceSelection, FieldUtil field) {
     this.allianceSelection = allianceSelection;
     
     logRotationKey = DataLogUtil.allocateLogRotation();
 
     // Create and enable cameras
-    cameraLeft = new PhotonCameraWrapper(VisionConstants.robotToCamLeft, VisionConstants.leftCameraName, field.getAprilTagFieldLayout());
-    cameraRight = new PhotonCameraWrapper(VisionConstants.robotToCamRight, VisionConstants.rightCameraName, field.getAprilTagFieldLayout());
+    cameraLeft = new PhotonCameraWrapper(VisionConstants.robotToCamLeft, VisionConstants.leftCameraName, field.getField());
+    cameraRight = new PhotonCameraWrapper(VisionConstants.robotToCamRight, VisionConstants.rightCameraName, field.getField());
     cameras.add(cameraLeft);
     cameras.add(cameraRight);
 

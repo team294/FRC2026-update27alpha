@@ -24,7 +24,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import frc.robot.utilities.AllianceSelection;
-import frc.robot.utilities.Field;
+import frc.robot.utilities.FieldUtil;
 import frc.robot.utilities.TrajectoryCache;
 import frc.robot.utilities.TrajectoryCache.TrajectoryName;
 
@@ -33,7 +33,7 @@ import frc.robot.utilities.TrajectoryCache.TrajectoryName;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutonReturnToAllianceAndShoot extends SequentialCommandGroup {
   /** Creates a new AutonDriveAndShoot. */
-  public AutonReturnToAllianceAndShoot(ReturnToAllianceType returnToAllianceZone, AutoEndType autoEnd, boolean isSecondCycle, boolean leftSide, boolean shoot, Intake intake, Feeder feeder, Turret turret, Shooter shooter, Climber climber, DriveTrain driveTrain, AllianceSelection alliance, TrajectoryCache cache, Field field) {
+  public AutonReturnToAllianceAndShoot(ReturnToAllianceType returnToAllianceZone, AutoEndType autoEnd, boolean isSecondCycle, boolean leftSide, boolean shoot, Intake intake, Feeder feeder, Turret turret, Shooter shooter, Climber climber, DriveTrain driveTrain, AllianceSelection alliance, TrajectoryCache cache, FieldUtil field) {
     Trajectory<SwerveSample> trajectory = returnToAllianceZone == ReturnToAllianceType.kOverBump ? cache.getTrajectory(leftSide, TrajectoryName.CollectEndToShootBump) : cache.getTrajectory(leftSide, TrajectoryName.CollectEndToShootTrench);
     addCommands(
       parallel(

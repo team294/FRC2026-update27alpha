@@ -51,10 +51,10 @@ public class RobotContainer {
   private final Timer teleopTimer = new Timer();
   private final AllianceSelection allianceSelection = new AllianceSelection();
   private final ShiftHelper shiftHelper = new ShiftHelper(allianceSelection.getAlliance(), teleopTimer);
-  private final Field field = new Field(allianceSelection);
+  private final FieldUtil fieldUtil = new FieldUtil(allianceSelection);
 
   // Define robot subsystems
-  private final DriveTrain driveTrain = new DriveTrain(allianceSelection, field);
+  private final DriveTrain driveTrain = new DriveTrain(allianceSelection, fieldUtil);
   private final Intake intake = new Intake("Intake");
   private final LED led = new LED(Ports.CANdle, Ports.CANbusMain, "LED");
   private final Feeder feeder = new Feeder("Feeder");
@@ -73,7 +73,7 @@ public class RobotContainer {
 
   // Define other utilities
   private final TrajectoryCache trajectoryCache = new TrajectoryCache();
-  private final AutoSelection autoSelection = new AutoSelection(rightJoystick, trajectoryCache, allianceSelection, field, intake, feeder, turret, shooter, climber, driveTrain);
+  private final AutoSelection autoSelection = new AutoSelection(rightJoystick, trajectoryCache, allianceSelection, fieldUtil, intake, feeder, turret, shooter, climber, driveTrain);
   
   // this command repeats until interrupted/cancelled (we cancel it in teleopInit() and autonomousInit()).
   // the command is created here to be passed into LEDEventUtil's initialize method
@@ -116,7 +116,7 @@ public class RobotContainer {
     configureElastic();
 
     driveTrain.setDefaultCommand(new DriveWithJoysticksAdvanced(leftJoystick, rightJoystick, allianceSelection, driveTrain));
-    turret.setDefaultCommand(new TurretAutoAim(turret, driveTrain, field));
+    turret.setDefaultCommand(new TurretAutoAim(turret, driveTrain, fieldUtil));
     // driveTrain.setDefaultCommand(new DriveWithController(driveTrain, xboxController, allianceSelection));
 
     // Set initial robot position on field. This takes place a while after the drivetrain is created, so after any CANbus delays.
@@ -192,8 +192,8 @@ public class RobotContainer {
 
     // Score Commands
 
-    Tunables.publish(SHOOTER_CMD_SCORE_PREP.value + " Manual Input", new ShooterScorePrep(true, EndType.runForever, shooter, turret, driveTrain, field));
-    Tunables.publish(SHOOTER_CMD_SCORE_PREP.value + " Self-Calculate", new ShooterScorePrep(false, EndType.runForever, shooter, turret, driveTrain, field));
+    Tunables.publish(SHOOTER_CMD_SCORE_PREP.value + " Manual Input", new ShooterScorePrep(true, EndType.runForever, shooter, turret, driveTrain, fieldUtil));
+    Tunables.publish(SHOOTER_CMD_SCORE_PREP.value + " Self-Calculate", new ShooterScorePrep(false, EndType.runForever, shooter, turret, driveTrain, fieldUtil));
 
     // Calibration Ramp
     
@@ -301,13 +301,13 @@ public class RobotContainer {
     xbLB.onTrue(new IntakeRollerStop(intake));
 
     // while held, prep Shooter & Hood for scoring or passing (depending on position on field). stops shooter motor when released
-    xbRT.whileTrue(new ShooterScorePrep(false, EndType.runForever, shooter, turret, driveTrain, field));
+    xbRT.whileTrue(new ShooterScorePrep(false, EndType.runForever, shooter, turret, driveTrain, fieldUtil));
 
     xbRT.onFalse(new IntakeDeploySetAngle(IntakeDeployAngle.INTAKE, intake));
 
     // manual setpoint for shooting when bot is at center of trench with turret facing hub
     xbRB.whileTrue(parallel(
-      new ShooterScorePrep(ShooterConstants.shooterVelocityFromTrench, ShooterConstants.hoodShootAngle, EndType.runForever, shooter, turret, driveTrain, field),
+      new ShooterScorePrep(ShooterConstants.shooterVelocityFromTrench, ShooterConstants.hoodShootAngle, EndType.runForever, shooter, turret, driveTrain, fieldUtil),
       new TurretSetAngle(0, EndType.runForever, turret)
     ));
 
