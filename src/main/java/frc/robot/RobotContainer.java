@@ -31,13 +31,15 @@ import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.driverstation.Joystick;
-import org.wpilib.system.RobotController;
 import org.wpilib.system.Timer;
-import org.wpilib.smartdashboard.SmartDashboard;
+import org.wpilib.telemetry.Telemetry;
+import org.wpilib.telemetry.TelemetryTable;
+import org.wpilib.tunable.Tunables;
 import org.wpilib.command2.Command;
 import org.wpilib.command2.CommandScheduler;
 import org.wpilib.command2.InstantCommand;
-import org.wpilib.command2.button.CommandNiDsXboxController;
+import org.wpilib.command2.button.CommandGamepad;
+// import org.wpilib.command2.button.CommandNiDsXboxController; no POV (d-pad) functionality
 import org.wpilib.command2.button.JoystickButton;
 import org.wpilib.command2.button.Trigger;
 
@@ -52,10 +54,10 @@ public class RobotContainer {
   private final Timer teleopTimer = new Timer();
   private final AllianceSelection allianceSelection = new AllianceSelection();
   private final ShiftHelper shiftHelper = new ShiftHelper(allianceSelection.getAlliance(), teleopTimer);
-  private final Field field = new Field(allianceSelection);
+  private final FieldUtil fieldUtil = new FieldUtil(allianceSelection);
 
   // Define robot subsystems
-  private final DriveTrain driveTrain = new DriveTrain(allianceSelection, field);
+  private final DriveTrain driveTrain = new DriveTrain(allianceSelection, fieldUtil);
   private final Intake intake = new Intake("Intake");
   private final LED led = new LED(Ports.CANdle, Ports.CANbusMain, "LED");
   private final Feeder feeder = new Feeder("Feeder");
@@ -67,11 +69,14 @@ public class RobotContainer {
   private final Joystick leftJoystick = new Joystick(OIConstants.usbLeftJoystick);
   private final Joystick rightJoystick = new Joystick(OIConstants.usbRightJoystick);
   private final Joystick coPanel = new Joystick(OIConstants.usbCoPanel);
-  private final CommandNiDsXboxController xboxController = new CommandNiDsXboxController(OIConstants.usbXboxController);
+
+  // CommandNiDsXboxController has no POV (d-pad) functionality, so temporarily (i hope) switching to CommandGamepad
+  // private final CommandNiDsXboxController xboxController = new CommandNiDsXboxController(OIConstants.usbXboxController);
+  private final CommandGamepad xboxController = new CommandGamepad(OIConstants.usbXboxController);
 
   // Define other utilities
   private final TrajectoryCache trajectoryCache = new TrajectoryCache();
-  private final AutoSelection autoSelection = new AutoSelection(rightJoystick, trajectoryCache, allianceSelection, field, intake, feeder, turret, shooter, climber, driveTrain);
+  private final AutoSelection autoSelection = new AutoSelection(rightJoystick, trajectoryCache, allianceSelection, fieldUtil, intake, feeder, turret, shooter, climber, driveTrain);
   
   // this command repeats until interrupted/cancelled (we cancel it in teleopInit() and autonomousInit()).
   // the command is created here to be passed into LEDEventUtil's initialize method
@@ -96,7 +101,7 @@ public class RobotContainer {
     // Start LEDEventUtil
     LEDEventUtil.initialize(led, LEDAnimateRobotDisabled);
 
-    SmartDashboard.putBoolean("RobotPrefs Initialized", RobotPreferences.prefsExist());
+    Robot.dashboard.log("RobotPrefs Initialized", RobotPreferences.prefsExist());
     if(!RobotPreferences.prefsExist()) {
       RobotPreferences.recordStickyFaults("RobotPreferences");
     }
@@ -114,127 +119,127 @@ public class RobotContainer {
     configureElastic();
 
     driveTrain.setDefaultCommand(new DriveWithJoysticksAdvanced(leftJoystick, rightJoystick, allianceSelection, driveTrain));
-    turret.setDefaultCommand(new TurretAutoAim(turret, driveTrain, field));
+    turret.setDefaultCommand(new TurretAutoAim(turret, driveTrain, fieldUtil));
     // driveTrain.setDefaultCommand(new DriveWithController(driveTrain, xboxController, allianceSelection));
 
     // Set initial robot position on field. This takes place a while after the drivetrain is created, so after any CANbus delays.
     // Set initial location to (0,0) and facing away from driver (regardless of alliance color).
     driveTrain.resetPose(new Pose2d(0.0, 0.0, 
-      allianceSelection.getAlliance() == Alliance.RED ? Rotation2d.k180deg : Rotation2d.kZero));
+      allianceSelection.getAlliance() == Alliance.RED ? Rotation2d.k180deg : Rotation2d.ZERO));
   }
 
   private void configureElastic() {
     // Sticky Faults
     RobotPreferences.showStickyFaultsOnElastic();
-    SmartDashboard.putData("Clear Sticky Faults", new StickyFaultsClear());
+    Tunables.publish("Clear Sticky Faults", new StickyFaultsClear());
 
     // DriveTrain
-    SmartDashboard.putData("Drive FOC On", new DriveSetFOC(true, driveTrain));
-    SmartDashboard.putData("Drive FOC Off", new DriveSetFOC(false, driveTrain));
-    SmartDashboard.putData("Drive Toggle Coast", new DriveToggleCoastMode(driveTrain));
-    SmartDashboard.putData("Drive Reset Pose", new DriveResetPose(driveTrain));
-    SmartDashboard.putData("Drive Reset Driver Angle", new DriveResetDriverAngle(driveTrain));
-    SmartDashboard.putData("Drive To Pose Absolute", new DriveToPose(CoordType.kAbsolute, driveTrain));
-    SmartDashboard.putData("Drive To Pose Relative", new DriveToPose(CoordType.kRelative, driveTrain));
-    SmartDashboard.putData("Drive 6m Fwd", new DriveToPose(CoordType.kRelative, () -> new Pose2d(6.0, 0.0, new Rotation2d(0.0)),
+    Tunables.publish("Drive FOC On", new DriveSetFOC(true, driveTrain));
+    Tunables.publish("Drive FOC Off", new DriveSetFOC(false, driveTrain));
+    Tunables.publish("Drive Toggle Coast", new DriveToggleCoastMode(driveTrain));
+    Tunables.publish("Drive Reset Pose", new DriveResetPose(driveTrain));
+    Tunables.publish("Drive Reset Driver Angle", new DriveResetDriverAngle(driveTrain));
+    Tunables.publish("Drive To Pose Absolute", new DriveToPose(CoordType.kAbsolute, driveTrain));
+    Tunables.publish("Drive To Pose Relative", new DriveToPose(CoordType.kRelative, driveTrain));
+    Tunables.publish("Drive 6m Fwd", new DriveToPose(CoordType.kRelative, () -> new Pose2d(6.0, 0.0, new Rotation2d(0.0)),
       SwerveConstants.kNominalSpeedMetersPerSecond, SwerveConstants.kNominalAccelerationMetersPerSecondSquare, 
       TrajectoryConstants.maxPositionErrorMeters, TrajectoryConstants.maxThetaErrorDegrees, 
       true, true, driveTrain));
-    SmartDashboard.putData("Drive Calibration", new DriveCalibration(0.0, 0.5, 5.0, 0.1, driveTrain));
-    SmartDashboard.putData("Drive Calibration 0.1", new DriveCalibration(0.0, 0.1, 5.0, 100000, driveTrain));
-    SmartDashboard.putData("Drive Calibration 0.25", new DriveCalibration(0.0, 0.25, 5.0, 100000, driveTrain));
-    SmartDashboard.putData("Drive Calibration 0.4", new DriveCalibration(0.0, 0.4, 5.0, 100000, driveTrain));
-    SmartDashboard.putData("Drive Calibration 0.55", new DriveCalibration(0.0, 0.55, 5.0, 100000, driveTrain));
-    SmartDashboard.putData("Drive Calibration 0.7", new DriveCalibration(0.0, 0.7, 5.0, 100000, driveTrain));
-    SmartDashboard.putData("Drive Calibration 0.85", new DriveCalibration(0.0, 0.85, 5.0, 100000, driveTrain));
-    SmartDashboard.putData("Drive Calibration 1.0", new DriveCalibration(0.0, 1.0, 5.0, 100000, driveTrain));
-    SmartDashboard.putData("Drive Turn Calibration", new DriveTurnCalibration(0.2, 5.0, 0.2 / 5.0, driveTrain));
-    SmartDashboard.putData("Drive Percent Speed", new DrivePercentSpeed(driveTrain));
-    SmartDashboard.putData("Drive Straight", new DriveStraight(false, false, true, driveTrain));
-    SmartDashboard.putData("Drive Traj 4m Relative", new DriveTrajectory(CoordType.kRelative, StopType.kBrake, 
+    Tunables.publish("Drive Calibration", new DriveCalibration(0.0, 0.5, 5.0, 0.1, driveTrain));
+    Tunables.publish("Drive Calibration 0.1", new DriveCalibration(0.0, 0.1, 5.0, 100000, driveTrain));
+    Tunables.publish("Drive Calibration 0.25", new DriveCalibration(0.0, 0.25, 5.0, 100000, driveTrain));
+    Tunables.publish("Drive Calibration 0.4", new DriveCalibration(0.0, 0.4, 5.0, 100000, driveTrain));
+    Tunables.publish("Drive Calibration 0.55", new DriveCalibration(0.0, 0.55, 5.0, 100000, driveTrain));
+    Tunables.publish("Drive Calibration 0.7", new DriveCalibration(0.0, 0.7, 5.0, 100000, driveTrain));
+    Tunables.publish("Drive Calibration 0.85", new DriveCalibration(0.0, 0.85, 5.0, 100000, driveTrain));
+    Tunables.publish("Drive Calibration 1.0", new DriveCalibration(0.0, 1.0, 5.0, 100000, driveTrain));
+    Tunables.publish("Drive Turn Calibration", new DriveTurnCalibration(0.2, 5.0, 0.2 / 5.0, driveTrain));
+    Tunables.publish("Drive Percent Speed", new DrivePercentSpeed(driveTrain));
+    Tunables.publish("Drive Straight", new DriveStraight(false, false, true, driveTrain));
+    Tunables.publish("Drive Traj 4m Relative", new DriveTrajectory(CoordType.kRelative, StopType.kBrake, 
         trajectoryCache.getTrajectory(false, TrajectoryName.RelativeStraight4m), driveTrain, allianceSelection));
 
     // Vision
-    SmartDashboard.putData("Vision Enable Odometry Updates", new VisionOdometryStateSet(true, driveTrain));
-    SmartDashboard.putData("Vision Disable Odometry Updates", new VisionOdometryStateSet(false, driveTrain));
+    Tunables.publish("Vision Enable Odometry Updates", new VisionOdometryStateSet(true, driveTrain));
+    Tunables.publish("Vision Disable Odometry Updates", new VisionOdometryStateSet(false, driveTrain));
 
     // Stop
-    SmartDashboard.putData(INTAKE_ROLLER_CMD_STOP.value, new IntakeRollerStop(intake));
-    SmartDashboard.putData(INTAKE_DEPLOY_CMD_STOP.value, new IntakeDeployStop(intake));
-    SmartDashboard.putData(INTAKE_CMD_STOP.value, new IntakeStop(intake));
-    SmartDashboard.putData(SPINDEXER_CMD_STOP.value, new SpindexerStop(feeder));
-    SmartDashboard.putData(UPTAKE_CMD_STOP.value, new UptakeStop(feeder));
-    SmartDashboard.putData(FEEDER_CMD_STOP.value, new FeederStop(feeder));
-    SmartDashboard.putData(SHOOTER_CMD_STOP.value, new ShooterStop(shooter));
-    SmartDashboard.putData(TURRET_CMD_STOP.value, new TurretStop(turret));
-    SmartDashboard.putData(STOP_ALL_MOTORS.value, new StopAllMotors(driveTrain, intake, feeder, shooter, climber));
+    Tunables.publish(INTAKE_ROLLER_CMD_STOP.value, new IntakeRollerStop(intake));
+    Tunables.publish(INTAKE_DEPLOY_CMD_STOP.value, new IntakeDeployStop(intake));
+    Tunables.publish(INTAKE_CMD_STOP.value, new IntakeStop(intake));
+    Tunables.publish(SPINDEXER_CMD_STOP.value, new SpindexerStop(feeder));
+    Tunables.publish(UPTAKE_CMD_STOP.value, new UptakeStop(feeder));
+    Tunables.publish(FEEDER_CMD_STOP.value, new FeederStop(feeder));
+    Tunables.publish(SHOOTER_CMD_STOP.value, new ShooterStop(shooter));
+    Tunables.publish(TURRET_CMD_STOP.value, new TurretStop(turret));
+    Tunables.publish(STOP_ALL_MOTORS.value, new StopAllMotors(driveTrain, intake, feeder, shooter, climber));
 
     // Set Percent
-    SmartDashboard.putData(INTAKE_ROLLER_CMD_SET_PERCENT.value, new IntakeRollerSetPercent(false, intake));
-    SmartDashboard.putData(INTAKE_DEPLOY_CMD_SET_PERCENT.value, new IntakeDeploySetPercent(false, intake));
-    SmartDashboard.putData(SPINDEXER_CMD_SET_PERCENT.value, new SpindexerSetPercent(false, feeder));
-    SmartDashboard.putData(UPTAKE_CMD_SET_PERCENT.value, new UptakeSetPercent(false, feeder));
-    SmartDashboard.putData(SHOOTER_CMD_SET_PERCENT.value, new ShooterSetPercent(shooter));
-    SmartDashboard.putData(TURRET_CMD_SET_PERCENT.value, new TurretSetPercent(turret));
+    Tunables.publish(INTAKE_ROLLER_CMD_SET_PERCENT.value, new IntakeRollerSetPercent(false, intake));
+    Tunables.publish(INTAKE_DEPLOY_CMD_SET_PERCENT.value, new IntakeDeploySetPercent(false, intake));
+    Tunables.publish(SPINDEXER_CMD_SET_PERCENT.value, new SpindexerSetPercent(false, feeder));
+    Tunables.publish(UPTAKE_CMD_SET_PERCENT.value, new UptakeSetPercent(false, feeder));
+    Tunables.publish(SHOOTER_CMD_SET_PERCENT.value, new ShooterSetPercent(shooter));
+    Tunables.publish(TURRET_CMD_SET_PERCENT.value, new TurretSetPercent(turret));
 
     // Set Velocity
-    SmartDashboard.putData(SPINDEXER_CMD_SET_VELOCITY.value, new SpindexerSetVelocity(feeder));
-    SmartDashboard.putData(UPTAKE_CMD_SET_VELOCITY.value, new UptakeSetVelocity(feeder));
-    SmartDashboard.putData(SHOOTER_CMD_SET_VELOCITY.value, new ShooterSetVelocity(VelocityType.runForever, shooter));
+    Tunables.publish(SPINDEXER_CMD_SET_VELOCITY.value, new SpindexerSetVelocity(feeder));
+    Tunables.publish(UPTAKE_CMD_SET_VELOCITY.value, new UptakeSetVelocity(feeder));
+    Tunables.publish(SHOOTER_CMD_SET_VELOCITY.value, new ShooterSetVelocity(VelocityType.runForever, shooter));
 
     // Set Angle
-    SmartDashboard.putData(INTAKE_DEPLOY_CMD_SET_ANGLE.value, new IntakeDeploySetAngle(intake));
-    SmartDashboard.putData(TURRET_CMD_SET_ANGLE.value, new TurretSetAngle(EndType.runForever, turret));
+    Tunables.publish(INTAKE_DEPLOY_CMD_SET_ANGLE.value, new IntakeDeploySetAngle(intake));
+    Tunables.publish(TURRET_CMD_SET_ANGLE.value, new TurretSetAngle(EndType.runForever, turret));
 
     // Set Position
 
     // Score Commands
 
-    SmartDashboard.putData(SHOOTER_CMD_SCORE_PREP.value + " Manual Input", new ShooterScorePrep(true, EndType.runForever, shooter, turret, driveTrain, field));
-    SmartDashboard.putData(SHOOTER_CMD_SCORE_PREP.value + " Self-Calculate", new ShooterScorePrep(false, EndType.runForever, shooter, turret, driveTrain, field));
+    Tunables.publish(SHOOTER_CMD_SCORE_PREP.value + " Manual Input", new ShooterScorePrep(true, EndType.runForever, shooter, turret, driveTrain, fieldUtil));
+    Tunables.publish(SHOOTER_CMD_SCORE_PREP.value + " Self-Calculate", new ShooterScorePrep(false, EndType.runForever, shooter, turret, driveTrain, fieldUtil));
 
     // Calibration Ramp
     
     // Calibrate Manual
-    SmartDashboard.putData(INTAKE_DEPLOY_CMD_CALIBRATE_MANUAL.value, new IntakeDeployCalibrateManual(intake));
-    SmartDashboard.putData(TURRET_CMD_RECALIBRATE_MANUAL.value, new TurretManualCalibration(turret, true));
-    SmartDashboard.putData(TURRET_CMD_RECALIBRATE_AUTOMATIC.value, new TurretManualCalibration(turret, false));
-    SmartDashboard.putData(CLIMBER_CMD_CALIBRATE_MANUAL_LEFT.value, new InstantCommand(() -> climber.calibrateEncoderLeft()));
-    SmartDashboard.putData(CLIMBER_CMD_CALIBRATE_MANUAL_RIGHT.value, new InstantCommand(() -> climber.calibrateEncoderRight()));
-    SmartDashboard.putData(CLIMBER_CMD_CALIBRATE_MANUAL_BOTH.value, new ClimberCalibrateManual(climber));
+    Tunables.publish(INTAKE_DEPLOY_CMD_CALIBRATE_MANUAL.value, new IntakeDeployCalibrateManual(intake));
+    Tunables.publish(TURRET_CMD_RECALIBRATE_MANUAL.value, new TurretManualCalibration(turret, true));
+    Tunables.publish(TURRET_CMD_RECALIBRATE_AUTOMATIC.value, new TurretManualCalibration(turret, false));
+    Tunables.publish(CLIMBER_CMD_CALIBRATE_MANUAL_LEFT.value, new InstantCommand(() -> climber.calibrateEncoderLeft()));
+    Tunables.publish(CLIMBER_CMD_CALIBRATE_MANUAL_RIGHT.value, new InstantCommand(() -> climber.calibrateEncoderRight()));
+    Tunables.publish(CLIMBER_CMD_CALIBRATE_MANUAL_BOTH.value, new ClimberCalibrateManual(climber));
 
     // Toggle
 
-    SmartDashboard.putData(TURRET_CMD_TOGGLE_SOTM.value, new TurretToggleShootOnTheMove(turret));
+    Tunables.publish(TURRET_CMD_TOGGLE_SOTM.value, new TurretToggleShootOnTheMove(turret));
 
     // Sequences
-    SmartDashboard.putData(INTAKING_CMD_SEQUENCE.value, new IntakeSequence(intake));
-    SmartDashboard.putData(FEED_SHOOTER_CMD_SEQUENCE.value, new FeederIntakeFeedShooterSequence(AgitateType.NONE, feeder, intake, shooter));
-    SmartDashboard.putData(FEED_SHOOTER_BOUNCE_AGITATE_CMD_SEQUENCE.value, new FeederIntakeFeedShooterSequence(AgitateType.BOUNCE, feeder, intake, shooter));
-    SmartDashboard.putData(FEED_SHOOTER_DUMP_AGITATE_CMD_SEQUENCE.value, new FeederIntakeFeedShooterSequence(AgitateType.DUMP, feeder, intake, shooter));
+    Tunables.publish(INTAKING_CMD_SEQUENCE.value, new IntakeSequence(intake));
+    Tunables.publish(FEED_SHOOTER_CMD_SEQUENCE.value, new FeederIntakeFeedShooterSequence(AgitateType.NONE, feeder, intake, shooter));
+    Tunables.publish(FEED_SHOOTER_BOUNCE_AGITATE_CMD_SEQUENCE.value, new FeederIntakeFeedShooterSequence(AgitateType.BOUNCE, feeder, intake, shooter));
+    Tunables.publish(FEED_SHOOTER_DUMP_AGITATE_CMD_SEQUENCE.value, new FeederIntakeFeedShooterSequence(AgitateType.DUMP, feeder, intake, shooter));
 
     // Climber
-    SmartDashboard.putData(CLIMBER_CMD_STOP.value, new ClimberStop(climber));
-    SmartDashboard.putData(CLIMBER_CMD_SET_PERCENT.value, new ClimberSetPercent(climber));
-    SmartDashboard.putData(CLIMBER_CMD_STOP_LEFT.value, new ClimberSingleStop(ClimberSide.LEFT, climber));
-    SmartDashboard.putData(CLIMBER_CMD_STOP_RIGHT.value, new ClimberSingleStop(ClimberSide.RIGHT, climber));
-    SmartDashboard.putData(CLIMBER_CMD_SET_PERCENT_LEFT.value, new ClimberSingleSetPercent(ClimberSide.LEFT, climber));
-    SmartDashboard.putData(CLIMBER_CMD_SET_PERCENT_RIGHT.value, new ClimberSingleSetPercent(ClimberSide.RIGHT, climber));
-    SmartDashboard.putData(CLIMBER_CMD_SET_POSITION.value, new ClimberSetPosition(climber));
+    Tunables.publish(CLIMBER_CMD_STOP.value, new ClimberStop(climber));
+    Tunables.publish(CLIMBER_CMD_SET_PERCENT.value, new ClimberSetPercent(climber));
+    Tunables.publish(CLIMBER_CMD_STOP_LEFT.value, new ClimberSingleStop(ClimberSide.LEFT, climber));
+    Tunables.publish(CLIMBER_CMD_STOP_RIGHT.value, new ClimberSingleStop(ClimberSide.RIGHT, climber));
+    Tunables.publish(CLIMBER_CMD_SET_PERCENT_LEFT.value, new ClimberSingleSetPercent(ClimberSide.LEFT, climber));
+    Tunables.publish(CLIMBER_CMD_SET_PERCENT_RIGHT.value, new ClimberSingleSetPercent(ClimberSide.RIGHT, climber));
+    Tunables.publish(CLIMBER_CMD_SET_POSITION.value, new ClimberSetPosition(climber));
 
-    SmartDashboard.putData(HOOD_CMD_SET_VOLTAGE_BOTH.value, new HoodSetVoltage(shooter, 0));
-    SmartDashboard.putData(HOOD_CMD_SET_VOLTAGE_LEFT.value, new HoodSetVoltage(shooter, 1));
-    SmartDashboard.putData(HOOD_CMD_SET_VOLTAGE_RIGHT.value, new HoodSetVoltage(shooter, 2));
-    SmartDashboard.putData(HOOD_CMD_SET_PERCENT_LEFT.value, new HoodSetPercent(true, shooter, 1));
-    SmartDashboard.putData(HOOD_CMD_SET_PERCENT_RIGHT.value, new HoodSetPercent(true, shooter, 2));
-    SmartDashboard.putData(HOOD_CMD_SET_ANGLE_FOREVER.value, new HoodSetAngle(EndType.runForever, shooter));
-    SmartDashboard.putData(HOOD_CMD_SET_ANGLE_WAIT.value, new HoodSetAngle(EndType.waitForSetPoint, shooter));
-    SmartDashboard.putData(HOOD_CMD_STOP_BOTH.value, new HoodSetVoltage(shooter, 0, 0));
-    SmartDashboard.putData(HOOD_CMD_STOP_LEFT.value, new HoodSetVoltage(shooter, 0, 1));
-    SmartDashboard.putData(HOOD_CMD_STOP_RIGHT.value, new HoodSetVoltage(shooter, 0, 2));
+    Tunables.publish(HOOD_CMD_SET_VOLTAGE_BOTH.value, new HoodSetVoltage(shooter, 0));
+    Tunables.publish(HOOD_CMD_SET_VOLTAGE_LEFT.value, new HoodSetVoltage(shooter, 1));
+    Tunables.publish(HOOD_CMD_SET_VOLTAGE_RIGHT.value, new HoodSetVoltage(shooter, 2));
+    Tunables.publish(HOOD_CMD_SET_PERCENT_LEFT.value, new HoodSetPercent(true, shooter, 1));
+    Tunables.publish(HOOD_CMD_SET_PERCENT_RIGHT.value, new HoodSetPercent(true, shooter, 2));
+    Tunables.publish(HOOD_CMD_SET_ANGLE_FOREVER.value, new HoodSetAngle(EndType.runForever, shooter));
+    Tunables.publish(HOOD_CMD_SET_ANGLE_WAIT.value, new HoodSetAngle(EndType.waitForSetPoint, shooter));
+    Tunables.publish(HOOD_CMD_STOP_BOTH.value, new HoodSetVoltage(shooter, 0, 0));
+    Tunables.publish(HOOD_CMD_STOP_LEFT.value, new HoodSetVoltage(shooter, 0, 1));
+    Tunables.publish(HOOD_CMD_STOP_RIGHT.value, new HoodSetVoltage(shooter, 0, 2));
 
     // Autos
-    SmartDashboard.putData("Autonomous Run Auto Now", autoSelection.scheduleAutoCommand());
+    Tunables.publish("Autonomous Run Auto Now", autoSelection.scheduleAutoCommand());
   }
  
   /**
@@ -244,18 +249,18 @@ public class RobotContainer {
     // Triggers for all Xbox buttons
     Trigger xbLT = xboxController.leftTrigger();
     Trigger xbRT = xboxController.rightTrigger();
-    Trigger xbA = xboxController.a();
-    Trigger xbB = xboxController.b();
-    Trigger xbY = xboxController.y();
-    Trigger xbX = xboxController.x();
+    Trigger xbA = xboxController.faceDown();
+    Trigger xbB = xboxController.faceRight();
+    Trigger xbY = xboxController.faceUp();
+    Trigger xbX = xboxController.faceLeft();
     Trigger xbLB = xboxController.leftBumper();
     Trigger xbRB = xboxController.rightBumper();
     Trigger xbBack = xboxController.back();
     Trigger xbStart = xboxController.start();
-    Trigger xbPOVUp = xboxController.povUp();
-    Trigger xbPOVRight = xboxController.povRight();
-    Trigger xbPOVLeft = xboxController.povLeft();
-    Trigger xbPOVDown = xboxController.povDown();
+    Trigger xbPOVUp = xboxController.dpadUp();
+    Trigger xbPOVRight = xboxController.dpadRight();
+    Trigger xbPOVLeft = xboxController.dpadLeft();
+    Trigger xbPOVDown = xboxController.dpadDown();
     Trigger xbLJoystickTrigger = xboxController.leftStick();
     // Trigger xbRJoystickTrigger = xboxController.rightStick();
 
@@ -274,13 +279,13 @@ public class RobotContainer {
     xbLB.onTrue(new IntakeRollerStop(intake));
 
     // while held, prep Shooter & Hood for scoring or passing (depending on position on field). stops shooter motor when released
-    xbRT.whileTrue(new ShooterScorePrep(false, EndType.runForever, shooter, turret, driveTrain, field));
+    xbRT.whileTrue(new ShooterScorePrep(false, EndType.runForever, shooter, turret, driveTrain, fieldUtil));
 
     xbRT.onFalse(new IntakeDeploySetAngle(IntakeDeployAngle.INTAKE, intake));
 
     // manual setpoint for shooting when bot is at center of trench with turret facing hub
     xbRB.whileTrue(parallel(
-      new ShooterScorePrep(ShooterConstants.shooterVelocityFromTrench, ShooterConstants.hoodShootAngle, EndType.runForever, shooter, turret, driveTrain, field),
+      new ShooterScorePrep(ShooterConstants.shooterVelocityFromTrench, ShooterConstants.hoodShootAngle, EndType.runForever, shooter, turret, driveTrain, fieldUtil),
       new TurretSetAngle(0, EndType.runForever, turret)
     ));
 
@@ -474,7 +479,7 @@ public class RobotContainer {
     shiftHelper.periodic();
     autoSelection.periodic();
 
-    SmartDashboard.putBoolean("Trench Safe", intake.isIntakeDeploySafeForTrench() && shooter.isHoodSafeForTrench() && climber.isSafeForTrench());
+    Robot.dashboard.log("Trench Safe", intake.isIntakeDeploySafeForTrench() && shooter.isHoodSafeForTrench() && climber.isSafeForTrench());
 
     heartBeat++;
     dLogRobotHeartBeat.append(heartBeat);

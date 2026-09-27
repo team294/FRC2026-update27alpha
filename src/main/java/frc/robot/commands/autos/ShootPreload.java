@@ -32,7 +32,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import frc.robot.utilities.AllianceSelection;
-import frc.robot.utilities.Field;
+import frc.robot.utilities.FieldUtil;
 import frc.robot.utilities.TrajectoryCache;
 import frc.robot.utilities.TrajectoryCache.TrajectoryName;
 
@@ -54,14 +54,14 @@ public class ShootPreload extends SequentialCommandGroup {
  * @param field Field utility
  * @param allianceSelection AllianceSelection utility
  */
-  public ShootPreload(EndType endType, boolean moveBack, Intake intake, Feeder feeder, Turret turret, Shooter shooter, Climber climber, DriveTrain driveTrain, Field field, AllianceSelection allianceSelection, TrajectoryCache cache) { 
+  public ShootPreload(EndType endType, boolean moveBack, Intake intake, Feeder feeder, Turret turret, Shooter shooter, Climber climber, DriveTrain driveTrain, FieldUtil field, AllianceSelection allianceSelection, TrajectoryCache cache) { 
     // boolean leftSide = routineSide == RoutineSideType.kLeftSide;
     // Trajectory<SwerveSample> trajectory = cache.getTrajectory(leftSide, TrajectoryName.CenterShootToClimb);
     addCommands(
       either(
         sequence(
           either(
-            new DriveToPose(CoordType.kRelative, new Pose2d(-1, 0, Rotation2d.kZero), driveTrain),
+            new DriveToPose(CoordType.kRelative, new Pose2d(-1, 0, Rotation2d.ZERO), driveTrain),
             none(),
             () -> moveBack
           ),

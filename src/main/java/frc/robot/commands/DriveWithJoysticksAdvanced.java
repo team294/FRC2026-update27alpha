@@ -13,12 +13,12 @@ import org.wpilib.driverstation.Joystick;
 import org.wpilib.system.RobotController;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.driverstation.Alliance;
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.TrajectoryConstants;
+import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.DriveTrain.DriveType;
 import frc.robot.utilities.AllianceSelection;
@@ -117,9 +117,9 @@ public class DriveWithJoysticksAdvanced extends Command {
     }
 
     if (DataLogUtil.isMyLogRotation(logRotationKey, RotationWhenDisabled.kNone)) {
-      SmartDashboard.putNumber("Joystick Left-Y", fwdVelocity);
-      SmartDashboard.putNumber("Joystick Left-X", leftVelocity);
-      SmartDashboard.putNumber("Joystick Right-X", turnRate);
+      Robot.dashboard.log("Joystick Left-Y", fwdVelocity);
+      Robot.dashboard.log("Joystick Left-X", leftVelocity);
+      Robot.dashboard.log("Joystick Right-X", turnRate);
     }
 
     // Apply deadbands and limits for fine control
@@ -173,10 +173,10 @@ public class DriveWithJoysticksAdvanced extends Command {
         }
 
         if (DataLogUtil.isMyLogRotation(logRotationKey, RotationWhenDisabled.kNone)) {
-          SmartDashboard.putNumber("DriveWJAdv Goal Angle", Math.toDegrees(goalAngle));
-          SmartDashboard.putNumber("DriveWJAdv Robot Angle", Math.toDegrees(curRobotAngle));
-          SmartDashboard.putNumber("DriveWJAdv Angle Error", Math.toDegrees(angleError));
-          SmartDashboard.putBoolean("DriveWJAdv In Tolerance", angleInTolerance);
+          Robot.dashboard.log("DriveWJAdv Goal Angle", Math.toDegrees(goalAngle));
+          Robot.dashboard.log("DriveWJAdv Robot Angle", Math.toDegrees(curRobotAngle));
+          Robot.dashboard.log("DriveWJAdv Angle Error", Math.toDegrees(angleError));
+          Robot.dashboard.log("DriveWJAdv In Tolerance", angleInTolerance);
         }
         turnRate = nextTurnRate;
       } else {

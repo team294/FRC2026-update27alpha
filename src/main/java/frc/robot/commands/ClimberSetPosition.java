@@ -4,8 +4,10 @@
 
 package frc.robot.commands;
 
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
+import org.wpilib.tunable.TunableDouble;
+import org.wpilib.tunable.Tunables;
+
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.ClimberConstants.ClimberLimit;
 import frc.robot.Constants.ClimberConstants.ClimberPosition;
@@ -19,6 +21,8 @@ public class ClimberSetPosition extends Command {
   private final Climber climber;
   private double targetPosition;
   private final boolean fromElastic;
+
+  private TunableDouble climberSetPositionInput = Tunables.addDouble(CLIMBER_CMD_SET_POSITION_INPUT.value, ClimberPosition.LOWER_LIMIT.value);
 
   /**
    * Sets the target position for the Climber and attempts to move it to that position.
@@ -58,16 +62,12 @@ public class ClimberSetPosition extends Command {
     this.fromElastic = true;
 
     addRequirements(climber);
-
-    if (SmartDashboard.getNumber(CLIMBER_CMD_SET_POSITION_INPUT.value, -9999) == -9999) {
-      SmartDashboard.putNumber(CLIMBER_CMD_SET_POSITION_INPUT.value, ClimberPosition.LOWER_LIMIT.value);
-    }
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (fromElastic) targetPosition = SmartDashboard.getNumber(CLIMBER_CMD_SET_POSITION_INPUT.value, ClimberPosition.LOWER_LIMIT.value);
+    if (fromElastic) targetPosition = climberSetPositionInput.getAsDouble();
     climber.setClimberPosition(targetPosition);
 
     climber.enableFastLogging(true);

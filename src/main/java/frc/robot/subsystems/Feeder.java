@@ -27,11 +27,11 @@ import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.driverstation.RobotState;
 import org.wpilib.system.RobotController;
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.SubsystemBase;
 
 import frc.robot.Constants.CANRangeConstants;
 import frc.robot.Constants.Ports;
+import frc.robot.Robot;
 import frc.robot.Constants.FeederConstants.SpindexerConstants;
 import frc.robot.Constants.FeederConstants.UptakeConstants;
 import frc.robot.utilities.DataLogUtil;
@@ -549,19 +549,19 @@ public class Feeder extends SubsystemBase implements Loggable {
     if (DataLogUtil.isMyLogRotation(logRotationKey, RotationWhenDisabled.kNormal)) {
       checkForFaultConditions();
 
-      SmartDashboard.putNumber(UPTAKE_RPM.value, getUptakeMotorVelocity());
-      SmartDashboard.putNumber(UPTAKE_TARGET_RPM.value, uptakeSetpointRPM);
-      SmartDashboard.putNumber(UPTAKE_TEMP.value, uptakeTemp.refresh().getValueAsDouble());
+      Robot.dashboard.log(UPTAKE_RPM.value, getUptakeMotorVelocity());
+      Robot.dashboard.log(UPTAKE_TARGET_RPM.value, uptakeSetpointRPM);
+      Robot.dashboard.log(UPTAKE_TEMP.value, uptakeTemp.refresh().getValueAsDouble());
 
-      SmartDashboard.putNumber(SPINDEXER_RPM.value, getSpindexerVelocity());
-      SmartDashboard.putNumber(SPINDEXER_TARGET_RPM.value, spindexerSetpointRPM);
-      SmartDashboard.putNumber(SPINDEXER_TEMP.value, spindexerTemp.refresh().getValueAsDouble());
+      Robot.dashboard.log(SPINDEXER_RPM.value, getSpindexerVelocity());
+      Robot.dashboard.log(SPINDEXER_TARGET_RPM.value, spindexerSetpointRPM);
+      Robot.dashboard.log(SPINDEXER_TEMP.value, spindexerTemp.refresh().getValueAsDouble());
 
 
-      SmartDashboard.putNumber("Uptake Entry Detected Distance", getDistance(1));
-      SmartDashboard.putBoolean("Uptake Entry Triggered?", isDetected(1));
-      SmartDashboard.putNumber("Uptake Exit Detected Distance", getDistance(0));
-      SmartDashboard.putBoolean("Uptake Exit Triggered?", isDetected(0));
+      Robot.dashboard.log("Uptake Entry Detected Distance", getDistance(1));
+      Robot.dashboard.log("Uptake Entry Triggered?", isDetected(1));
+      Robot.dashboard.log("Uptake Exit Detected Distance", getDistance(0));
+      Robot.dashboard.log("Uptake Exit Triggered?", isDetected(0));
     }    
   }
 }

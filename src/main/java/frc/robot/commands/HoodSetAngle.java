@@ -6,8 +6,10 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
+import org.wpilib.tunable.TunableDouble;
+import org.wpilib.tunable.Tunables;
+
 import frc.robot.Constants.EndType;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Shooter;
@@ -21,6 +23,8 @@ public class HoodSetAngle extends Command {
   private final Shooter shooter;
   private final boolean fromElastic;
   private int toleranceCounter;
+
+  private TunableDouble angleInput = Tunables.addDouble(HOOD_CMD_SET_ANGLE_INPUT.value, ShooterConstants.hoodMinimumAngle);
   
   private DoubleSupplier angleGetter;
   private boolean useGetter = false;
@@ -76,10 +80,6 @@ public class HoodSetAngle extends Command {
     this.shooter = shooter;
     this.fromElastic = true;
 
-    if (SmartDashboard.getNumber(HOOD_CMD_SET_ANGLE_INPUT.value, -9999.9) == -9999.9) {
-      SmartDashboard.putNumber(HOOD_CMD_SET_ANGLE_INPUT.value, ShooterConstants.hoodMinimumAngle);
-    }
-
     addRequirements(shooter);
   }
 
@@ -90,8 +90,7 @@ public class HoodSetAngle extends Command {
       shooter.enableFastLogging(true);
     }
 
-    if (fromElastic) targetAngle = SmartDashboard.getNumber(HOOD_CMD_SET_ANGLE_INPUT.value, ShooterConstants.hoodMinimumAngle);
-
+    if (fromElastic) targetAngle = angleInput.getAsDouble();
     if (useGetter) targetAngle = angleGetter.getAsDouble();
 
     shooter.setHoodAnglePID(targetAngle);
@@ -104,15 +103,16 @@ public class HoodSetAngle extends Command {
   @Override
   public void execute() {
 
-    if (useGetter && type == EndType.runForever) {
-      // Don't update angle from getter if type == waitForSetPoint, otherwise the getter could
-      // change the angle a little and never settle on a value. Then the PID controller would
-      // try to track and maybe never get in tolerance, and then this command would never end.
-      targetAngle = angleGetter.getAsDouble();
-    }
-
-    if (fromElastic && type == EndType.runForever) {
-      targetAngle = SmartDashboard.getNumber(HOOD_CMD_SET_ANGLE_INPUT.value, ShooterConstants.hoodMinimumAngle);
+    if (type == EndType.runForever) {
+      if (useGetter) {
+        // Don't update angle from getter if type == waitForSetPoint, otherwise the getter could
+        // change the angle a little and never settle on a value. Then the PID controller would
+        // try to track and maybe never get in tolerance, and then this command would never end.
+        targetAngle = angleGetter.getAsDouble();
+      }
+      else if (fromElastic) {
+        targetAngle = angleInput.getAsDouble();
+      }
     }
 
     // Call hoodPID every execute cycle, so that hood continues to run under PID control.

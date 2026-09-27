@@ -13,6 +13,7 @@ import com.ctre.phoenix6.signals.RGBWColor;
 
 import org.wpilib.math.linalg.Matrix;
 import org.wpilib.math.linalg.VecBuilder;
+import org.wpilib.hardware.bus.CANPort;
 import org.wpilib.math.geometry.Rotation3d;
 import org.wpilib.math.geometry.Transform3d;
 import org.wpilib.math.geometry.Translation2d;
@@ -65,8 +66,8 @@ public final class Constants {
 
   public static final class Ports {
     // Define CAN buses
-    public static final CANBus CANbusMain = CANBus.systemcore(0);
-    public static final CANBus CANbusDriveTrain = CANBus.systemcore(2);
+    public static final CANBus CANbusMain = new CANBus(CANPort.CAN_S0);         // Systemcore CANbus port 0
+    public static final CANBus CANbusDriveTrain = new CANBus(CANPort.CAN_S2);   // Systemcore CANbus port 2
 
     // Define CAN IDs
     public static final int CANDriveFrontLeftMotor = 1;

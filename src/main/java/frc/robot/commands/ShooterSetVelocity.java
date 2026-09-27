@@ -8,8 +8,10 @@ import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix6.SignalLogger;
 
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
+import org.wpilib.tunable.TunableDouble;
+import org.wpilib.tunable.Tunables;
+
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.VelocityType;
 import frc.robot.subsystems.Shooter;
@@ -21,8 +23,10 @@ public class ShooterSetVelocity extends Command {
   private double velocity = 0.0;
   private final Shooter shooter;
   private final VelocityType type;
-  private boolean fromShuffleboard;
+  private boolean fromElastic;
   private int counter;
+
+  private TunableDouble velocityInput = Tunables.addDouble(SHOOTER_CMD_SET_VELOCITY_INPUT.value, 0.0);
 
   private DoubleSupplier velocityGetter;
   private boolean useGetter = false;
@@ -41,7 +45,7 @@ public class ShooterSetVelocity extends Command {
     this.velocity = velocity;
     this.type = type;
     this.shooter = shooter;
-    this.fromShuffleboard = false;
+    this.fromElastic = false;
     addRequirements(shooter);
   }
 
@@ -58,7 +62,7 @@ public class ShooterSetVelocity extends Command {
     this.velocityGetter = velocityGetter;
     this.type = type;
     this.shooter = shooter;
-    this.fromShuffleboard = false;
+    this.fromElastic = false;
     this.useGetter = true;
     addRequirements(shooter);
   }
@@ -72,12 +76,8 @@ public class ShooterSetVelocity extends Command {
     this.velocity = 0.0;
     this.type = type;
     this.shooter = shooter;
-    this.fromShuffleboard = true;
+    this.fromElastic = true;
     addRequirements(shooter);
-
-    if(SmartDashboard.getNumber(SHOOTER_CMD_SET_VELOCITY_INPUT.value, -9999.9) == -9999.9) {
-      SmartDashboard.putNumber(SHOOTER_CMD_SET_VELOCITY_INPUT.value, 0);
-    }
   }
 
   // Called when the command is initially scheduled.
@@ -88,11 +88,9 @@ public class ShooterSetVelocity extends Command {
       //SignalLogger.start();     // Uncomment for Phoenix logging
     }
 
-    if (fromShuffleboard) {
-      velocity = SmartDashboard.getNumber(SHOOTER_CMD_SET_VELOCITY_INPUT.value, 0.0);
-    }
-
-    if (useGetter) {
+    if (fromElastic) {
+      velocity = velocityInput.getAsDouble();
+    } else if (useGetter) {
       velocity = velocityGetter.getAsDouble();
     }
 

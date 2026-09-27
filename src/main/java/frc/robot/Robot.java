@@ -5,6 +5,8 @@
 package frc.robot;
 
 import org.wpilib.framework.TimedRobot;
+import org.wpilib.telemetry.Telemetry;
+import org.wpilib.telemetry.TelemetryTable;
 import org.wpilib.command2.Command;
 import org.wpilib.command2.CommandScheduler;
 
@@ -20,6 +22,8 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
+
+  public static final TelemetryTable dashboard = Telemetry.getTable("SmartDashboard");
 
   /**
    * This function is run when the robot is first started up and should be used for any

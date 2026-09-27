@@ -138,9 +138,10 @@ public class ChoreoFollower extends Command {
     Optional<SwerveSample> finalSampleOpt = trajectory.getFinalSample(mirrorTrajectoryThisInit);
     noTrajectory = finalSampleOpt.isEmpty();
     if (!noTrajectory) {
-      finalPose = finalSampleOpt.get().getPose();
-      finalVelocity = Math.hypot( finalSampleOpt.get().getChassisVelocities().vx,
-        finalSampleOpt.get().getChassisVelocities().vy);
+      SwerveSample finalSample = finalSampleOpt.get();
+      finalPose = finalSample.getPose();
+      // TODO: verify change for 2027 Alpha
+      finalVelocity = Math.hypot( finalSample.vx, finalSample.vy);
     }
 
     DataLogUtil.writeMessage("ChoreoFollower:  Init, Is Flipped =", mirrorTrajectoryThisInit, ", Stop Type =", stopType, ", Trajectory =", trajectory.name());

@@ -13,7 +13,7 @@ import frc.robot.commands.ShooterScorePrep;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
-import frc.robot.utilities.Field;
+import frc.robot.utilities.FieldUtil;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -26,7 +26,7 @@ public class ShooterTurretScorePrepSequence extends SequentialCommandGroup {
    * @param shooter Shooter shooter subsystem 
    * @param driveTrain DriveTrain driveTrain -- only for current pose information
    */
-  public ShooterTurretScorePrepSequence(boolean shootOnTheMove, EndType endType, Turret turret, Shooter shooter, DriveTrain driveTrain, Field field) {
+  public ShooterTurretScorePrepSequence(boolean shootOnTheMove, EndType endType, Turret turret, Shooter shooter, DriveTrain driveTrain, FieldUtil field) {
     addCommands(
       parallel(
         new ShooterScorePrep(shootOnTheMove, endType, shooter, turret, driveTrain, field), 

@@ -28,7 +28,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import frc.robot.utilities.AllianceSelection;
-import frc.robot.utilities.Field;
+import frc.robot.utilities.FieldUtil;
 import frc.robot.utilities.TrajectoryCache;
 import frc.robot.utilities.TrajectoryCache.TrajectoryName;
 
@@ -39,7 +39,7 @@ public class AutonOutpostOrDepotAndScore extends SequentialCommandGroup {
   /** Creates a new AutoOutpostOrDepotAndScore.
    * can only go to outpost from under the trench atm
    */
-  public AutonOutpostOrDepotAndScore(RoutineSideType routineSide, Intake intake, Feeder feeder, Turret turret, Shooter shooter, Climber climber, DriveTrain driveTrain, AllianceSelection alliance, TrajectoryCache cache, Field field) {
+  public AutonOutpostOrDepotAndScore(RoutineSideType routineSide, Intake intake, Feeder feeder, Turret turret, Shooter shooter, Climber climber, DriveTrain driveTrain, AllianceSelection alliance, TrajectoryCache cache, FieldUtil field) {
     addCommands(
       new DataLogMessage(false, "AutonOutpostOrDepotAndScore: start"),
       // If we are on the right side, we go to the outpost. Otherwise, we are on the left side and we go to the depot
@@ -52,7 +52,7 @@ public class AutonOutpostOrDepotAndScore extends SequentialCommandGroup {
           new DriveTrajectory(CoordType.kAbsolute, StopType.kBrake, cache.getTrajectory(TrajectoryName.ShootTrenchToDepot), driveTrain, alliance),
           parallel(
             new AutonScore(EndType.waitForSetPoint, intake, feeder, turret, shooter, climber, driveTrain, field), // doesn't end
-            new DriveToPose(CoordType.kRelative, new Pose2d(0.75, 0, Rotation2d.kZero), driveTrain)
+            new DriveToPose(CoordType.kRelative, new Pose2d(0.75, 0, Rotation2d.ZERO), driveTrain)
             // new IntakeSequence(intake)
           )
 

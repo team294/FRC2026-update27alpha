@@ -12,8 +12,10 @@ import java.util.function.Consumer;
 import org.wpilib.driverstation.MatchState;
 import org.wpilib.driverstation.RobotState;
 import org.wpilib.driverstation.Alliance;
-import org.wpilib.smartdashboard.SendableChooser;
-import org.wpilib.smartdashboard.SmartDashboard;
+import org.wpilib.tunable.Selectable;
+import org.wpilib.tunable.Tunables;
+
+import frc.robot.Robot;
 import frc.robot.utilities.DataLogUtil.RotationWhenDisabled;
 
 public class AllianceSelection {
@@ -28,19 +30,19 @@ public class AllianceSelection {
     Auto
   }
 
-  private SendableChooser<AllianceChoice> allianceChooser = new SendableChooser<>();
+  private Selectable<AllianceChoice> allianceChooser = new Selectable<>();
 
   public AllianceSelection() {
     
     newAllianceCalls = new ArrayList<Consumer<Alliance>>();
     logRotationKey = DataLogUtil.allocateLogRotation();
 
-		allianceChooser.setDefaultOption("Automatic", AllianceChoice.Auto);
-		allianceChooser.addOption("Red", AllianceChoice.Red);
-		allianceChooser.addOption("Blue", AllianceChoice.Blue);
+		allianceChooser.addDefault("Automatic", AllianceChoice.Auto);
+		allianceChooser.add("Red", AllianceChoice.Red);
+		allianceChooser.add("Blue", AllianceChoice.Blue);
 	
 		// Show alliance selection widget on Elastic
-		SmartDashboard.putData("Alliance Selection", allianceChooser);
+    Tunables.publish("Alliance Selection", allianceChooser);
 
     // Set Alliance on Elastic
     Optional<Alliance> ally = MatchState.getAlliance();
@@ -61,9 +63,9 @@ public class AllianceSelection {
     this.alliance = alliance;
     DataLogUtil.writeMessageEcho("Alliance Selection: SetAlliance, Alliance Chooser =", allianceChooser.getSelected().name(), ", Alliance =", alliance.name());
 
-    SmartDashboard.putBoolean("Alliance Blue", alliance != Alliance.RED);
-    SmartDashboard.putBoolean("Alliance Red", alliance != Alliance.BLUE);
-    SmartDashboard.putString("Alliance", alliance.name());
+    Robot.dashboard.log("Alliance Blue", alliance != Alliance.RED);
+    Robot.dashboard.log("Alliance Red", alliance != Alliance.BLUE);
+    Robot.dashboard.log("Alliance", alliance.name());
   }
 
   /**

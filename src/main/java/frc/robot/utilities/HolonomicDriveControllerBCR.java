@@ -9,7 +9,6 @@ import org.wpilib.math.controller.ProfiledPIDController;
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
 import org.wpilib.math.kinematics.ChassisVelocities;
-import org.wpilib.math.trajectory.Trajectory;
 import org.wpilib.math.util.Units;
 
 /**
@@ -121,20 +120,6 @@ public class HolonomicDriveControllerBCR {
 
     // Return next output
     return new ChassisVelocities(xFF + xFeedback, yFF + yFeedback, thetaFF + thetaFeedback);
-  }
-
-  /**
-   * Gest the next output of the holonomic drive controller in field-relative speeds.
-   * @param currentPose current pose, as measured by odometry or pose estimator
-   * @param desiredState desired trajectory pose, as sampled for the current timestep
-   * <p><b>NOTE:</b> The rotation component of desiredState is the desired velocity direction (not the desired robot facing)
-   * @param desiredHeading desired heading (the desired robot facing)
-   * @return The next output of the holonomic drive controller (field-relative speeds)
-   */
-  public ChassisVelocities calculate(
-      Pose2d currentPose, Trajectory.State desiredState, Rotation2d desiredHeading) {
-    return calculate(
-        currentPose, desiredState.pose, desiredState.velocity, desiredHeading);
   }
 
   /**

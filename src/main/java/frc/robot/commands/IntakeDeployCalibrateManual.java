@@ -4,8 +4,10 @@
 
 package frc.robot.commands;
 
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.InstantCommand;
+import org.wpilib.tunable.TunableDouble;
+import org.wpilib.tunable.Tunables;
+
 import frc.robot.Constants.IntakeConstants.IntakeDeployAngle;
 import frc.robot.subsystems.Intake;
 import frc.robot.utilities.DataLogUtil;
@@ -16,6 +18,8 @@ public class IntakeDeployCalibrateManual extends InstantCommand {
   private final Intake intake;
   private double angle;
   private boolean fromElastic;
+
+  private TunableDouble angleInput = Tunables.addDouble(INTAKE_DEPLOY_CMD_CALIBRATE_MANUAL_INPUT.value, IntakeDeployAngle.INTAKE.value);
 
   /**
    * Manually calibrate the intakeDeployMotor with a known current angle.
@@ -37,16 +41,12 @@ public class IntakeDeployCalibrateManual extends InstantCommand {
     this.intake = intake;
     this.fromElastic = true;
     addRequirements(intake);
-
-    if (SmartDashboard.getNumber(INTAKE_DEPLOY_CMD_CALIBRATE_MANUAL_INPUT.value, -9999) == -9999) {
-      SmartDashboard.putNumber(INTAKE_DEPLOY_CMD_CALIBRATE_MANUAL_INPUT.value, IntakeDeployAngle.INTAKE.value);
-    }
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (fromElastic) this.angle = SmartDashboard.getNumber(INTAKE_DEPLOY_CMD_CALIBRATE_MANUAL_INPUT.value, IntakeDeployAngle.UPPER_LIMIT.value);
+    if (fromElastic) this.angle = angleInput.getAsDouble();
     intake.calibrateIntakeDeployEncoder(angle);
     DataLogUtil.writeMessage("IntakeDeployCalibrateManual: Init, Angle =", angle);
   }

@@ -4,13 +4,16 @@
 
 package frc.robot.commands;
 
+import static frc.robot.Constants.ElasticKeyConstants.ElasticKey.HOOD_CMD_SET_ANGLE_INPUT;
+import static frc.robot.Constants.ElasticKeyConstants.ElasticKey.SHOOTER_CMD_SET_VELOCITY_INPUT;
+
 import java.util.function.DoubleSupplier;
 
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Translation2d;
-import org.wpilib.smartdashboard.SmartDashboard;
+import org.wpilib.tunable.TunableDouble;
+import org.wpilib.tunable.Tunables;
 import org.wpilib.command2.Command;
-import frc.robot.Constants.ElasticKeyConstants.ElasticKey;
 import frc.robot.Constants.EndType;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.ShooterConstants;
@@ -18,14 +21,13 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import frc.robot.utilities.DataLogUtil;
-import frc.robot.utilities.Field;
-import frc.robot.utilities.MathBCR;
+import frc.robot.utilities.FieldUtil;
 
 public class ShooterScorePrep extends Command {
   private final Shooter shooter;
   private final Turret turret;
   private final DriveTrain driveTrain;
-  private final Field field;
+  private final FieldUtil field;
   private DoubleSupplier velocityGetter;
   private DoubleSupplier angleGetter;
   private Translation2d goalTranslation2d;
@@ -34,6 +36,9 @@ public class ShooterScorePrep extends Command {
   private boolean useGetter = false;
   private boolean selfCalculate = false;
   private boolean fromElastic = false;
+
+  private TunableDouble velocityInput = Tunables.addDouble(SHOOTER_CMD_SET_VELOCITY_INPUT.value, 0.0);
+  private TunableDouble angleInput = Tunables.addDouble(HOOD_CMD_SET_ANGLE_INPUT.value, ShooterConstants.hoodMinimumAngle);
 
   private int toleranceCounter = 0;
   private double distanceToTarget;
@@ -54,7 +59,7 @@ public class ShooterScorePrep extends Command {
    * @param shooter shooter subsystem
    * 
    */
-  public ShooterScorePrep(DoubleSupplier velocityGetter, DoubleSupplier angleGetter, EndType type, Shooter shooter, Turret turret, DriveTrain driveTrain, Field field) {
+  public ShooterScorePrep(DoubleSupplier velocityGetter, DoubleSupplier angleGetter, EndType type, Shooter shooter, Turret turret, DriveTrain driveTrain, FieldUtil field) {
    this.driveTrain = driveTrain;
    this.shooter = shooter;
    this.turret = turret;
@@ -80,7 +85,7 @@ public class ShooterScorePrep extends Command {
    * @param shooter shooter subsystem
    * 
    */
-  public ShooterScorePrep(double velocity, double angle, EndType type, Shooter shooter, Turret turret, DriveTrain driveTrain, Field field) {
+  public ShooterScorePrep(double velocity, double angle, EndType type, Shooter shooter, Turret turret, DriveTrain driveTrain, FieldUtil field) {
     this.driveTrain = driveTrain;
     this.shooter = shooter;
     this.turret = turret;
@@ -103,7 +108,7 @@ public class ShooterScorePrep extends Command {
    * @param driveTrain driveTrain subsystem
    * 
    */
-  public ShooterScorePrep(boolean fromElastic, EndType type, Shooter shooter, Turret turret, DriveTrain driveTrain, Field field) {
+  public ShooterScorePrep(boolean fromElastic, EndType type, Shooter shooter, Turret turret, DriveTrain driveTrain, FieldUtil field) {
     this.driveTrain = driveTrain;
     this.shooter = shooter;
     this.turret = turret;
@@ -111,17 +116,7 @@ public class ShooterScorePrep extends Command {
     this.type = type;
     this.fromElastic = fromElastic;
 
-    if (fromElastic) {
-      if (SmartDashboard.getNumber(ElasticKey.HOOD_CMD_SET_ANGLE_INPUT.value, -9999.9) == -9999.9) {
-      SmartDashboard.putNumber(ElasticKey.HOOD_CMD_SET_ANGLE_INPUT.value, ShooterConstants.hoodMinimumAngle);
-      }
-
-      if (SmartDashboard.getNumber(ElasticKey.SHOOTER_CMD_SET_VELOCITY_INPUT.value, -9999.9) == -9999.9) {
-        SmartDashboard.putNumber(ElasticKey.SHOOTER_CMD_SET_VELOCITY_INPUT.value, 0);
-      }
-    } else {
-      selfCalculate = true;
-    }
+    selfCalculate = !fromElastic;
 
     addRequirements(shooter);
   }
@@ -133,8 +128,8 @@ public class ShooterScorePrep extends Command {
     if (type == EndType.waitForSetPoint) shooter.enableFastLogging(true);
 
     if (fromElastic) {
-      targetHoodAngle = SmartDashboard.getNumber(ElasticKey.HOOD_CMD_SET_ANGLE_INPUT.value, ShooterConstants.hoodMinimumAngle);
-      targetVelocity = SmartDashboard.getNumber(ElasticKey.SHOOTER_CMD_SET_VELOCITY_INPUT.value, 0);
+      targetHoodAngle = angleInput.getAsDouble();
+      targetVelocity = velocityInput.getAsDouble();
     }
     else if (useGetter) {
       targetHoodAngle = angleGetter.getAsDouble();

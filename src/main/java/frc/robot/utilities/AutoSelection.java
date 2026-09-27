@@ -5,11 +5,13 @@ import static org.wpilib.command2.Commands.*;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.driverstation.Joystick;
 import org.wpilib.system.Timer;
-import org.wpilib.smartdashboard.SendableChooser;
-import org.wpilib.smartdashboard.SmartDashboard;
+import org.wpilib.tunable.Selectable;
+import org.wpilib.tunable.TunableDouble;
+import org.wpilib.tunable.Tunables;
 import org.wpilib.command2.*;
 
 import frc.robot.Constants.EndType;
+import frc.robot.Robot;
 import frc.robot.Constants.AutoConstants.BallPickupTrajType;
 import frc.robot.Constants.AutoConstants.AutoEndType;
 import frc.robot.Constants.AutoConstants.ReturnToAllianceType;
@@ -78,7 +80,7 @@ public class AutoSelection {
 	}
 
 	private final AllianceSelection allianceSelection;
-	private final Field field;
+	private final FieldUtil field;
 	private final TrajectoryCache trajectoryCache;
 	private final Joystick rightJoystick;
 	private final DriveTrain driveTrain;
@@ -96,7 +98,8 @@ public class AutoSelection {
 	private double waitTime;
 	private Alliance alliance;
 
-	private SendableChooser<Integer> autoRoutineChooser = new SendableChooser<>();
+	private Selectable<Integer> autoRoutineChooser = new Selectable<>();
+	private TunableDouble waitTimeInput = Tunables.addDouble("Autonomous delay", 0.0);
 
 	/**
 	 * Autoselection constructor for command group to set up autoPlan widget.
@@ -106,7 +109,7 @@ public class AutoSelection {
 	 * @param field Field utility
 	 * @param driveTrain DriveTrain subsystem
 	 */
-	public AutoSelection(Joystick rightJoystick, TrajectoryCache trajectoryCache, AllianceSelection allianceSelection, Field field, 
+	public AutoSelection(Joystick rightJoystick, TrajectoryCache trajectoryCache, AllianceSelection allianceSelection, FieldUtil field, 
 							Intake intake, Feeder feeder, Turret turret, Shooter shooter, Climber climber, DriveTrain driveTrain) {
 			    // Intake intake, Feeder feeder, Turret turret, Shooter shooter, Climber climber
 		this.rightJoystick = rightJoystick;
@@ -123,7 +126,7 @@ public class AutoSelection {
 		logRotationKey = DataLogUtil.allocateLogRotation();
 
 		// Auto selections
-		autoRoutineChooser.setDefaultOption(RoutineSelectionOption.NONE.name, RoutineSelectionOption.NONE.value);
+		autoRoutineChooser.addDefault(RoutineSelectionOption.NONE.name, RoutineSelectionOption.NONE.value);
 
 		// startPositionChooser.setDefaultOption(StartPositionSelectionOption.NONE.name, StartPositionSelectionOption.NONE.value);
 		// shootPreloadChooser.setDefaultOption(ShootPreloadSelectionOption.NONE.name, ShootPreloadSelectionOption.NONE.value);
@@ -143,15 +146,15 @@ public class AutoSelection {
 
 		for (RoutineSelectionOption option : RoutineSelectionOption.values()) {
 			if (option == RoutineSelectionOption.NONE) continue;
-			autoRoutineChooser.addOption(option.name, option.value);
+			autoRoutineChooser.add(option.name, option.value);
 		}
 
 		// Show auto selection widget on dashboard
-		SmartDashboard.putData("Autonomous routine", autoRoutineChooser);
+		Tunables.publish("Autonomous routine", autoRoutineChooser);
 
 		// Show auto parameters on dashboard
-		SmartDashboard.putNumber("Autonomous delay", 0);
-		// SmartDashboard.putBoolean("Autonomous use vision", false);
+		Robot.dashboard.log("Autonomous delay", 0);
+		// Robot.dashboard.log("Autonomous use vision", false);
 
 		// Show start position selection widget on dashboard
 		// SmartDashboard.putData("Start position", startPositionChooser);
@@ -174,8 +177,8 @@ public class AutoSelection {
 		RoutineSelectionOption autoSelectionOption = RoutineSelectionOption.NONE;
 		DataLogUtil.writeMessage(true, "AutoSelect, autoPlan =", autoPlan);
 
-		waitTime = SmartDashboard.getNumber("Autonomous delay", 0);
-		waitTime = Math.clamp(waitTime, 0, 15); // make sure autoDelay isn't negative and is only active during auto
+		waitTime = waitTimeInput.getAsDouble();
+		waitTime = Math.clamp(waitTime, 0, 20); // make sure autoDelay isn't negative and is only active during auto
 
 		if (autoPlan == RoutineSelectionOption.NONE.value) {
 			// Starting position = facing drivers
@@ -327,7 +330,7 @@ public class AutoSelection {
 		);
 
 		String autoDescription = StringUtil.buildString(allianceSelection.getAlliance(), " ", autoSelectionOption);
-		SmartDashboard.putString("Autonomous cached", autoDescription);
+		Robot.dashboard.log("Autonomous cached", autoDescription);
 		DataLogUtil.writeMessage("AutoSelection: Built ", autoDescription);
 	}
 
@@ -373,7 +376,7 @@ public class AutoSelection {
 			// int newReturnToAlliance =  returnToAllianceChooser.getSelected();
 			// int newNumCycles =  numCyclesChooser.getSelected();
 	
-			double newWaitTime = SmartDashboard.getNumber("Autonomous delay", 0);
+			double newWaitTime = waitTimeInput.getAsDouble();
 			Alliance newAlliance = allianceSelection.getAlliance();
 
 			if ( (newAutoPlan != autoPlan) || (newWaitTime != waitTime) ||

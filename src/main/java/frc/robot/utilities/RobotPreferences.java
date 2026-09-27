@@ -7,9 +7,9 @@
 
 package frc.robot.utilities;
 
-import org.wpilib.util.Preferences;
-import org.wpilib.smartdashboard.SmartDashboard;
+import org.wpilib.preferences.Preferences;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Robot;
 
 /**
  * Utility to handle all stored robot preferences.
@@ -121,8 +121,8 @@ public class RobotPreferences {
    * Shows any sticky faults on Elastic.
    */
   public static void showStickyFaultsOnElastic() {
-    SmartDashboard.putString("problemSubsystem", problemSubsystem);
-    SmartDashboard.putBoolean("problemExists", problemExists);
+    Robot.dashboard.log("problemSubsystem", problemSubsystem);
+    Robot.dashboard.log("problemExists", problemExists);
   }
 
   /**

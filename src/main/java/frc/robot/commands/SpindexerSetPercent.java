@@ -4,8 +4,10 @@
 
 package frc.robot.commands;
 
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.Command;
+import org.wpilib.tunable.TunableDouble;
+import org.wpilib.tunable.Tunables;
+
 import frc.robot.subsystems.Feeder;
 import frc.robot.utilities.DataLogUtil;
 
@@ -15,6 +17,8 @@ public class SpindexerSetPercent extends Command {
   private final Feeder feeder;
   private double percent = 0.0;
   private boolean endImmediately, fromElastic;
+
+  private TunableDouble percentInput = Tunables.addDouble(SPINDEXER_CMD_SET_PERCENT_INPUT.value, 0.0);
 
   /**
    * Sets the percent output of the spindexerMotor FROM ELASTIC.
@@ -26,10 +30,6 @@ public class SpindexerSetPercent extends Command {
     this.endImmediately = endImmediately;
     fromElastic = true;
     addRequirements(feeder);
-
-    if (SmartDashboard.getNumber(SPINDEXER_CMD_SET_PERCENT_INPUT.value, -9999.9) == -9999.9) {
-      SmartDashboard.putNumber(SPINDEXER_CMD_SET_PERCENT_INPUT.value, 0.0);
-    }
   }
 
   /**
@@ -49,7 +49,7 @@ public class SpindexerSetPercent extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (fromElastic) percent = SmartDashboard.getNumber(SPINDEXER_CMD_SET_PERCENT_INPUT.value, 0.0);
+    if (fromElastic) percent = percentInput.getAsDouble();
     feeder.setSpindexerPercentOutput(percent);
     DataLogUtil.writeMessage("SpindexerSetPercent: Init, Percent =", percent);
   }

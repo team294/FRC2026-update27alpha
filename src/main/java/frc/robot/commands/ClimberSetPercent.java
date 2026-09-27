@@ -6,8 +6,10 @@ package frc.robot.commands;
 
 import static frc.robot.Constants.ElasticKeyConstants.ElasticKey.*;
 
-import org.wpilib.smartdashboard.SmartDashboard;
+import org.wpilib.tunable.TunableDouble;
+import org.wpilib.tunable.Tunables;
 import org.wpilib.command2.Command;
+
 import frc.robot.subsystems.Climber;
 import frc.robot.utilities.DataLogUtil;
 
@@ -15,6 +17,8 @@ public class ClimberSetPercent extends Command {
   private final Climber climber;
   private final boolean fromElastic;
   private double percent;
+  
+  private final TunableDouble climberSetPercentInput = Tunables.addDouble(CLIMBER_CMD_SET_PERCENT_INPUT.value, 0.0);
 
   /**
    * Set percent of climber motors (+ is up, - is down) with input from elastic.  
@@ -25,11 +29,6 @@ public class ClimberSetPercent extends Command {
     this.climber = climber;
     fromElastic = true;
     addRequirements(climber);
-
-    if (SmartDashboard.getNumber(CLIMBER_CMD_SET_PERCENT_INPUT.value, -9999) == -9999) {
-      SmartDashboard.putNumber(CLIMBER_CMD_SET_PERCENT_INPUT.value, 0.0);
-    }
-
   }
 
   /**
@@ -49,7 +48,7 @@ public class ClimberSetPercent extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (fromElastic) percent = SmartDashboard.getNumber(CLIMBER_CMD_SET_PERCENT_INPUT.value, 0.0);
+    if (fromElastic) percent = climberSetPercentInput.getAsDouble();
     climber.setClimberPercentOutput(percent);
     DataLogUtil.writeMessage("ClimberSetPercent: Init, Percent =", percent);
 

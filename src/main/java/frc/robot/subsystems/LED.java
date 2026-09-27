@@ -9,10 +9,10 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.LEDConfigs;
 import com.ctre.phoenix6.controls.*;
 
-import org.wpilib.smartdashboard.SmartDashboard;
 import org.wpilib.command2.SubsystemBase;
 import frc.robot.Constants.*;
 import frc.robot.Constants.LEDConstants.Animations;
+import frc.robot.Robot;
 import frc.robot.utilities.*;
 import frc.robot.utilities.DataLogUtil.RotationWhenDisabled;
 
@@ -96,7 +96,7 @@ public class LED extends SubsystemBase {
       }
 
       // update LED state and match timer on the dashboard
-      SmartDashboard.putString("LED State", String.format("#%02x%02x%02x", dashboardColor.r, dashboardColor.g, dashboardColor.b));
+      Robot.dashboard.log("LED State", String.format("#%02x%02x%02x", dashboardColor.r, dashboardColor.g, dashboardColor.b));
     }
   }
 }
