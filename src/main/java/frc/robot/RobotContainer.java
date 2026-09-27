@@ -32,14 +32,11 @@ import org.wpilib.system.DataLogManager;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.driverstation.Joystick;
 import org.wpilib.system.Timer;
-import org.wpilib.telemetry.Telemetry;
-import org.wpilib.telemetry.TelemetryTable;
 import org.wpilib.tunable.Tunables;
 import org.wpilib.command2.Command;
 import org.wpilib.command2.CommandScheduler;
 import org.wpilib.command2.InstantCommand;
-import org.wpilib.command2.button.CommandGamepad;
-// import org.wpilib.command2.button.CommandNiDsXboxController; no POV (d-pad) functionality
+import org.wpilib.command2.button.CommandXboxController;
 import org.wpilib.command2.button.JoystickButton;
 import org.wpilib.command2.button.Trigger;
 
@@ -72,7 +69,7 @@ public class RobotContainer {
 
   // CommandNiDsXboxController has no POV (d-pad) functionality, so temporarily (i hope) switching to CommandGamepad
   // private final CommandNiDsXboxController xboxController = new CommandNiDsXboxController(OIConstants.usbXboxController);
-  private final CommandGamepad xboxController = new CommandGamepad(OIConstants.usbXboxController);
+  private final CommandXboxController xboxController = new CommandXboxController(OIConstants.usbXboxController);
 
   // Define other utilities
   private final TrajectoryCache trajectoryCache = new TrajectoryCache();
@@ -249,14 +246,14 @@ public class RobotContainer {
     // Triggers for all Xbox buttons
     Trigger xbLT = xboxController.leftTrigger();
     Trigger xbRT = xboxController.rightTrigger();
-    Trigger xbA = xboxController.faceDown();
-    Trigger xbB = xboxController.faceRight();
-    Trigger xbY = xboxController.faceUp();
-    Trigger xbX = xboxController.faceLeft();
+    Trigger xbA = xboxController.a();
+    Trigger xbB = xboxController.b();
+    Trigger xbY = xboxController.y();
+    Trigger xbX = xboxController.x();
     Trigger xbLB = xboxController.leftBumper();
     Trigger xbRB = xboxController.rightBumper();
-    Trigger xbBack = xboxController.back();
-    Trigger xbStart = xboxController.start();
+    Trigger xbBack = xboxController.view();
+    Trigger xbStart = xboxController.menu();
     Trigger xbPOVUp = xboxController.dpadUp();
     Trigger xbPOVRight = xboxController.dpadRight();
     Trigger xbPOVLeft = xboxController.dpadLeft();
@@ -274,6 +271,31 @@ public class RobotContainer {
       )
     );
     xbX.onFalse(new FeederStop(feeder));
+
+    // feed shooter with bounce agitation
+    xbA.whileTrue(new FeederIntakeFeedShooterSequence(AgitateType.BOUNCE, feeder, intake, shooter));
+    
+    // feed shooter without agitation
+    xbB.whileTrue(new FeederIntakeFeedShooterSequence(AgitateType.NONE, feeder, intake, shooter));
+
+    // feed shooter with dump agitation
+    xbY.whileTrue(new FeederIntakeFeedShooterSequence(AgitateType.DUMP, feeder, intake, shooter));
+
+    // reset intake if agitated, stop rollers and spindexer/uptake in both cases
+    xbA.onFalse(parallel(
+      new IntakeDeploySetAngle(IntakeDeployAngle.INTAKE, intake),
+      new InstantCommand(() -> intake.stopIntakeRoller()),
+      new FeederStop(feeder)
+    ));
+    xbB.onFalse(parallel(
+      new IntakeRollerStop(intake),
+      new FeederStop(feeder)
+    ));
+    xbY.onFalse(parallel(
+      new IntakeDeploySetAngle(IntakeDeployAngle.INTAKE, intake),
+      new InstantCommand(() -> intake.stopIntakeRoller()),
+      new FeederStop(feeder)
+    ));
 
     xbLT.whileTrue(new IntakeRollerSetPercent(IntakeConstants.rollerIntakePercent, false, intake));
     xbLB.onTrue(new IntakeRollerStop(intake));
@@ -313,32 +335,6 @@ public class RobotContainer {
     
     // raise climb to be extended, but fitting under tower, and prep hood for shooting
     xbPOVUp.onTrue(new RaiseHoodAndClimber(climber, shooter));
-
-
-    // feed shooter with bounce agitation
-    xbA.whileTrue(new FeederIntakeFeedShooterSequence(AgitateType.BOUNCE, feeder, intake, shooter));
-    
-    // feed shooter without agitation
-    xbB.whileTrue(new FeederIntakeFeedShooterSequence(AgitateType.NONE, feeder, intake, shooter));
-
-    // feed shooter with dump agitation
-    xbY.whileTrue(new FeederIntakeFeedShooterSequence(AgitateType.DUMP, feeder, intake, shooter));
-
-    // reset intake if agitated, stop rollers and spindexer/uptake in both cases
-    xbA.onFalse(parallel(
-      new IntakeDeploySetAngle(IntakeDeployAngle.INTAKE, intake),
-      new InstantCommand(() -> intake.stopIntakeRoller()),
-      new FeederStop(feeder)
-    ));
-    xbB.onFalse(parallel(
-      new IntakeRollerStop(intake),
-      new FeederStop(feeder)
-    ));
-    xbY.onFalse(parallel(
-      new IntakeDeploySetAngle(IntakeDeployAngle.INTAKE, intake),
-      new InstantCommand(() -> intake.stopIntakeRoller()),
-      new FeederStop(feeder)
-    ));
   }
 
   /**
