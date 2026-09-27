@@ -443,7 +443,8 @@ public class DriveToPose extends Command {
     if (!goalDirection.getAngle().isEmpty()) {
       desiredPose = new Pose2d( goalDirection.times(desiredState.position), goalDirection.getAngle().get());
     } else {
-      System.out.println("Exception in DriveToPose line 444: goalDirection Optional<Rotation2d> is empty!");
+      desiredPose = new Pose2d( goalDirection.times(desiredState.position), Rotation2d.ZERO);
+      DataLogUtil.writeMessageEcho("DriveToPose:  EXCEPTION line 447: goalDirection Optional<Rotation2d> is empty!");
     }
 
     // Fudge in some kA

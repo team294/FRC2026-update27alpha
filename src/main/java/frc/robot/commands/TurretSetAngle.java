@@ -131,6 +131,7 @@ public class TurretSetAngle extends Command {
       // a value.  Then the PID controller would try to track and maybe never get in tolerance,
       // and then this command would never end.
       if (fromDashboard) {
+        targetAngle = angleInput.getAsDouble();
       }
 
       if (useGetter) {
