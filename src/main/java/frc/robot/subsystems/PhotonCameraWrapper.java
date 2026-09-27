@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import org.wpilib.vision.apriltag.AprilTagFieldLayout;
 import org.wpilib.math.linalg.Matrix;
 import org.wpilib.math.linalg.VecBuilder;
 import org.wpilib.math.geometry.Pose2d;
@@ -10,6 +9,7 @@ import org.wpilib.math.numbers.N3;
 import org.wpilib.datalog.BooleanLogEntry;
 import org.wpilib.datalog.DataLog;
 import org.wpilib.datalog.StructLogEntry;
+import org.wpilib.fields.Field;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.system.RobotController;
 import org.wpilib.system.Timer;
@@ -53,7 +53,7 @@ public class PhotonCameraWrapper extends SubsystemBase {
    * @param robotToCam Transform3d specifying the location of the camera relative to the robot center
    * @param cameraName Name of this camera
    */
-  public PhotonCameraWrapper(Transform3d robotToCam, String cameraName, AprilTagFieldLayout aprilTagFieldLayout) {
+  public PhotonCameraWrapper(Transform3d robotToCam, String cameraName, Field fieldLayout) {
     this.cameraName = cameraName;
     timeSinceStart.reset();
     timeSinceStart.start();
@@ -69,7 +69,7 @@ public class PhotonCameraWrapper extends SubsystemBase {
     photonCamera = new PhotonCamera(cameraName);
 
     // Create pose estimator
-    photonPoseEstimatorCamera = new PhotonPoseEstimator(aprilTagFieldLayout, robotToCam);
+    photonPoseEstimatorCamera = new PhotonPoseEstimator(fieldLayout, robotToCam);
 
     // Prime the DataLog to reduce delay when first enabling the robot
     long timeNow = RobotController.getTime();

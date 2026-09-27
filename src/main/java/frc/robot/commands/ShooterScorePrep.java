@@ -21,13 +21,13 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import frc.robot.utilities.DataLogUtil;
-import frc.robot.utilities.Field;
+import frc.robot.utilities.FieldUtil;
 
 public class ShooterScorePrep extends Command {
   private final Shooter shooter;
   private final Turret turret;
   private final DriveTrain driveTrain;
-  private final Field field;
+  private final FieldUtil field;
   private DoubleSupplier velocityGetter;
   private DoubleSupplier angleGetter;
   private Translation2d goalTranslation2d;
@@ -59,7 +59,7 @@ public class ShooterScorePrep extends Command {
    * @param shooter shooter subsystem
    * 
    */
-  public ShooterScorePrep(DoubleSupplier velocityGetter, DoubleSupplier angleGetter, EndType type, Shooter shooter, Turret turret, DriveTrain driveTrain, Field field) {
+  public ShooterScorePrep(DoubleSupplier velocityGetter, DoubleSupplier angleGetter, EndType type, Shooter shooter, Turret turret, DriveTrain driveTrain, FieldUtil field) {
    this.driveTrain = driveTrain;
    this.shooter = shooter;
    this.turret = turret;
@@ -85,7 +85,7 @@ public class ShooterScorePrep extends Command {
    * @param shooter shooter subsystem
    * 
    */
-  public ShooterScorePrep(double velocity, double angle, EndType type, Shooter shooter, Turret turret, DriveTrain driveTrain, Field field) {
+  public ShooterScorePrep(double velocity, double angle, EndType type, Shooter shooter, Turret turret, DriveTrain driveTrain, FieldUtil field) {
     this.driveTrain = driveTrain;
     this.shooter = shooter;
     this.turret = turret;
@@ -108,7 +108,7 @@ public class ShooterScorePrep extends Command {
    * @param driveTrain driveTrain subsystem
    * 
    */
-  public ShooterScorePrep(boolean fromElastic, EndType type, Shooter shooter, Turret turret, DriveTrain driveTrain, Field field) {
+  public ShooterScorePrep(boolean fromElastic, EndType type, Shooter shooter, Turret turret, DriveTrain driveTrain, FieldUtil field) {
     this.driveTrain = driveTrain;
     this.shooter = shooter;
     this.turret = turret;

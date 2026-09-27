@@ -6,30 +6,29 @@ package frc.robot.utilities;
 
 import java.io.UncheckedIOException;
 
-import org.wpilib.vision.apriltag.AprilTagFieldLayout;
-import org.wpilib.vision.apriltag.AprilTagFieldLayout.OriginPosition;
-import org.wpilib.vision.apriltag.AprilTagFields;
+import org.wpilib.fields.Field;
+import org.wpilib.fields.Fields;
 import org.wpilib.math.geometry.Translation2d;
 import org.wpilib.math.kinematics.ChassisVelocities;
 import org.wpilib.driverstation.Alliance;
 import frc.robot.Constants.FieldConstants;
 
 /** BCR Field class (implementation in progress) */
-public class Field {
+public class FieldUtil {
     private AllianceSelection allianceSelection;
-    private AprilTagFieldLayout aprilTagFieldLayout;
+    private Field fieldLayout;
 
     /**
      * Constructor for Field objects.
      * @param allianceSelection
      */
-    public Field(AllianceSelection allianceSelection) {
+    public FieldUtil(AllianceSelection allianceSelection) {
         this.allianceSelection = allianceSelection;
 
         // Create aprilTagFieldLayout for pose estimators and photonvision
         try {
-            aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
-            aprilTagFieldLayout.setOrigin(OriginPosition.kBlueAllianceWallRightSide); 
+            fieldLayout = Fields.FRC_2026_REBUILT_WELDED.loadField();
+            fieldLayout.setOrigin(Field.OriginPosition.BLUE_ALLIANCE_WALL_RIGHT_SIDE);
             DataLogUtil.writeMessage("Field Constructor:  Loaded april tags from file");
         } catch (UncheckedIOException e) {
             RobotPreferences.recordStickyFaults("Field");
@@ -39,11 +38,11 @@ public class Field {
     }
 
     /**
-     * Returns the AprilTag field layout for the current season and field
+     * Returns the field layout (including AprilTags) for the current season and field
      * @return
      */
-    public AprilTagFieldLayout getAprilTagFieldLayout() {
-        return aprilTagFieldLayout;
+    public Field getField() {
+        return fieldLayout;
     }
 
     /**

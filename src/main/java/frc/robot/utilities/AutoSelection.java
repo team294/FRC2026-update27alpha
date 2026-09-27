@@ -80,7 +80,7 @@ public class AutoSelection {
 	}
 
 	private final AllianceSelection allianceSelection;
-	private final Field field;
+	private final FieldUtil field;
 	private final TrajectoryCache trajectoryCache;
 	private final Joystick rightJoystick;
 	private final DriveTrain driveTrain;
@@ -109,7 +109,7 @@ public class AutoSelection {
 	 * @param field Field utility
 	 * @param driveTrain DriveTrain subsystem
 	 */
-	public AutoSelection(Joystick rightJoystick, TrajectoryCache trajectoryCache, AllianceSelection allianceSelection, Field field, 
+	public AutoSelection(Joystick rightJoystick, TrajectoryCache trajectoryCache, AllianceSelection allianceSelection, FieldUtil field, 
 							Intake intake, Feeder feeder, Turret turret, Shooter shooter, Climber climber, DriveTrain driveTrain) {
 			    // Intake intake, Feeder feeder, Turret turret, Shooter shooter, Climber climber
 		this.rightJoystick = rightJoystick;

@@ -40,7 +40,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import frc.robot.utilities.AllianceSelection;
-import frc.robot.utilities.Field;
+import frc.robot.utilities.FieldUtil;
 import frc.robot.utilities.TrajectoryCache;
 import frc.robot.utilities.TrajectoryCache.TrajectoryName;
 
@@ -49,7 +49,7 @@ import frc.robot.utilities.TrajectoryCache.TrajectoryName;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class BuildCenterAuton extends SequentialCommandGroup {
   /** Creates a new BuildCenterAuton. */
-  public BuildCenterAuton(EndType shootEndType, boolean collectBalls, boolean climb, Intake intake, Feeder feeder, Turret turret, Shooter shooter, Climber climber, DriveTrain driveTrain, Field field, AllianceSelection alliance, TrajectoryCache cache) {
+  public BuildCenterAuton(EndType shootEndType, boolean collectBalls, boolean climb, Intake intake, Feeder feeder, Turret turret, Shooter shooter, Climber climber, DriveTrain driveTrain, FieldUtil field, AllianceSelection alliance, TrajectoryCache cache) {
     Trajectory<SwerveSample> driveToClimbTrajectory = collectBalls ? cache.getTrajectory(TrajectoryName.CollectDepotToClimb_LabSafe) : cache.getTrajectory(TrajectoryName.CenterShootToClimb);
     Trajectory<SwerveSample> collectTrajectory = cache.getTrajectory(TrajectoryName.CenterStartCollectUnderTower_LabSafe);
     Pose2d initalPose2d = collectBalls ? collectTrajectory.getInitialPose(alliance.getAlliance() == Alliance.RED).get() : cache.getTrajectory(TrajectoryName.CenterShootToClimb).getInitialPose(alliance.getAlliance() == Alliance.RED).get().transformBy(new Transform2d(1.0, 0, Rotation2d.ZERO));
