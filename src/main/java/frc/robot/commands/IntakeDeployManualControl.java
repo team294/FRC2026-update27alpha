@@ -9,7 +9,7 @@ import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.system.RobotController;
 import org.wpilib.command2.Command;
-import org.wpilib.command2.button.CommandGamepad;
+import org.wpilib.command2.button.CommandXboxController;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.Intake;
@@ -17,7 +17,7 @@ import frc.robot.utilities.DataLogUtil;
 
 public class IntakeDeployManualControl extends Command {
   private final Intake intake;
-  private final CommandGamepad xboxController;
+  private final CommandXboxController xboxController;
 
   // Variables for DataLogging
   private final DataLog log = DataLogManager.getLog();
@@ -28,7 +28,7 @@ public class IntakeDeployManualControl extends Command {
    * @param xboxController Xbox controller
    * @param intake Intake subsystem
    */
-  public IntakeDeployManualControl(CommandGamepad xboxController, Intake intake) {
+  public IntakeDeployManualControl(CommandXboxController xboxController, Intake intake) {
     this.intake = intake;
     this.xboxController = xboxController;
 
