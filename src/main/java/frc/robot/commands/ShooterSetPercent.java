@@ -19,7 +19,7 @@ public class ShooterSetPercent extends Command {
   private double percent = 0.0;
   private boolean fromElastic;
 
-  private TunableDouble percentInput = Tunables.addDouble(SHOOTER_CMD_SET_PERCENT_INPUT.value, 0.0);
+  private static final TunableDouble percentInput = Tunables.addDouble(SHOOTER_CMD_SET_PERCENT_INPUT.value, 0.0);
 
   /**
    * Sets the percent output of the shooter from Shuffleboard and ends immediately.

@@ -20,7 +20,7 @@ public class IntakeDeploySetAngle extends Command {
   private double targetAngle;
   private boolean fromElastic;
 
-  private TunableDouble angleInput = Tunables.addDouble(INTAKE_DEPLOY_CMD_SET_ANGLE_INPUT.value, IntakeDeployAngle.START_CONFIG.value);
+  private static final TunableDouble angleInput = Tunables.addDouble(INTAKE_DEPLOY_CMD_SET_ANGLE_INPUT.value, IntakeDeployAngle.START_CONFIG.value);
 
   /**
    * Sets the target angle for the Intake Deploy and attempts to move it to that angle. It is constrained by

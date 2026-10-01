@@ -8,6 +8,8 @@
 package frc.robot.utilities;
 
 import org.wpilib.preferences.Preferences;
+import org.wpilib.telemetry.Telemetry;
+
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Robot;
 
@@ -121,8 +123,8 @@ public class RobotPreferences {
    * Shows any sticky faults on Elastic.
    */
   public static void showStickyFaultsOnElastic() {
-    Robot.dashboard.log("problemSubsystem", problemSubsystem);
-    Robot.dashboard.log("problemExists", problemExists);
+    Telemetry.getTable("RobotPreferences").log("problemSubsystem", problemSubsystem);
+    Telemetry.getTable("RobotPreferences").log("problemExists", problemExists);
   }
 
   /**

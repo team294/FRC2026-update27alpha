@@ -28,9 +28,9 @@ public class DriveResetPose extends Command {
   private double curX, curY, curAngle;  // in meters and degrees
   private Supplier<Pose2d> poseSupplier;
 
-  private TunableDouble resetXInput = Tunables.addDouble("DriveResetPose X", 0.0);
-  private TunableDouble resetYInput = Tunables.addDouble("DriveResetPose Y", 0.0);
-  private TunableDouble resetAngleInput = Tunables.addDouble("DriveResetPose Angle", 0.0);
+  private static final TunableDouble resetXInput = Tunables.addDouble("DriveResetPose X", 0.0);
+  private static final TunableDouble resetYInput = Tunables.addDouble("DriveResetPose Y", 0.0);
+  private static final TunableDouble resetAngleInput = Tunables.addDouble("DriveResetPose Angle", 0.0);
   
   /**
 	 * Resets the pose, gyro, and encoders on the driveTrain.

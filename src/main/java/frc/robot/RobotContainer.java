@@ -32,6 +32,7 @@ import org.wpilib.system.DataLogManager;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.driverstation.Joystick;
 import org.wpilib.system.Timer;
+import org.wpilib.telemetry.Telemetry;
 import org.wpilib.tunable.Tunables;
 import org.wpilib.command2.Command;
 import org.wpilib.command2.CommandScheduler;
@@ -98,7 +99,7 @@ public class RobotContainer {
     // Start LEDEventUtil
     LEDEventUtil.initialize(led, LEDAnimateRobotDisabled);
 
-    Robot.dashboard.log("RobotPrefs Initialized", RobotPreferences.prefsExist());
+    Telemetry.getTable("RobotContainer").log("RobotPrefs Initialized", RobotPreferences.prefsExist());
     if(!RobotPreferences.prefsExist()) {
       RobotPreferences.recordStickyFaults("RobotPreferences");
     }
@@ -475,7 +476,7 @@ public class RobotContainer {
     shiftHelper.periodic();
     autoSelection.periodic();
 
-    Robot.dashboard.log("Trench Safe", intake.isIntakeDeploySafeForTrench() && shooter.isHoodSafeForTrench() && climber.isSafeForTrench());
+    Telemetry.getTable("RobotContainer").log("Trench Safe", intake.isIntakeDeploySafeForTrench() && shooter.isHoodSafeForTrench() && climber.isSafeForTrench());
 
     heartBeat++;
     dLogRobotHeartBeat.append(heartBeat);

@@ -19,7 +19,7 @@ public class SpindexerSetVelocity extends Command {
   private final double velocityTolerance = 50.0;
   private boolean fromElastic;
 
-  private TunableDouble velocityInput = Tunables.addDouble(SPINDEXER_CMD_SET_VELOCITY_INPUT.value, 0.0);
+  private static final TunableDouble velocityInput = Tunables.addDouble(SPINDEXER_CMD_SET_VELOCITY_INPUT.value, 0.0);
 
   /**
    * Sets the target velocity for the spindexerMotor FROM ELASTIC. This command ends when the velocity is 

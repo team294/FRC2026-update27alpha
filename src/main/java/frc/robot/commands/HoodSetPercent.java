@@ -21,7 +21,7 @@ public class HoodSetPercent extends Command {
   private double percent;
   private int motorNumber;
 
-  private TunableDouble percentInput = Tunables.addDouble(HOOD_CMD_SET_PERCENT_INPUT.value, 0.0);
+  private static final TunableDouble percentInput = Tunables.addDouble(HOOD_CMD_SET_PERCENT_INPUT.value, 0.0);
 
   /**
    * Set percent for hood motors to move at [0.0, 1.0] with input from Elastic

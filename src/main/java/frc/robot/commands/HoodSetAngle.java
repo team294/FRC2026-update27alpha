@@ -24,7 +24,7 @@ public class HoodSetAngle extends Command {
   private final boolean fromElastic;
   private int toleranceCounter;
 
-  private TunableDouble angleInput = Tunables.addDouble(HOOD_CMD_SET_ANGLE_INPUT.value, ShooterConstants.hoodMinimumAngle);
+  private static final TunableDouble angleInput = Tunables.addDouble(HOOD_CMD_SET_ANGLE_INPUT.value, ShooterConstants.hoodMinimumAngle);
   
   private DoubleSupplier angleGetter;
   private boolean useGetter = false;

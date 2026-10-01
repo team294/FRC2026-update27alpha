@@ -18,7 +18,7 @@ public class ClimberSetPercent extends Command {
   private final boolean fromElastic;
   private double percent;
   
-  private final TunableDouble climberSetPercentInput = Tunables.addDouble(CLIMBER_CMD_SET_PERCENT_INPUT.value, 0.0);
+  private static final TunableDouble climberSetPercentInput = Tunables.addDouble(CLIMBER_CMD_SET_PERCENT_INPUT.value, 0.0);
 
   /**
    * Set percent of climber motors (+ is up, - is down) with input from elastic.  

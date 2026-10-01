@@ -11,6 +11,7 @@ import java.util.function.Consumer;
 
 import org.wpilib.driverstation.MatchState;
 import org.wpilib.driverstation.RobotState;
+import org.wpilib.telemetry.Telemetry;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.tunable.Selectable;
 import org.wpilib.tunable.Tunables;
@@ -63,9 +64,9 @@ public class AllianceSelection {
     this.alliance = alliance;
     DataLogUtil.writeMessageEcho("Alliance Selection: SetAlliance, Alliance Chooser =", allianceChooser.getSelected().name(), ", Alliance =", alliance.name());
 
-    Robot.dashboard.log("Alliance Blue", alliance != Alliance.RED);
-    Robot.dashboard.log("Alliance Red", alliance != Alliance.BLUE);
-    Robot.dashboard.log("Alliance", alliance.name());
+    Telemetry.getTable("AllianceSelection").log("Alliance Blue", alliance != Alliance.RED);
+    Telemetry.getTable("AllianceSelection").log("Alliance Red", alliance != Alliance.BLUE);
+    Telemetry.getTable("AllianceSelection").log("Alliance", alliance.name());
   }
 
   /**

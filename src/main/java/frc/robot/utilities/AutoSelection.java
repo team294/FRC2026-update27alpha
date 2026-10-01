@@ -5,6 +5,7 @@ import static org.wpilib.command2.Commands.*;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.driverstation.Joystick;
 import org.wpilib.system.Timer;
+import org.wpilib.telemetry.Telemetry;
 import org.wpilib.tunable.Selectable;
 import org.wpilib.tunable.TunableDouble;
 import org.wpilib.tunable.Tunables;
@@ -99,7 +100,7 @@ public class AutoSelection {
 	private Alliance alliance;
 
 	private Selectable<Integer> autoRoutineChooser = new Selectable<>();
-	private TunableDouble waitTimeInput = Tunables.addDouble("Autonomous delay", 0.0);
+	private static final TunableDouble waitTimeInput = Tunables.addDouble("Autonomous delay", 0.0);
 
 	/**
 	 * Autoselection constructor for command group to set up autoPlan widget.
@@ -153,8 +154,8 @@ public class AutoSelection {
 		Tunables.publish("Autonomous routine", autoRoutineChooser);
 
 		// Show auto parameters on dashboard
-		Robot.dashboard.log("Autonomous delay", 0);
-		// Robot.dashboard.log("Autonomous use vision", false);
+		Telemetry.getTable("AutoSelection").log("Autonomous delay", 0);
+		// Telemetry.getTable("AutoSelection").log("Autonomous use vision", false);
 
 		// Show start position selection widget on dashboard
 		// SmartDashboard.putData("Start position", startPositionChooser);
@@ -330,7 +331,7 @@ public class AutoSelection {
 		);
 
 		String autoDescription = StringUtil.buildString(allianceSelection.getAlliance(), " ", autoSelectionOption);
-		Robot.dashboard.log("Autonomous cached", autoDescription);
+		Telemetry.getTable("AutoSelection").log("Autonomous cached", autoDescription);
 		DataLogUtil.writeMessage("AutoSelection: Built ", autoDescription);
 	}
 

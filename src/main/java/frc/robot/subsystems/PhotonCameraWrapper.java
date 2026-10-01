@@ -13,6 +13,7 @@ import org.wpilib.fields.Field;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.system.RobotController;
 import org.wpilib.system.Timer;
+import org.wpilib.telemetry.Telemetry;
 import org.wpilib.command2.SubsystemBase;
 
 import frc.robot.Constants.VisionConstants;
@@ -77,7 +78,7 @@ public class PhotonCameraWrapper extends SubsystemBase {
 
     priorConnected = photonCamera.isConnected();
     dLogConnected.append(priorConnected, timeNow);
-    Robot.dashboard.log(StringUtil.buildString("PhotonVision ", cameraName, " Connected"), priorConnected);
+    Telemetry.getTable("PhotonCameraWrapper").log(StringUtil.buildString("PhotonVision ", cameraName, " Connected"), priorConnected);
 
     priorTagPresent = false;
     dLogTagPresent.append(priorTagPresent, timeNow);
@@ -211,7 +212,7 @@ public class PhotonCameraWrapper extends SubsystemBase {
       if (isConnected != priorConnected) {
         // only write to datalog if this value has changed (saves space in the log)
         dLogConnected.append(isConnected, timeNow);
-        Robot.dashboard.log(StringUtil.buildString("PhotonVision ", cameraName, " Connected"), isConnected);
+        Telemetry.getTable("PhotonCameraWrapper").log(StringUtil.buildString("PhotonVision ", cameraName, " Connected"), isConnected);
         priorConnected = isConnected;
       }
   }

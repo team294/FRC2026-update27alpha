@@ -21,7 +21,7 @@ public class HoodSetVoltage extends Command {
   private double voltage;
   private int motorNumber;
 
-  private TunableDouble voltageInput = Tunables.addDouble(HOOD_CMD_SET_VOLTAGE_INPUT.value, 0.0);
+  private static final TunableDouble voltageInput = Tunables.addDouble(HOOD_CMD_SET_VOLTAGE_INPUT.value, 0.0);
 
   /**
    * Set voltage for hood motors to move at [0.0, 4.92] with input from Elastic

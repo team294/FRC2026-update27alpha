@@ -27,6 +27,7 @@ import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.driverstation.RobotState;
 import org.wpilib.system.RobotController;
+import org.wpilib.telemetry.Telemetry;
 import org.wpilib.command2.SubsystemBase;
 
 import frc.robot.Constants.CANRangeConstants;
@@ -549,19 +550,19 @@ public class Feeder extends SubsystemBase implements Loggable {
     if (DataLogUtil.isMyLogRotation(logRotationKey, RotationWhenDisabled.kNormal)) {
       checkForFaultConditions();
 
-      Robot.dashboard.log(UPTAKE_RPM.value, getUptakeMotorVelocity());
-      Robot.dashboard.log(UPTAKE_TARGET_RPM.value, uptakeSetpointRPM);
-      Robot.dashboard.log(UPTAKE_TEMP.value, uptakeTemp.refresh().getValueAsDouble());
+      Telemetry.getTable("Feeder").log(UPTAKE_RPM.value, getUptakeMotorVelocity());
+      Telemetry.getTable("Feeder").log(UPTAKE_TARGET_RPM.value, uptakeSetpointRPM);
+      Telemetry.getTable("Feeder").log(UPTAKE_TEMP.value, uptakeTemp.refresh().getValueAsDouble());
 
-      Robot.dashboard.log(SPINDEXER_RPM.value, getSpindexerVelocity());
-      Robot.dashboard.log(SPINDEXER_TARGET_RPM.value, spindexerSetpointRPM);
-      Robot.dashboard.log(SPINDEXER_TEMP.value, spindexerTemp.refresh().getValueAsDouble());
+      Telemetry.getTable("Feeder").log(SPINDEXER_RPM.value, getSpindexerVelocity());
+      Telemetry.getTable("Feeder").log(SPINDEXER_TARGET_RPM.value, spindexerSetpointRPM);
+      Telemetry.getTable("Feeder").log(SPINDEXER_TEMP.value, spindexerTemp.refresh().getValueAsDouble());
 
 
-      Robot.dashboard.log("Uptake Entry Detected Distance", getDistance(1));
-      Robot.dashboard.log("Uptake Entry Triggered?", isDetected(1));
-      Robot.dashboard.log("Uptake Exit Detected Distance", getDistance(0));
-      Robot.dashboard.log("Uptake Exit Triggered?", isDetected(0));
+      Telemetry.getTable("Feeder").log("Uptake Entry Detected Distance", getDistance(1));
+      Telemetry.getTable("Feeder").log("Uptake Entry Triggered?", isDetected(1));
+      Telemetry.getTable("Feeder").log("Uptake Exit Detected Distance", getDistance(0));
+      Telemetry.getTable("Feeder").log("Uptake Exit Triggered?", isDetected(0));
     }    
   }
 }

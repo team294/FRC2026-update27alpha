@@ -26,7 +26,7 @@ public class TurretSetAngle extends Command {
   private final boolean useGetter;
   private double targetAngle;
 
-  private TunableDouble angleInput = Tunables.addDouble(TURRET_CMD_SET_ANGLE_INPUT.value, 0.0);
+  private static final TunableDouble angleInput = Tunables.addDouble(TURRET_CMD_SET_ANGLE_INPUT.value, 0.0);
 
   private int toleranceCounter;
 

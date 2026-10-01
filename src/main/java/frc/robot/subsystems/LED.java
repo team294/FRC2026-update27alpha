@@ -10,6 +10,8 @@ import com.ctre.phoenix6.configs.LEDConfigs;
 import com.ctre.phoenix6.controls.*;
 
 import org.wpilib.command2.SubsystemBase;
+import org.wpilib.telemetry.Telemetry;
+
 import frc.robot.Constants.*;
 import frc.robot.Constants.LEDConstants.Animations;
 import frc.robot.Robot;
@@ -96,7 +98,7 @@ public class LED extends SubsystemBase {
       }
 
       // update LED state and match timer on the dashboard
-      Robot.dashboard.log("LED State", String.format("#%02x%02x%02x", dashboardColor.r, dashboardColor.g, dashboardColor.b));
+      Telemetry.getTable("LED").log("LED State", String.format("#%02x%02x%02x", dashboardColor.r, dashboardColor.g, dashboardColor.b));
     }
   }
 }

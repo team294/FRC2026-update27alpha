@@ -18,7 +18,7 @@ public class IntakeRollerSetPercent extends Command {
   private double percent = 0.0;
   private boolean endImmediately, fromElastic;
 
-  private TunableDouble percentInput = Tunables.addDouble(INTAKE_ROLLER_CMD_SET_PERCENT_INPUT.value, 0.0);
+  private static final TunableDouble percentInput = Tunables.addDouble(INTAKE_ROLLER_CMD_SET_PERCENT_INPUT.value, 0.0);
 
   /**
    * Sets the percent output of the intakeDeployMotor FROM ELASTIC.

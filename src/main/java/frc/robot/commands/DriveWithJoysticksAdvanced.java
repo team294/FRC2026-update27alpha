@@ -11,6 +11,7 @@ import org.wpilib.datalog.DataLog;
 import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.driverstation.Joystick;
 import org.wpilib.system.RobotController;
+import org.wpilib.telemetry.Telemetry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.command2.Command;
@@ -117,9 +118,9 @@ public class DriveWithJoysticksAdvanced extends Command {
     }
 
     if (DataLogUtil.isMyLogRotation(logRotationKey, RotationWhenDisabled.kNone)) {
-      Robot.dashboard.log("Joystick Left-Y", fwdVelocity);
-      Robot.dashboard.log("Joystick Left-X", leftVelocity);
-      Robot.dashboard.log("Joystick Right-X", turnRate);
+      Telemetry.getTable("DriveWithJoysticksAdvanced").log("Joystick Left-Y", fwdVelocity);
+      Telemetry.getTable("DriveWithJoysticksAdvanced").log("Joystick Left-X", leftVelocity);
+      Telemetry.getTable("DriveWithJoysticksAdvanced").log("Joystick Right-X", turnRate);
     }
 
     // Apply deadbands and limits for fine control
@@ -173,10 +174,10 @@ public class DriveWithJoysticksAdvanced extends Command {
         }
 
         if (DataLogUtil.isMyLogRotation(logRotationKey, RotationWhenDisabled.kNone)) {
-          Robot.dashboard.log("DriveWJAdv Goal Angle", Math.toDegrees(goalAngle));
-          Robot.dashboard.log("DriveWJAdv Robot Angle", Math.toDegrees(curRobotAngle));
-          Robot.dashboard.log("DriveWJAdv Angle Error", Math.toDegrees(angleError));
-          Robot.dashboard.log("DriveWJAdv In Tolerance", angleInTolerance);
+          Telemetry.getTable("DriveWithJoysticksAdvanced").log("DriveWJAdv Goal Angle", Math.toDegrees(goalAngle));
+          Telemetry.getTable("DriveWithJoysticksAdvanced").log("DriveWJAdv Robot Angle", Math.toDegrees(curRobotAngle));
+          Telemetry.getTable("DriveWithJoysticksAdvanced").log("DriveWJAdv Angle Error", Math.toDegrees(angleError));
+          Telemetry.getTable("DriveWithJoysticksAdvanced").log("DriveWJAdv In Tolerance", angleInTolerance);
         }
         turnRate = nextTurnRate;
       } else {

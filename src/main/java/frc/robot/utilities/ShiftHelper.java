@@ -4,6 +4,7 @@ import static frc.robot.Constants.ElasticKeyConstants.ElasticKey.*;
 
 import org.wpilib.driverstation.MatchState;
 import org.wpilib.system.Timer;
+import org.wpilib.telemetry.Telemetry;
 
 import frc.robot.Robot;
 import frc.robot.utilities.DataLogUtil.RotationWhenDisabled;
@@ -77,10 +78,10 @@ public class ShiftHelper {
 
     public void periodic() {
         if (DataLogUtil.isMyLogRotation(logRotationKey, RotationWhenDisabled.kNormal)) {
-            Robot.dashboard.log(TELEOP_TIMER.value, Math.max(140.0 - teleopTimer.get(), 0));
-            Robot.dashboard.log(SHIFT_TIMER.value, timeLeftInShiftSeconds());
-            Robot.dashboard.log(IS_BLUE_SHIFT.value, isCurrentShiftBlue());
-            Robot.dashboard.log(IS_YOUR_SHIFT.value, isCurrentShiftYours());
+            Telemetry.getTable("ShiftHelper").log(TELEOP_TIMER.value, Math.max(140.0 - teleopTimer.get(), 0));
+            Telemetry.getTable("ShiftHelper").log(SHIFT_TIMER.value, timeLeftInShiftSeconds());
+            Telemetry.getTable("ShiftHelper").log(IS_BLUE_SHIFT.value, isCurrentShiftBlue());
+            Telemetry.getTable("ShiftHelper").log(IS_YOUR_SHIFT.value, isCurrentShiftYours());
         }
     }
 }

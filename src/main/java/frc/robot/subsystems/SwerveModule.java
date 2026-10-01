@@ -25,6 +25,7 @@ import org.wpilib.datalog.DataLog;
 import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.system.RobotController;
+import org.wpilib.telemetry.Telemetry;
 
 import frc.robot.Constants.Ports;
 import frc.robot.Constants.SwerveConstants;
@@ -633,11 +634,11 @@ public class SwerveModule {
    * Updates relevant variables on Elastic.
    */
   public void updateElastic() {
-    Robot.dashboard.log(buildString("Swerve FXangle ", swName), MathBCR.normalizeAngle(getTurningEncoderDegrees()));
-    Robot.dashboard.log(buildString("Swerve CCangle ", swName), getCanCoderDegrees());
-    Robot.dashboard.log(buildString("Swerve FXangle dps", swName), getTurningEncoderVelocityDPS());
-    Robot.dashboard.log(buildString("Swerve distance", swName), getDriveEncoderMeters());
-    Robot.dashboard.log(buildString("Swerve drive temp ", swName), getDriveTemp());
+    Telemetry.getTable("SwerveModule").log(buildString("Swerve FXangle ", swName), MathBCR.normalizeAngle(getTurningEncoderDegrees()));
+    Telemetry.getTable("SwerveModule").log(buildString("Swerve CCangle ", swName), getCanCoderDegrees());
+    Telemetry.getTable("SwerveModule").log(buildString("Swerve FXangle dps", swName), getTurningEncoderVelocityDPS());
+    Telemetry.getTable("SwerveModule").log(buildString("Swerve distance", swName), getDriveEncoderMeters());
+    Telemetry.getTable("SwerveModule").log(buildString("Swerve drive temp ", swName), getDriveTemp());
   }
 
   /**
