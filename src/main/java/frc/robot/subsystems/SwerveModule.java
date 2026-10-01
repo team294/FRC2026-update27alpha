@@ -29,7 +29,6 @@ import org.wpilib.telemetry.Telemetry;
 
 import frc.robot.Constants.Ports;
 import frc.robot.Constants.SwerveConstants;
-import frc.robot.Robot;
 import frc.robot.utilities.*;
 
 import static frc.robot.utilities.StringUtil.*;

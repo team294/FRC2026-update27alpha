@@ -16,7 +16,6 @@ import org.wpilib.driverstation.Alliance;
 import org.wpilib.tunable.Selectable;
 import org.wpilib.tunable.Tunables;
 
-import frc.robot.Robot;
 import frc.robot.utilities.DataLogUtil.RotationWhenDisabled;
 
 public class AllianceSelection {

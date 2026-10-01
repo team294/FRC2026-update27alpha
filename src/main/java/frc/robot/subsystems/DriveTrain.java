@@ -47,7 +47,6 @@ import static frc.robot.Constants.DriveConstants.*;
 import frc.robot.Constants.Ports;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.Robot;
 import frc.robot.commands.DriveStop;
 import frc.robot.utilities.*;
 import frc.robot.utilities.DataLogUtil.RotationWhenDisabled;

@@ -6,7 +6,6 @@ import org.wpilib.driverstation.MatchState;
 import org.wpilib.system.Timer;
 import org.wpilib.telemetry.Telemetry;
 
-import frc.robot.Robot;
 import frc.robot.utilities.DataLogUtil.RotationWhenDisabled;
 
 import org.wpilib.driverstation.Alliance;

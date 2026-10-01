@@ -14,7 +14,6 @@ import org.wpilib.telemetry.Telemetry;
 
 import frc.robot.Constants.*;
 import frc.robot.Constants.LEDConstants.Animations;
-import frc.robot.Robot;
 import frc.robot.utilities.*;
 import frc.robot.utilities.DataLogUtil.RotationWhenDisabled;
 

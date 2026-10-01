@@ -35,7 +35,6 @@ import org.wpilib.command2.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.IntakeConstants.IntakeDeployAngle;
 import frc.robot.Constants.Ports;
-import frc.robot.Robot;
 import frc.robot.utilities.DataLogUtil;
 // import frc.robot.utilities.LEDEventUtil;
 import frc.robot.utilities.Loggable;

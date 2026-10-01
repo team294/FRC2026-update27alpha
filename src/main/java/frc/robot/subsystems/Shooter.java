@@ -37,7 +37,6 @@ import org.wpilib.command2.SubsystemBase;
 
 import frc.robot.Constants.Ports;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.Robot;
 import frc.robot.utilities.DataLogUtil;
 import frc.robot.utilities.Loggable;
 import frc.robot.utilities.MathBCR;

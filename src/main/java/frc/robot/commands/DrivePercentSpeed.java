@@ -14,7 +14,6 @@ import org.wpilib.tunable.Tunables;
 import org.wpilib.command2.Command;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.utilities.DataLogUtil;
-import frc.robot.Robot;
 
 public class DrivePercentSpeed extends Command {
   private DriveTrain driveTrain;

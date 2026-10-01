@@ -11,7 +11,6 @@ import org.wpilib.preferences.Preferences;
 import org.wpilib.telemetry.Telemetry;
 
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Robot;
 
 /**
  * Utility to handle all stored robot preferences.

@@ -33,7 +33,6 @@ import frc.robot.utilities.Wait;
 import frc.robot.utilities.DataLogUtil.RotationWhenDisabled;
 import frc.robot.Constants.*;
 import frc.robot.Constants.TurretConstants.TurretAngle;
-import frc.robot.Robot;
 
 import static frc.robot.Constants.ElasticKeyConstants.ElasticKey.*;
 

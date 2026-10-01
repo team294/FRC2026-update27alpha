@@ -12,7 +12,6 @@ import org.wpilib.tunable.Tunables;
 import org.wpilib.command2.*;
 
 import frc.robot.Constants.EndType;
-import frc.robot.Robot;
 import frc.robot.Constants.AutoConstants.BallPickupTrajType;
 import frc.robot.Constants.AutoConstants.AutoEndType;
 import frc.robot.Constants.AutoConstants.ReturnToAllianceType;

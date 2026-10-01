@@ -30,7 +30,6 @@ import org.wpilib.telemetry.Telemetry;
 import org.wpilib.command2.SubsystemBase;
 
 import frc.robot.Constants.Ports;
-import frc.robot.Robot;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.ClimberConstants.ClimberLimit;
 import frc.robot.Constants.ClimberConstants.ClimberPosition;

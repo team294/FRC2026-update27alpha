@@ -32,7 +32,6 @@ import org.wpilib.command2.SubsystemBase;
 
 import frc.robot.Constants.CANRangeConstants;
 import frc.robot.Constants.Ports;
-import frc.robot.Robot;
 import frc.robot.Constants.FeederConstants.SpindexerConstants;
 import frc.robot.Constants.FeederConstants.UptakeConstants;
 import frc.robot.utilities.DataLogUtil;

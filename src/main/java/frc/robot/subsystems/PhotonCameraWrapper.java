@@ -17,7 +17,6 @@ import org.wpilib.telemetry.Telemetry;
 import org.wpilib.command2.SubsystemBase;
 
 import frc.robot.Constants.VisionConstants;
-import frc.robot.Robot;
 import frc.robot.utilities.DataLogUtil;
 import frc.robot.utilities.RobotPreferences;
 import frc.robot.utilities.StringUtil;
