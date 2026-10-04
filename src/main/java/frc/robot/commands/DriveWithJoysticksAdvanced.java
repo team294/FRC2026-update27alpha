@@ -11,6 +11,8 @@ import org.wpilib.datalog.DataLog;
 import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.driverstation.Joystick;
 import org.wpilib.system.RobotController;
+import org.wpilib.telemetry.Telemetry;
+import org.wpilib.telemetry.TelemetryTable;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.command2.Command;
@@ -18,7 +20,6 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.TrajectoryConstants;
-import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.DriveTrain.DriveType;
 import frc.robot.utilities.AllianceSelection;
@@ -32,7 +33,9 @@ public class DriveWithJoysticksAdvanced extends Command {
   private final Joystick rightJoystick;
   private final AllianceSelection allianceSelection;
   private final DriveTrain driveTrain;
-  
+
+  private static final TelemetryTable dashboard = Telemetry.getTable("DriveWithJoysticksAdvanced");
+
   private ProfiledPIDController turnRateController;
   private boolean firstInDeadband, firstCorrecting;
   private boolean stopped;                    // Joysticks are all in deadband, and robot has turned to the desired heading. Stop the robot from moving/jittering until the driver moves a joystick.
@@ -117,9 +120,9 @@ public class DriveWithJoysticksAdvanced extends Command {
     }
 
     if (DataLogUtil.isMyLogRotation(logRotationKey, RotationWhenDisabled.kNone)) {
-      Robot.dashboard.log("Joystick Left-Y", fwdVelocity);
-      Robot.dashboard.log("Joystick Left-X", leftVelocity);
-      Robot.dashboard.log("Joystick Right-X", turnRate);
+      dashboard.log("Joystick Left-Y", fwdVelocity);
+      dashboard.log("Joystick Left-X", leftVelocity);
+      dashboard.log("Joystick Right-X", turnRate);
     }
 
     // Apply deadbands and limits for fine control
@@ -173,10 +176,10 @@ public class DriveWithJoysticksAdvanced extends Command {
         }
 
         if (DataLogUtil.isMyLogRotation(logRotationKey, RotationWhenDisabled.kNone)) {
-          Robot.dashboard.log("DriveWJAdv Goal Angle", Math.toDegrees(goalAngle));
-          Robot.dashboard.log("DriveWJAdv Robot Angle", Math.toDegrees(curRobotAngle));
-          Robot.dashboard.log("DriveWJAdv Angle Error", Math.toDegrees(angleError));
-          Robot.dashboard.log("DriveWJAdv In Tolerance", angleInTolerance);
+          dashboard.log("DriveWJAdv Goal Angle", Math.toDegrees(goalAngle));
+          dashboard.log("DriveWJAdv Robot Angle", Math.toDegrees(curRobotAngle));
+          dashboard.log("DriveWJAdv Angle Error", Math.toDegrees(angleError));
+          dashboard.log("DriveWJAdv In Tolerance", angleInTolerance);
         }
         turnRate = nextTurnRate;
       } else {

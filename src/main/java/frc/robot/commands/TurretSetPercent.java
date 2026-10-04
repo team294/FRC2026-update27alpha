@@ -18,7 +18,7 @@ public class TurretSetPercent extends Command {
   private double percent;
   private final boolean fromElastic;
 
-  private TunableDouble percentInput = Tunables.addDouble(TURRET_CMD_SET_PERCENT_INPUT.value, 0.0);
+  private static final TunableDouble percentInput = Tunables.addDouble(TURRET_CMD_SET_PERCENT_INPUT.value, 0.0);
 
   /**
    * Set turret percent output using a value from Elastic.

@@ -22,7 +22,7 @@ public class ClimberSetPosition extends Command {
   private double targetPosition;
   private final boolean fromElastic;
 
-  private TunableDouble climberSetPositionInput = Tunables.addDouble(CLIMBER_CMD_SET_POSITION_INPUT.value, ClimberPosition.LOWER_LIMIT.value);
+  private static final TunableDouble climberSetPositionInput = Tunables.addDouble(CLIMBER_CMD_SET_POSITION_INPUT.value, ClimberPosition.LOWER_LIMIT.value);
 
   /**
    * Sets the target position for the Climber and attempts to move it to that position.

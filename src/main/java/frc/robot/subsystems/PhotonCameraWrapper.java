@@ -13,10 +13,11 @@ import org.wpilib.fields.Field;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.system.RobotController;
 import org.wpilib.system.Timer;
+import org.wpilib.telemetry.Telemetry;
+import org.wpilib.telemetry.TelemetryTable;
 import org.wpilib.command2.SubsystemBase;
 
 import frc.robot.Constants.VisionConstants;
-import frc.robot.Robot;
 import frc.robot.utilities.DataLogUtil;
 import frc.robot.utilities.RobotPreferences;
 import frc.robot.utilities.StringUtil;
@@ -36,6 +37,11 @@ public class PhotonCameraWrapper extends SubsystemBase {
   
   private String cameraName;
 
+  private Timer timeSinceStart = new Timer();
+
+  // Dashboard table
+  private final TelemetryTable dashboard = Telemetry.getTable("PhotonCameraWrapper");
+
   // Create Data Log Entries
   private final DataLog log = DataLogManager.getLog();
   private final StructLogEntry<Pose2d> dLogEstPose2D;
@@ -43,8 +49,6 @@ public class PhotonCameraWrapper extends SubsystemBase {
   private final BooleanLogEntry dLogTagPresent;
   private boolean priorConnected, priorTagPresent;
   private boolean recordedStickyFault = false;
-
-  private Timer timeSinceStart = new Timer();
 
 
   /**
@@ -77,7 +81,7 @@ public class PhotonCameraWrapper extends SubsystemBase {
 
     priorConnected = photonCamera.isConnected();
     dLogConnected.append(priorConnected, timeNow);
-    Robot.dashboard.log(StringUtil.buildString("PhotonVision ", cameraName, " Connected"), priorConnected);
+    dashboard.log(StringUtil.buildString("PhotonVision ", cameraName, " Connected"), priorConnected);
 
     priorTagPresent = false;
     dLogTagPresent.append(priorTagPresent, timeNow);
@@ -211,7 +215,7 @@ public class PhotonCameraWrapper extends SubsystemBase {
       if (isConnected != priorConnected) {
         // only write to datalog if this value has changed (saves space in the log)
         dLogConnected.append(isConnected, timeNow);
-        Robot.dashboard.log(StringUtil.buildString("PhotonVision ", cameraName, " Connected"), isConnected);
+        dashboard.log(StringUtil.buildString("PhotonVision ", cameraName, " Connected"), isConnected);
         priorConnected = isConnected;
       }
   }

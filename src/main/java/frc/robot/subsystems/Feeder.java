@@ -27,11 +27,12 @@ import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.driverstation.RobotState;
 import org.wpilib.system.RobotController;
+import org.wpilib.telemetry.Telemetry;
+import org.wpilib.telemetry.TelemetryTable;
 import org.wpilib.command2.SubsystemBase;
 
 import frc.robot.Constants.CANRangeConstants;
 import frc.robot.Constants.Ports;
-import frc.robot.Robot;
 import frc.robot.Constants.FeederConstants.SpindexerConstants;
 import frc.robot.Constants.FeederConstants.UptakeConstants;
 import frc.robot.utilities.DataLogUtil;
@@ -103,7 +104,10 @@ public class Feeder extends SubsystemBase implements Loggable {
   private VelocityVoltage uptakeVelocityControl = new VelocityVoltage(0.0).withEnableFOC(false);
   private VelocityVoltage spindexerVelocityControl = new VelocityVoltage(0.0).withEnableFOC(false);
 
-  // DataLog
+  // Dashboard table
+  private final TelemetryTable dashboard = Telemetry.getTable("Feeder");
+
+  // DataLog entries
   private final DataLog log = DataLogManager.getLog();
   private final DoubleLogEntry dLogUptakeTemp = new DoubleLogEntry(log, "/Uptake/Temperature");
   private final DoubleLogEntry dLogUptakeCurrent = new DoubleLogEntry(log, "/Uptake/Current");
@@ -549,19 +553,19 @@ public class Feeder extends SubsystemBase implements Loggable {
     if (DataLogUtil.isMyLogRotation(logRotationKey, RotationWhenDisabled.kNormal)) {
       checkForFaultConditions();
 
-      Robot.dashboard.log(UPTAKE_RPM.value, getUptakeMotorVelocity());
-      Robot.dashboard.log(UPTAKE_TARGET_RPM.value, uptakeSetpointRPM);
-      Robot.dashboard.log(UPTAKE_TEMP.value, uptakeTemp.refresh().getValueAsDouble());
+      dashboard.log(UPTAKE_RPM.value, getUptakeMotorVelocity());
+      dashboard.log(UPTAKE_TARGET_RPM.value, uptakeSetpointRPM);
+      dashboard.log(UPTAKE_TEMP.value, uptakeTemp.refresh().getValueAsDouble());
 
-      Robot.dashboard.log(SPINDEXER_RPM.value, getSpindexerVelocity());
-      Robot.dashboard.log(SPINDEXER_TARGET_RPM.value, spindexerSetpointRPM);
-      Robot.dashboard.log(SPINDEXER_TEMP.value, spindexerTemp.refresh().getValueAsDouble());
+      dashboard.log(SPINDEXER_RPM.value, getSpindexerVelocity());
+      dashboard.log(SPINDEXER_TARGET_RPM.value, spindexerSetpointRPM);
+      dashboard.log(SPINDEXER_TEMP.value, spindexerTemp.refresh().getValueAsDouble());
 
 
-      Robot.dashboard.log("Uptake Entry Detected Distance", getDistance(1));
-      Robot.dashboard.log("Uptake Entry Triggered?", isDetected(1));
-      Robot.dashboard.log("Uptake Exit Detected Distance", getDistance(0));
-      Robot.dashboard.log("Uptake Exit Triggered?", isDetected(0));
+      dashboard.log("Uptake Entry Detected Distance", getDistance(1));
+      dashboard.log("Uptake Entry Triggered?", isDetected(1));
+      dashboard.log("Uptake Exit Detected Distance", getDistance(0));
+      dashboard.log("Uptake Exit Triggered?", isDetected(0));
     }    
   }
 }

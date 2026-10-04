@@ -36,10 +36,10 @@ public class DriveStraight extends Command {
   private Translation2d startLocation;
   private SwerveModuleVelocity[] desiredVelocities;
 
-  private TunableDouble targetDistInput = Tunables.addDouble("DriveStraight Manual Target Dist", 2);
-  private TunableDouble targetAngleInput = Tunables.addDouble("DriveStraight Manual Angle", 0);
-  private TunableDouble targetMaxVelInput = Tunables.addDouble("DriveStraight Manual MaxVel", 0.5 * SwerveConstants.kMaxSpeedMetersPerSecond);
-  private TunableDouble targetMaxAccelInput = Tunables.addDouble("DriveStraight Manual MaxAccel", 0.5 * SwerveConstants.kMaxAccelerationMetersPerSecondSquare);
+  private static final TunableDouble targetDistInput = Tunables.addDouble("DriveStraight Manual Target Dist", 2);
+  private static final TunableDouble targetAngleInput = Tunables.addDouble("DriveStraight Manual Angle", 0);
+  private static final TunableDouble targetMaxVelInput = Tunables.addDouble("DriveStraight Manual MaxVel", 0.5 * SwerveConstants.kMaxSpeedMetersPerSecond);
+  private static final TunableDouble targetMaxAccelInput = Tunables.addDouble("DriveStraight Manual MaxAccel", 0.5 * SwerveConstants.kMaxAccelerationMetersPerSecondSquare);
 
   private boolean isOpenLoop;
 

@@ -19,7 +19,7 @@ public class IntakeDeployCalibrateManual extends InstantCommand {
   private double angle;
   private boolean fromElastic;
 
-  private TunableDouble angleInput = Tunables.addDouble(INTAKE_DEPLOY_CMD_CALIBRATE_MANUAL_INPUT.value, IntakeDeployAngle.INTAKE.value);
+  private static final TunableDouble angleInput = Tunables.addDouble(INTAKE_DEPLOY_CMD_CALIBRATE_MANUAL_INPUT.value, IntakeDeployAngle.INTAKE.value);
 
   /**
    * Manually calibrate the intakeDeployMotor with a known current angle.

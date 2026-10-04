@@ -63,10 +63,10 @@ public class DriveToPose extends Command {
   private Translation2d goalDirection;      // Unit vector pointing from initial pose to goal pose = direction of travel
   private TrapezoidProfileBCR profile;      // Relative linear distance/speeds from initial pose to goal pose 
 
-  private TunableDouble xPosInput = Tunables.addDouble("DriveToPose XPos meters", 2);
-  private TunableDouble yPosInput = Tunables.addDouble("DriveToPose YPos meters", 2);
-  private TunableDouble rotationInput = Tunables.addDouble("DriveToPose Rot degrees", 0);
-  private TunableDouble velMaxInput = Tunables.addDouble("DriveToPose VelMax mps", 2);
+  private static final TunableDouble xPosInput = Tunables.addDouble("DriveToPose XPos meters", 2);
+  private static final TunableDouble yPosInput = Tunables.addDouble("DriveToPose YPos meters", 2);
+  private static final TunableDouble rotationInput = Tunables.addDouble("DriveToPose Rot degrees", 0);
+  private static final TunableDouble velMaxInput = Tunables.addDouble("DriveToPose VelMax mps", 2);
 
   private Translation2d curRobotTranslation;  // Current robot translation relative to initialTranslation
 

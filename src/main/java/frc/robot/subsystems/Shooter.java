@@ -32,14 +32,14 @@ import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.driverstation.RobotState;
 import org.wpilib.system.RobotController;
+import org.wpilib.telemetry.Telemetry;
+import org.wpilib.telemetry.TelemetryTable;
 import org.wpilib.command2.SubsystemBase;
 
 import frc.robot.Constants.Ports;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.Robot;
 import frc.robot.utilities.DataLogUtil;
 import frc.robot.utilities.Loggable;
-import frc.robot.utilities.MathBCR;
 import frc.robot.utilities.RobotPreferences;
 import frc.robot.utilities.DataLogUtil.RotationWhenDisabled;
 
@@ -106,6 +106,9 @@ public class Shooter extends SubsystemBase implements Loggable {
   private PIDController hood1PidController = new PIDController(ShooterConstants.hood1kP, ShooterConstants.hood1kI, ShooterConstants.hood1kD);
   private PIDController hood2PidController = new PIDController(ShooterConstants.hood2kP, ShooterConstants.hood2kI, ShooterConstants.hood2kD);
   
+  // Dashboard table
+  private final TelemetryTable dashboard = Telemetry.getTable("Shooter");
+
   // DataLog entries
   private final DataLog log = DataLogManager.getLog();
   private final DoubleLogEntry dLogShooter1Temp = new DoubleLogEntry(log, "/Shooter/Temperature1");
@@ -680,21 +683,21 @@ public class Shooter extends SubsystemBase implements Loggable {
     if (DataLogUtil.isMyLogRotation(logRotationKey, RotationWhenDisabled.kNormal)) {
       checkForFaultConditions();
 
-      Robot.dashboard.log(SHOOTER_LEFT_TEMP.value, shooter1Temperature.refresh().getValueAsDouble());
-      Robot.dashboard.log(SHOOTER_RIGHT_TEMP.value, shooter2Temperature.refresh().getValueAsDouble());
-      Robot.dashboard.log(SHOOTER_RPM.value, getShooterVelocity());
-      Robot.dashboard.log(SHOOTER_TARGET_RPM.value, shooterSetpointRPM);
+      dashboard.log(SHOOTER_LEFT_TEMP.value, shooter1Temperature.refresh().getValueAsDouble());
+      dashboard.log(SHOOTER_RIGHT_TEMP.value, shooter2Temperature.refresh().getValueAsDouble());
+      dashboard.log(SHOOTER_RPM.value, getShooterVelocity());
+      dashboard.log(SHOOTER_TARGET_RPM.value, shooterSetpointRPM);
       
-      Robot.dashboard.log(HOOD_LEFT_VOLTAGE.value, hoodMotor1.getMotorVoltage(true).getValueAsDouble());
-      Robot.dashboard.log(HOOD_RIGHT_VOLTAGE.value, hoodMotor2.getMotorVoltage(true).getValueAsDouble());
-      Robot.dashboard.log(HOOD_LEFT_ANALOG_VOLTAGE.value, getHoodAnalogVoltage(1));
-      Robot.dashboard.log(HOOD_RIGHT_ANALOG_VOLTAGE.value, getHoodAnalogVoltage(2));
-      Robot.dashboard.log(HOOD_LEFT_LENGTH.value, getHoodExtensionLength(1));
-      Robot.dashboard.log(HOOD_RIGHT_LENGTH.value, getHoodExtensionLength(2));
-      Robot.dashboard.log(HOOD_LEFT_ANGLE.value, getHoodAngle(1));
-      Robot.dashboard.log(HOOD_RIGHT_ANGLE.value, getHoodAngle(2));
-      Robot.dashboard.log(HOOD_ANGLE.value, getHoodAngle());
-      Robot.dashboard.log(HOOD_ANGLE_CURRENT_SETPOINT.value, hoodAngleSetpoint);
+      dashboard.log(HOOD_LEFT_VOLTAGE.value, hoodMotor1.getMotorVoltage(true).getValueAsDouble());
+      dashboard.log(HOOD_RIGHT_VOLTAGE.value, hoodMotor2.getMotorVoltage(true).getValueAsDouble());
+      dashboard.log(HOOD_LEFT_ANALOG_VOLTAGE.value, getHoodAnalogVoltage(1));
+      dashboard.log(HOOD_RIGHT_ANALOG_VOLTAGE.value, getHoodAnalogVoltage(2));
+      dashboard.log(HOOD_LEFT_LENGTH.value, getHoodExtensionLength(1));
+      dashboard.log(HOOD_RIGHT_LENGTH.value, getHoodExtensionLength(2));
+      dashboard.log(HOOD_LEFT_ANGLE.value, getHoodAngle(1));
+      dashboard.log(HOOD_RIGHT_ANGLE.value, getHoodAngle(2));
+      dashboard.log(HOOD_ANGLE.value, getHoodAngle());
+      dashboard.log(HOOD_ANGLE_CURRENT_SETPOINT.value, hoodAngleSetpoint);
     }
   }
 }

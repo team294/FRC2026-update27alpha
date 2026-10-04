@@ -6,9 +6,9 @@ package frc.robot.commands;
 
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Translation2d;
+import org.wpilib.telemetry.Telemetry;
 import org.wpilib.command2.Command;
 import frc.robot.Constants.FieldConstants;
-import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Turret;
 import frc.robot.utilities.DataLogUtil;
@@ -67,7 +67,7 @@ public class TurretAutoAim extends Command {
       turret.setTurretAngle(turretTargetAngle);
     }
 
-    Robot.dashboard.log("Turret Distance To Blue Hub", turret.getTurretAbsolutePose(robotPose2d).getTranslation().getDistance(FieldConstants.hubPositionBlue));
+    Telemetry.getTable("TurretAutoAim").log("Turret Distance To Blue Hub", turret.getTurretAbsolutePose(robotPose2d).getTranslation().getDistance(FieldConstants.hubPositionBlue));
   }
 
   // Returns true when the command should end.

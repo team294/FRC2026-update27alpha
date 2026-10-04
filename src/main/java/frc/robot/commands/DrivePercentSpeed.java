@@ -8,12 +8,12 @@ import com.ctre.phoenix6.SignalLogger;
 
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.system.Timer;
+import org.wpilib.telemetry.Telemetry;
 import org.wpilib.tunable.TunableDouble;
 import org.wpilib.tunable.Tunables;
 import org.wpilib.command2.Command;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.utilities.DataLogUtil;
-import frc.robot.Robot;
 
 public class DrivePercentSpeed extends Command {
   private DriveTrain driveTrain;
@@ -24,9 +24,9 @@ public class DrivePercentSpeed extends Command {
   private Pose2d poseStart;
   private double curDistance;
 
-  private TunableDouble angleFacingInput = Tunables.addDouble("DrivePercentSpeed angle", 0.0);
-  private TunableDouble percentSpeedInput = Tunables.addDouble("DrivePercentSpeed percent", 0.2);
-  private TunableDouble maxDistanceInput = Tunables.addDouble("DrivePercentSpeed maxDistance", 0.0);
+  private static final TunableDouble angleFacingInput = Tunables.addDouble("DrivePercentSpeed angle", 0.0);
+  private static final TunableDouble percentSpeedInput = Tunables.addDouble("DrivePercentSpeed percent", 0.2);
+  private static final TunableDouble maxDistanceInput = Tunables.addDouble("DrivePercentSpeed maxDistance", 0.0);
 
   /**
    * Drives the robot straight at a fixed speed and stops after it travels a specified distance (or is canceled).
@@ -60,7 +60,7 @@ public class DrivePercentSpeed extends Command {
 
     addRequirements(driveTrain);
 
-    Robot.dashboard.log("DrivePercentSpeed curDistance", 0.0);
+    Telemetry.getTable("DrivePercentSpeed").log("DrivePercentSpeed curDistance", 0.0);
   }
 
   // Called when the command is initially scheduled.
@@ -91,7 +91,7 @@ public class DrivePercentSpeed extends Command {
   public void execute() {
     // DataLogUtil.writeMessage("DrivePercentSpeed: Execute");
     curDistance = driveTrain.getPose().relativeTo(poseStart).getTranslation().getNorm();
-    Robot.dashboard.log("DrivePercentSpeed curDistance", curDistance);
+    Telemetry.getTable("DrivePercentSpeed").log("DrivePercentSpeed curDistance", curDistance);
     
     driveTrain.setWheelFacings(angleFacing);
     if (timer.hasElapsed(1.0)) {

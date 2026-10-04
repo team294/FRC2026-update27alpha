@@ -18,7 +18,7 @@ public class SpindexerSetPercent extends Command {
   private double percent = 0.0;
   private boolean endImmediately, fromElastic;
 
-  private TunableDouble percentInput = Tunables.addDouble(SPINDEXER_CMD_SET_PERCENT_INPUT.value, 0.0);
+  private static final TunableDouble percentInput = Tunables.addDouble(SPINDEXER_CMD_SET_PERCENT_INPUT.value, 0.0);
 
   /**
    * Sets the percent output of the spindexerMotor FROM ELASTIC.

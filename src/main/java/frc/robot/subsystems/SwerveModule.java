@@ -25,10 +25,11 @@ import org.wpilib.datalog.DataLog;
 import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.system.RobotController;
+import org.wpilib.telemetry.Telemetry;
+import org.wpilib.telemetry.TelemetryTable;
 
 import frc.robot.Constants.Ports;
 import frc.robot.Constants.SwerveConstants;
-import frc.robot.Robot;
 import frc.robot.utilities.*;
 
 import static frc.robot.utilities.StringUtil.*;
@@ -88,6 +89,9 @@ public class SwerveModule {
   private final SimpleMotorFeedforward driveFeedforward;
   private double priorDriveVelocity = 0;  // Last requested drive speed (m/sec)
   private boolean inVelocityMode = true;  // true = last drive request was velocity control (or stopped), false = last drive request was direct non-zero voltage control
+
+  // Dashboard table
+  private final TelemetryTable dashboard = Telemetry.getTable("SwerveModule");
 
   // Data logging variables
   private final DataLog log = DataLogManager.getLog();
@@ -633,11 +637,11 @@ public class SwerveModule {
    * Updates relevant variables on Elastic.
    */
   public void updateElastic() {
-    Robot.dashboard.log(buildString("Swerve FXangle ", swName), MathBCR.normalizeAngle(getTurningEncoderDegrees()));
-    Robot.dashboard.log(buildString("Swerve CCangle ", swName), getCanCoderDegrees());
-    Robot.dashboard.log(buildString("Swerve FXangle dps", swName), getTurningEncoderVelocityDPS());
-    Robot.dashboard.log(buildString("Swerve distance", swName), getDriveEncoderMeters());
-    Robot.dashboard.log(buildString("Swerve drive temp ", swName), getDriveTemp());
+    dashboard.log(buildString("Swerve FXangle ", swName), MathBCR.normalizeAngle(getTurningEncoderDegrees()));
+    dashboard.log(buildString("Swerve CCangle ", swName), getCanCoderDegrees());
+    dashboard.log(buildString("Swerve FXangle dps", swName), getTurningEncoderVelocityDPS());
+    dashboard.log(buildString("Swerve distance", swName), getDriveEncoderMeters());
+    dashboard.log(buildString("Swerve drive temp ", swName), getDriveTemp());
   }
 
   /**

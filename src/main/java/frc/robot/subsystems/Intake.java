@@ -29,16 +29,16 @@ import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.driverstation.RobotState;
 import org.wpilib.system.RobotController;
+import org.wpilib.telemetry.Telemetry;
+import org.wpilib.telemetry.TelemetryTable;
 import org.wpilib.command2.SubsystemBase;
 
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.IntakeConstants.IntakeDeployAngle;
 import frc.robot.Constants.Ports;
-import frc.robot.Robot;
 import frc.robot.utilities.DataLogUtil;
 // import frc.robot.utilities.LEDEventUtil;
 import frc.robot.utilities.Loggable;
-import frc.robot.utilities.MathBCR;
 import frc.robot.utilities.RobotPreferences;
 import frc.robot.utilities.Wait;
 import frc.robot.utilities.DataLogUtil.RotationWhenDisabled;
@@ -88,7 +88,10 @@ public class Intake extends SubsystemBase implements Loggable{
   private VoltageOut intakeDeployVoltageControl = new VoltageOut(0.0).withEnableFOC(false);
   private MotionMagicVoltage intakeDeployMMVoltageControl = new MotionMagicVoltage(0.0).withEnableFOC(false);
 
-  // DataLog
+  // Dashboard table
+  private final TelemetryTable dashboard = Telemetry.getTable("Intake");
+
+  // DataLog entries
   private final DataLog log = DataLogManager.getLog();
   private final DoubleLogEntry dLogRollerTemp = new DoubleLogEntry(log, "/IntakeRoller/Temperature");
   private final DoubleLogEntry dLogRollerCurrent = new DoubleLogEntry(log, "/IntakeRoller/Current");
@@ -626,16 +629,16 @@ public class Intake extends SubsystemBase implements Loggable{
     }
 
     if (DataLogUtil.isMyLogRotation(logRotationKey, RotationWhenDisabled.kNormal)) {
-      Robot.dashboard.log(INTAKE_DEPLOY_IS_CANCODER_CONNECTED.value, isIntakeDeployCANcoderConnected());
-      Robot.dashboard.log(INTAKE_DEPLOY_IS_CALIBRATED.value, isIntakeDeployCalibrated());
-      Robot.dashboard.log(INTAKE_DEPLOY_TEMP.value, intakeRollerTemp.refresh().getValueAsDouble());    
-      Robot.dashboard.log(INTAKE_DEPLOY_CANCODER_RAW_ROTATIONS.value, getIntakeDeployCANcoderRotationsRaw());
-      Robot.dashboard.log(INTAKE_DEPLOY_ANGLE.value, getIntakeDeployAngle());
-      Robot.dashboard.log(INTAKE_DEPLOY_TARGET_ANGLE.value, getIntakeDeployTargetAngle());
+      dashboard.log(INTAKE_DEPLOY_IS_CANCODER_CONNECTED.value, isIntakeDeployCANcoderConnected());
+      dashboard.log(INTAKE_DEPLOY_IS_CALIBRATED.value, isIntakeDeployCalibrated());
+      dashboard.log(INTAKE_DEPLOY_TEMP.value, intakeRollerTemp.refresh().getValueAsDouble());    
+      dashboard.log(INTAKE_DEPLOY_CANCODER_RAW_ROTATIONS.value, getIntakeDeployCANcoderRotationsRaw());
+      dashboard.log(INTAKE_DEPLOY_ANGLE.value, getIntakeDeployAngle());
+      dashboard.log(INTAKE_DEPLOY_TARGET_ANGLE.value, getIntakeDeployTargetAngle());
 
-      Robot.dashboard.log(INTAKE_ROLLER_TEMP.value, intakeRollerTemp.refresh().getValueAsDouble());
-      Robot.dashboard.log(INTAKE_ROLLER_CURRENT.value, rollerAmps);
-      Robot.dashboard.log(INTAKE_ROLLER_RPM.value, getIntakeRollerVelocity());
+      dashboard.log(INTAKE_ROLLER_TEMP.value, intakeRollerTemp.refresh().getValueAsDouble());
+      dashboard.log(INTAKE_ROLLER_CURRENT.value, rollerAmps);
+      dashboard.log(INTAKE_ROLLER_RPM.value, getIntakeRollerVelocity());
     }
 
   }

@@ -26,7 +26,7 @@ public class ShooterSetVelocity extends Command {
   private boolean fromElastic;
   private int counter;
 
-  private TunableDouble velocityInput = Tunables.addDouble(SHOOTER_CMD_SET_VELOCITY_INPUT.value, 0.0);
+  private static final TunableDouble velocityInput = Tunables.addDouble(SHOOTER_CMD_SET_VELOCITY_INPUT.value, 0.0);
 
   private DoubleSupplier velocityGetter;
   private boolean useGetter = false;

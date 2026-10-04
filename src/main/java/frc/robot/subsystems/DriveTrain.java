@@ -23,6 +23,8 @@ import org.wpilib.datalog.StructLogEntry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.driverstation.RobotState;
 import org.wpilib.system.RobotController;
+import org.wpilib.telemetry.Telemetry;
+import org.wpilib.telemetry.TelemetryTable;
 import org.wpilib.tunable.Tunables;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.smartdashboard.Field2d;
@@ -45,7 +47,6 @@ import static frc.robot.Constants.DriveConstants.*;
 import frc.robot.Constants.Ports;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.Robot;
 import frc.robot.commands.DriveStop;
 import frc.robot.utilities.*;
 import frc.robot.utilities.DataLogUtil.RotationWhenDisabled;
@@ -79,6 +80,10 @@ public class DriveTrain extends SubsystemBase implements Loggable {
   private double yawZero = 0.0;
   private double pitchZero = 0.0;
 
+  // Dashboard table
+  private final TelemetryTable dashboard = Telemetry.getTable("DriveTrain");
+
+  // DataLog entries
   private final DataLog log = DataLogManager.getLog();
   private final StructLogEntry<Pose2d> dLogOdometryPose2D = StructLogEntry.create(log, "/DrivePathFollower/curPose2d", Pose2d.struct);
   private final DoubleLogEntry dLogGyroAngle = new DoubleLogEntry(log, "/DriveTrain/GyroAngle");
@@ -173,7 +178,8 @@ public class DriveTrain extends SubsystemBase implements Loggable {
     this.allianceSelection.addAllianceChangeNotification(this::resetPoseForAlliance);
 
     // Create field object on Elastic
-    Tunables.publish("Field", field2d);
+    // Tunables.publish("Field", field2d);
+    dashboard.log("Field", field2d);            //TODO Fix - does this work?
 
     // Prime the DataLog to reduce delay when first enabling the robot
     updateDriveLog(true);
@@ -291,7 +297,7 @@ public class DriveTrain extends SubsystemBase implements Loggable {
     swerveBackLeft.setMotorModeCoast(setCoast);
     swerveBackRight.setMotorModeCoast(setCoast);
 
-    Robot.dashboard.log("Drive Mode", setCoast ? "Coast" : "Brake");
+    dashboard.log("Drive Mode", setCoast ? "Coast" : "Brake");
   }
 
   /**
@@ -696,24 +702,24 @@ public class DriveTrain extends SubsystemBase implements Loggable {
 
       ChassisVelocities robotVelocities = getRobotVelocities();
 
-      // Robot.dashboard.log("Drive Average Dist in Meters", Units.inchesToMeters(getAverageDistance()));
-      Robot.dashboard.log("Drive Speed", speedAvg);
-      Robot.dashboard.log("Drive X Velocity", robotVelocities.vx);
-      Robot.dashboard.log("Drive Y Velocity", robotVelocities.vy);
-      Robot.dashboard.log("Drive isGyroReading", isGyroReading());
-      Robot.dashboard.log("Drive isBrakeMode", !isDriveModeCoast());
-      Robot.dashboard.log("Drive Raw Gyro", getGyroRaw());
-      Robot.dashboard.log("Drive Gyro Rotation", getGyroRotation());
-      Robot.dashboard.log("Drive AngVel", getAngularVelocity());
-      Robot.dashboard.log("Drive Pitch", getGyroPitch());
+      // dashboard.log("Drive Average Dist in Meters", Units.inchesToMeters(getAverageDistance()));
+      dashboard.log("Drive Speed", speedAvg);
+      dashboard.log("Drive X Velocity", robotVelocities.vx);
+      dashboard.log("Drive Y Velocity", robotVelocities.vy);
+      dashboard.log("Drive isGyroReading", isGyroReading());
+      dashboard.log("Drive isBrakeMode", !isDriveModeCoast());
+      dashboard.log("Drive Raw Gyro", getGyroRaw());
+      dashboard.log("Drive Gyro Rotation", getGyroRotation());
+      dashboard.log("Drive AngVel", getAngularVelocity());
+      dashboard.log("Drive Pitch", getGyroPitch());
       
       // Position from poseEstimator (helpful for auto routines)
       Pose2d pose = poseEstimator.getEstimatedPosition();
-      Robot.dashboard.log("Drive Odometry X", pose.getTranslation().getX());
-      Robot.dashboard.log("Drive Odometry Y", pose.getTranslation().getY());
-      Robot.dashboard.log("Drive Odometry Theta", pose.getRotation().getDegrees());
+      dashboard.log("Drive Odometry X", pose.getTranslation().getX());
+      dashboard.log("Drive Odometry Y", pose.getTranslation().getY());
+      dashboard.log("Drive Odometry Theta", pose.getRotation().getDegrees());
 
-      Robot.dashboard.log("Vision Updating Odometry", useVisionForOdometry);
+      dashboard.log("Vision Updating Odometry", useVisionForOdometry);
 
       // TODO This code creates errors after running for a few minutes. Need to debug.
       // SmartDashboard.putData("Swerve Drive", new Sendable() {
@@ -744,7 +750,7 @@ public class DriveTrain extends SubsystemBase implements Loggable {
       swerveBackRight.updateElastic();
 
       // Values for bug fixing
-      Robot.dashboard.log("Drive Bus Volt", swerveFrontLeft.getDriveBusVoltage());
+      dashboard.log("Drive Bus Volt", swerveFrontLeft.getDriveBusVoltage());
     }
   }
 
@@ -847,14 +853,14 @@ public class DriveTrain extends SubsystemBase implements Loggable {
         Optional<EstimatedRobotPose> result = camera.getEstimatedGlobalPose(poseEstimator.getEstimatedPosition(), camResult);
         if (result.isPresent()) {
           EstimatedRobotPose camPose = result.get();
-          Robot.dashboard.log("Vision " + camera.getName() + " X", camPose.estimatedPose.toPose2d().getX());
-          Robot.dashboard.log("Vision " + camera.getName() + " Y", camPose.estimatedPose.toPose2d().getY());
-          Robot.dashboard.log("Vision " + camera.getName() + " rot", camPose.estimatedPose.toPose2d().getRotation().getDegrees());
+          dashboard.log("Vision " + camera.getName() + " X", camPose.estimatedPose.toPose2d().getX());
+          dashboard.log("Vision " + camera.getName() + " Y", camPose.estimatedPose.toPose2d().getY());
+          dashboard.log("Vision " + camera.getName() + " rot", camPose.estimatedPose.toPose2d().getRotation().getDegrees());
 
           // Only run camera updates for pose estimator if useVisionForOdometry is true, camera has target(s), and the targets are not ambiguous
           if (useVisionForOdometry && camResult.hasTargets() && camResult.getBestTarget().getPoseAmbiguity() <= 0.3) {
             PhotonTrackedTarget bestTarget = camResult.getBestTarget();
-            Robot.dashboard.log("Vision " + camera.getName() + " AprilTag", bestTarget.getFiducialId());
+            dashboard.log("Vision " + camera.getName() + " AprilTag", bestTarget.getFiducialId());
 
             // 2025 version:
             // if (bestTarget.getBestCameraToTarget().getX() < 1.5) {
@@ -867,13 +873,13 @@ public class DriveTrain extends SubsystemBase implements Loggable {
               camera.getVisionMatrix(result, camResult.getTargets()));
 
           } else {
-            Robot.dashboard.log("Vision " + camera.getName() + " AprilTag", -3);
+            dashboard.log("Vision " + camera.getName() + " AprilTag", -3);
           }
         } else {
-          Robot.dashboard.log("Vision " + camera.getName() + " AprilTag", -2);
+          dashboard.log("Vision " + camera.getName() + " AprilTag", -2);
         }
       } else {
-        Robot.dashboard.log("Vision " + camera.getName() + " AprilTag", -1);
+        dashboard.log("Vision " + camera.getName() + " AprilTag", -1);
       }
     }
     
@@ -883,5 +889,6 @@ public class DriveTrain extends SubsystemBase implements Loggable {
 
     // Place robot on field object
     field2d.setRobotPose(poseEstimator.getEstimatedPosition());
+    dashboard.log("Field", field2d);    //TODO test and fix!
   }  
 }

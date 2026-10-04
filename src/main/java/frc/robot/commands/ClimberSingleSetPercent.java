@@ -19,8 +19,8 @@ public class ClimberSingleSetPercent extends Command {
   private final boolean fromElastic;
   private double percent;
 
-  private TunableDouble climberLeftSetPercentInput = Tunables.addDouble(CLIMBER_CMD_SET_PERCENT_LEFT_INPUT.value, 0.0);
-  private TunableDouble climberRightSetPercentInput = Tunables.addDouble(CLIMBER_CMD_SET_PERCENT_RIGHT_INPUT.value, 0.0);
+  private static final TunableDouble climberLeftSetPercentInput = Tunables.addDouble(CLIMBER_CMD_SET_PERCENT_LEFT_INPUT.value, 0.0);
+  private static final TunableDouble climberRightSetPercentInput = Tunables.addDouble(CLIMBER_CMD_SET_PERCENT_RIGHT_INPUT.value, 0.0);
 
   /**
    * Set one climber side percent using Elastic input.  Command stops when 

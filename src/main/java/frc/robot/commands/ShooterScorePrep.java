@@ -37,8 +37,8 @@ public class ShooterScorePrep extends Command {
   private boolean selfCalculate = false;
   private boolean fromElastic = false;
 
-  private TunableDouble velocityInput = Tunables.addDouble(SHOOTER_CMD_SET_VELOCITY_INPUT.value, 0.0);
-  private TunableDouble angleInput = Tunables.addDouble(HOOD_CMD_SET_ANGLE_INPUT.value, ShooterConstants.hoodMinimumAngle);
+  private static final TunableDouble velocityInput = Tunables.addDouble(SHOOTER_CMD_SET_VELOCITY_INPUT.value, 0.0);
+  private static final TunableDouble angleInput = Tunables.addDouble(HOOD_CMD_SET_ANGLE_INPUT.value, ShooterConstants.hoodMinimumAngle);
 
   private int toleranceCounter = 0;
   private double distanceToTarget;
