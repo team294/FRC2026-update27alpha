@@ -23,11 +23,11 @@ import org.wpilib.system.DataLogManager;
 import org.wpilib.driverstation.RobotState;
 import org.wpilib.system.RobotController;
 import org.wpilib.telemetry.Telemetry;
+import org.wpilib.telemetry.TelemetryTable;
 import org.wpilib.command2.SubsystemBase;
 
 import frc.robot.utilities.DataLogUtil;
 import frc.robot.utilities.Loggable;
-import frc.robot.utilities.MathBCR;
 import frc.robot.utilities.RobotPreferences;
 import frc.robot.utilities.Wait;
 import frc.robot.utilities.DataLogUtil.RotationWhenDisabled;
@@ -85,6 +85,9 @@ public class Turret extends SubsystemBase implements Loggable {
   private final StatusSignal<MagnetHealthValue> canCoderGearMagnetHealth;
   private final StatusSignal<Angle> canCoderGearPosition; // CANcoder position, in CANcoder rotations
   private final StatusSignal<Angle> canCoderGearAbsPosition; // CANcoder position, in CANcoder rotations
+
+  // Dashboard table
+  private final TelemetryTable dashboard = Telemetry.getTable("Turret");
 
   // Create Data Log Entries
   private final DataLog log = DataLogManager.getLog();
@@ -370,7 +373,7 @@ public class Turret extends SubsystemBase implements Loggable {
       turretMotor.setControl(turretMMVoltageControl.withPosition(turretDegreesToEncoderRotations(angle)));
 
       dLogTurretTargetSet.append(angle);
-      Telemetry.getTable("Turret").log("Turret set raw rot", turretDegreesToEncoderRotations(angle));
+      dashboard.log("Turret set raw rot", turretDegreesToEncoderRotations(angle));
 
       targetAngle = angle;
     }
@@ -820,20 +823,20 @@ public class Turret extends SubsystemBase implements Loggable {
   public void periodic() {
 
     if (DataLogUtil.isMyLogRotation(logRotationKey, RotationWhenDisabled.kNormal)) {
-      Telemetry.getTable("Turret").log(TURRET_IS_CANCODER_CONNECTED.value, areBothCANcodersConnected());
-      Telemetry.getTable("Turret").log(TURRET_IS_CALIBRATED.value, turretCalibrated);
-      Telemetry.getTable("Turret").log(TURRET_IS_USING_CANCODER.value, usingBeltEncoder);
-      Telemetry.getTable("Turret").log(TURRET_CANCODER_BELT_RAW.value, getCANcoderRotationsRaw(1));
-      Telemetry.getTable("Turret").log(TURRET_CANCODER_GEAR_RAW.value, getCANcoderRotationsRaw(2));
-      Telemetry.getTable("Turret").log(TURRET_CANCODER_BELT_ABS.value, getCANcoderAbsRotationsRaw(1));
-      Telemetry.getTable("Turret").log(TURRET_CANCODER_GEAR_ABS.value, getCANcoderAbsRotationsRaw(2));
-      Telemetry.getTable("Turret").log(TURRET_ENCODER_RAW.value, getTurretEncoderRotationsRaw());
-      Telemetry.getTable("Turret").log(TURRET_ANGLE.value, getTurretEncoderDegrees());
-      Telemetry.getTable("Turret").log(TURRET_TARGET_ANGLE.value, getCurrentTurretTarget());
+      dashboard.log(TURRET_IS_CANCODER_CONNECTED.value, areBothCANcodersConnected());
+      dashboard.log(TURRET_IS_CALIBRATED.value, turretCalibrated);
+      dashboard.log(TURRET_IS_USING_CANCODER.value, usingBeltEncoder);
+      dashboard.log(TURRET_CANCODER_BELT_RAW.value, getCANcoderRotationsRaw(1));
+      dashboard.log(TURRET_CANCODER_GEAR_RAW.value, getCANcoderRotationsRaw(2));
+      dashboard.log(TURRET_CANCODER_BELT_ABS.value, getCANcoderAbsRotationsRaw(1));
+      dashboard.log(TURRET_CANCODER_GEAR_ABS.value, getCANcoderAbsRotationsRaw(2));
+      dashboard.log(TURRET_ENCODER_RAW.value, getTurretEncoderRotationsRaw());
+      dashboard.log(TURRET_ANGLE.value, getTurretEncoderDegrees());
+      dashboard.log(TURRET_TARGET_ANGLE.value, getCurrentTurretTarget());
 
-      Telemetry.getTable("Turret").log(TURRET_ADVANCED_ESTIMATION.value, calcTurretAngleFromEncodersAdvanced());
+      dashboard.log(TURRET_ADVANCED_ESTIMATION.value, calcTurretAngleFromEncodersAdvanced());
 
-      Telemetry.getTable("Turret").log("Turret Temp", turretTemp.refresh().getValueAsDouble());
+      dashboard.log("Turret Temp", turretTemp.refresh().getValueAsDouble());
     }
 
     if (fastLogging || DataLogUtil.isMyLogRotation(logRotationKey, RotationWhenDisabled.kSlow)) {

@@ -11,6 +11,7 @@ import com.ctre.phoenix6.controls.*;
 
 import org.wpilib.command2.SubsystemBase;
 import org.wpilib.telemetry.Telemetry;
+import org.wpilib.telemetry.TelemetryTable;
 
 import frc.robot.Constants.*;
 import frc.robot.Constants.LEDConstants.Animations;
@@ -33,6 +34,9 @@ public class LED extends SubsystemBase {
 
   public static AnimationColor dashboardColor = AnimationColor.NEUTRAL;
   private boolean lastStickyFaultPresentReading = false;
+
+  // Dashboard table
+  private final TelemetryTable dashboard = Telemetry.getTable("LED");
 
   /**
    * Creates the LED subsystem.
@@ -97,7 +101,7 @@ public class LED extends SubsystemBase {
       }
 
       // update LED state and match timer on the dashboard
-      Telemetry.getTable("LED").log("LED State", String.format("#%02x%02x%02x", dashboardColor.r, dashboardColor.g, dashboardColor.b));
+      dashboard.log("LED State", String.format("#%02x%02x%02x", dashboardColor.r, dashboardColor.g, dashboardColor.b));
     }
   }
 }

@@ -5,8 +5,6 @@
 package frc.robot;
 
 import org.wpilib.framework.TimedRobot;
-import org.wpilib.telemetry.Telemetry;
-import org.wpilib.telemetry.TelemetryTable;
 import org.wpilib.command2.Command;
 import org.wpilib.command2.CommandScheduler;
 
@@ -23,36 +21,11 @@ public class Robot extends TimedRobot {
 
   private final RobotContainer m_robotContainer;
 
-  public static final TelemetryTable dashboard = Telemetry.getTable("SmartDashboard");
-
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
   public Robot() {
-      /* roboRIO settings to optimize Java memory use:
-        echo "vm.overcommit_memory=1" >> /etc/sysctl.conf
-        echo "vm.vfs_cache_pressure=1000" >> /etc/sysctl.conf
-        echo "vm.swappiness=100" >> /etc/sysctl.conf
-        sync
-        power cycle the RIO
-
-      To restiore default settings, edit /etc/sysctl.conf to set the
-      following values:
-        vm.overcommit_memory=2
-        vm.vfs_cache_pressure=100
-        vm.swappiness=60
-        power cycle the RIO
-
-      To stop the web server to save memory:
-      /etc/init.d/systemWebServer stop; update-rc.d -f systemWebServer remove; sync
-      chmod a-x /usr/local/natinst/etc/init.d/systemWebServer; sync
-
-      To restart the web server in order to image the RIO:
-      chmod a+x /usr/local/natinst/etc/init.d/systemWebServer; sync
-      power cycle the RIO
-    */
-
     // Start Datalogger first!
     DataLogUtil.start();
 
