@@ -23,7 +23,7 @@ public class RaiseHoodAndClimber extends ParallelCommandGroup {
   */
   public RaiseHoodAndClimber(Climber climber, Shooter shooter) {
     addCommands(
-      new ClimberSetPosition(ClimberPosition.UNDER_TOWER, climber),
+      new ClimberSetPosition(ClimberPosition.UPPER_LIMIT, climber),
       new HoodSetAngle(ShooterConstants.hoodShootAngle, EndType.waitForSetPoint, shooter)
     );
   }
