@@ -178,9 +178,8 @@ public class DriveTrain extends SubsystemBase implements Loggable {
     this.allianceSelection.addAllianceChangeNotification(this::resetPoseForAlliance);
 
     // Create field object on Elastic
-    dashboard.log("Field", field2d);
     // Tunables.publish("Field", field2d);
-    //TODO test!
+    dashboard.log("Field", field2d);            //TODO Fix - does this work?
 
     // Prime the DataLog to reduce delay when first enabling the robot
     updateDriveLog(true);
@@ -890,7 +889,6 @@ public class DriveTrain extends SubsystemBase implements Loggable {
 
     // Place robot on field object
     field2d.setRobotPose(poseEstimator.getEstimatedPosition());
-    dashboard.log("Field", field2d);
-    //TODO test!
+    dashboard.log("Field", field2d);    //TODO test and fix!
   }  
 }
