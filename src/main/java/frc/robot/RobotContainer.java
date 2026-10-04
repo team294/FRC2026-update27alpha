@@ -334,7 +334,7 @@ public class RobotContainer {
     // prep for climbing
     xbPOVRight.onTrue(new ClimbPrepSequence(climber, shooter, turret, intake));
     
-    // raise climb to be extended, and prep hood for shooting   // 10/4/26 - climber now extends to upper limit instead of fitting under tower 
+    // raise climb to be extended, but fitting under tower, and prep hood for shooting
     xbPOVUp.onTrue(new RaiseHoodAndClimber(climber, shooter));
   }
 
