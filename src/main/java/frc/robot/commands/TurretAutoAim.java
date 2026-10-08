@@ -5,9 +5,14 @@
 package frc.robot.commands;
 
 import org.wpilib.math.geometry.Pose2d;
+import org.wpilib.math.geometry.Rotation2d;
 import org.wpilib.math.geometry.Translation2d;
+import org.wpilib.system.DataLogManager;
 import org.wpilib.telemetry.Telemetry;
 import org.wpilib.command2.Command;
+import org.wpilib.datalog.DataLog;
+import org.wpilib.datalog.StructLogEntry;
+
 import frc.robot.Constants.FieldConstants;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Turret;
@@ -20,6 +25,10 @@ public class TurretAutoAim extends Command {
   private final FieldUtil field;
 
   private Pose2d robotPose2d;
+  private Pose2d turretPose2d;
+  private Pose2d staticTargetPose2d;
+  private Pose2d ghostTargetPose2d;
+
   private double turretTargetAngle;
 
   /**
@@ -47,19 +56,23 @@ public class TurretAutoAim extends Command {
     robotPose2d = driveTrain.getPose();
     Translation2d turretTranslation2d = turret.getTurretAbsolutePose(robotPose2d).getTranslation();
 
-    if (turret.getShootOnTheMoveEnabled()) {
-      turretTargetAngle = turret.getAutoTargetAngleTurretRelative(
-                            robotPose2d, 
-                            field.getGhostShotTarget(
+    turretPose2d = turret.getTurretAbsolutePose(robotPose2d);
+    staticTargetPose2d = new Pose2d(field.getStaticShotTarget(turretTranslation2d), Rotation2d.ZERO);
+    ghostTargetPose2d = new Pose2d(field.getGhostShotTarget(
                               field.getStaticShotTarget(turretTranslation2d),
                               turret.getTurretAbsolutePose(robotPose2d).getTranslation(),
                               driveTrain.getRobotVelocities()
-                            )
+                            ), Rotation2d.ZERO);
+
+    if (turret.getShootOnTheMoveEnabled()) {
+      turretTargetAngle = turret.getAutoTargetAngleTurretRelative(
+                            robotPose2d, 
+                            ghostTargetPose2d.getTranslation()
                           );
     } else {
       turretTargetAngle = turret.getAutoTargetAngleTurretRelative(
                             robotPose2d, 
-                            field.getStaticShotTarget(turretTranslation2d)
+                            staticTargetPose2d.getTranslation()
                           );
     }
 
@@ -68,6 +81,10 @@ public class TurretAutoAim extends Command {
     }
 
     Telemetry.getTable("TurretAutoAim").log("Turret Distance To Blue Hub", turret.getTurretAbsolutePose(robotPose2d).getTranslation().getDistance(FieldConstants.hubPositionBlue));
+    
+    Telemetry.getTable("TurretAutoAim").log("Turret Pose", turretPose2d);
+    Telemetry.getTable("TurretAutoAim").log("Turret Static Shot Target", staticTargetPose2d);
+    Telemetry.getTable("TurretAutoAim").log("Turret Ghost Shot Target", ghostTargetPose2d);
   }
 
   // Returns true when the command should end.

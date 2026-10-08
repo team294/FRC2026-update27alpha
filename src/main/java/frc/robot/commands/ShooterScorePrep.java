@@ -149,6 +149,7 @@ public class ShooterScorePrep extends Command {
       distanceToTarget = goalTranslation2d.getDistance(turretTranslation2d);
       
       // Target shooter motor speed based on: A0 + (A1)(Dist) where A0, A1 are unique constants
+      // TODO switch to square root relationship
       double calculatedVelocity = (ShooterConstants.shooterDistanceToRPMIntercept + (ShooterConstants.shooterDistanceToRPMSlope * distanceToTarget));
       targetVelocity = Math.clamp(calculatedVelocity, 0, ShooterConstants.maxShootRPM);
       
