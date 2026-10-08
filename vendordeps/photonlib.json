@@ -41,7 +41,7 @@
         {
             "groupId": "org.photonvision",
             "artifactId": "photonlib-cpp",
-            "version": "dev-v2027.0.0-alpha-2-73-g4651dbae",
+            "version": "dev-v2027.0.0-alpha-2-81-g5b5b7870",
             "libName": "photonlib",
             "headerClassifier": "headers",
             "sharedLibrary": true,
@@ -56,7 +56,7 @@
         {
             "groupId": "org.photonvision",
             "artifactId": "photontargeting-cpp",
-            "version": "dev-v2027.0.0-alpha-2-73-g4651dbae",
+            "version": "dev-v2027.0.0-alpha-2-81-g5b5b7870",
             "libName": "photontargeting",
             "headerClassifier": "headers",
             "sharedLibrary": true,
@@ -73,12 +73,12 @@
         {
             "groupId": "org.photonvision",
             "artifactId": "photonlib-java",
-            "version": "dev-v2027.0.0-alpha-2-73-g4651dbae"
+            "version": "dev-v2027.0.0-alpha-2-81-g5b5b7870"
         },
         {
             "groupId": "org.photonvision",
             "artifactId": "photontargeting-java",
-            "version": "dev-v2027.0.0-alpha-2-73-g4651dbae"
+            "version": "dev-v2027.0.0-alpha-2-81-g5b5b7870"
         }
     ]
 }
