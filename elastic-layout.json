@@ -23,7 +23,7 @@
                 "y": 256.0,
                 "width": 384.0,
                 "height": 128.0,
-                "type": "ComboBox Chooser",
+                "type": "Dropdown Chooser",
                 "properties": {
                   "topic": "/Tunables/Autonomous routine",
                   "period": 0.06,
@@ -237,7 +237,7 @@
             "height": 384.0,
             "type": "Field",
             "properties": {
-              "topic": "/Tunables/Field",
+              "topic": "/Telemetry/DriveTrain/Field",
               "period": 0.06,
               "field_game": "Rebuilt",
               "robot_width": 0.85,
@@ -419,7 +419,7 @@
             "y": 256.0,
             "width": 256.0,
             "height": 128.0,
-            "type": "ComboBox Chooser",
+            "type": "Dropdown Chooser",
             "properties": {
               "topic": "/Tunables/Alliance Selection",
               "period": 0.06,
@@ -866,7 +866,7 @@
                 "height": 128.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/Telemetry/martDashboard/Drive isGyroReading",
+                  "topic": "/Telemetry/DriveTrain/Drive isGyroReading",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -1204,7 +1204,7 @@
                 "y": 0.0,
                 "width": 128.0,
                 "height": 128.0,
-                "type": "ComboBox Chooser",
+                "type": "Dropdown Chooser",
                 "properties": {
                   "topic": "/Tunables/DriveToPose Feedback",
                   "period": 0.06,

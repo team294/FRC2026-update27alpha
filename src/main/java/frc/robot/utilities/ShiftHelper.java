@@ -5,6 +5,7 @@ import static frc.robot.Constants.ElasticKeyConstants.ElasticKey.*;
 import org.wpilib.driverstation.MatchState;
 import org.wpilib.system.Timer;
 import org.wpilib.telemetry.Telemetry;
+import org.wpilib.telemetry.TelemetryTable;
 
 import frc.robot.utilities.DataLogUtil.RotationWhenDisabled;
 
@@ -14,6 +15,9 @@ public class ShiftHelper {
     private final Alliance alliance;
     private final Timer teleopTimer;
     private int logRotationKey;           // Key to identify the log rotation
+
+    // Dashboard table
+    private final TelemetryTable dashboard = Telemetry.getTable("ShiftHelper");
 
     /**
      * Keeps track of shifts, publishing data to Elastic regarding whether or not shift is active.
@@ -77,10 +81,10 @@ public class ShiftHelper {
 
     public void periodic() {
         if (DataLogUtil.isMyLogRotation(logRotationKey, RotationWhenDisabled.kNormal)) {
-            Telemetry.getTable("ShiftHelper").log(TELEOP_TIMER.value, Math.max(140.0 - teleopTimer.get(), 0));
-            Telemetry.getTable("ShiftHelper").log(SHIFT_TIMER.value, timeLeftInShiftSeconds());
-            Telemetry.getTable("ShiftHelper").log(IS_BLUE_SHIFT.value, isCurrentShiftBlue());
-            Telemetry.getTable("ShiftHelper").log(IS_YOUR_SHIFT.value, isCurrentShiftYours());
+            dashboard.log(TELEOP_TIMER.value, Math.max(140.0 - teleopTimer.get(), 0));
+            dashboard.log(SHIFT_TIMER.value, timeLeftInShiftSeconds());
+            dashboard.log(IS_BLUE_SHIFT.value, isCurrentShiftBlue());
+            dashboard.log(IS_YOUR_SHIFT.value, isCurrentShiftYours());
         }
     }
 }

@@ -27,6 +27,7 @@ import org.wpilib.hardware.discrete.DigitalInput;
 import org.wpilib.driverstation.RobotState;
 import org.wpilib.system.RobotController;
 import org.wpilib.telemetry.Telemetry;
+import org.wpilib.telemetry.TelemetryTable;
 import org.wpilib.command2.SubsystemBase;
 
 import frc.robot.Constants.Ports;
@@ -36,7 +37,6 @@ import frc.robot.Constants.ClimberConstants.ClimberPosition;
 import frc.robot.Constants.ClimberConstants.ClimberSide;
 import frc.robot.utilities.DataLogUtil;
 import frc.robot.utilities.Loggable;
-import frc.robot.utilities.MathBCR;
 import frc.robot.utilities.RobotPreferences;
 import frc.robot.utilities.Wait;
 import frc.robot.utilities.DataLogUtil.RotationWhenDisabled;
@@ -80,6 +80,9 @@ public class Climber extends SubsystemBase implements Loggable {
 
   private final VoltageOut climberVoltageControl = new VoltageOut(0.0).withEnableFOC(false);
   private final MotionMagicVoltage climberMMVoltageControl = new MotionMagicVoltage(0.0).withEnableFOC(false);
+
+  // Dashboard table
+  private final TelemetryTable dashboard = Telemetry.getTable("Climber");
 
   // DataLog entries
   private final DataLog log = DataLogManager.getLog();
@@ -614,20 +617,20 @@ public class Climber extends SubsystemBase implements Loggable {
     if (DataLogUtil.isMyLogRotation(logRotationKey, RotationWhenDisabled.kNormal)) {
       checkForFaultConditions();
 
-      Telemetry.getTable("Climber").log("Climber L LOWER", isSideLimitReached(ClimberSide.LEFT, ClimberLimit.LOWER));
-      Telemetry.getTable("Climber").log("Climber R LOWER", isSideLimitReached(ClimberSide.RIGHT, ClimberLimit.LOWER));
-      Telemetry.getTable("Climber").log("Climber L UPPER", isSideLimitReached(ClimberSide.LEFT, ClimberLimit.UPPER));
-      Telemetry.getTable("Climber").log("Climber R UPPER", isSideLimitReached(ClimberSide.RIGHT, ClimberLimit.UPPER));
-      Telemetry.getTable("Climber").log("Climber Calibrated?", climberCalibrated);
-      Telemetry.getTable("Climber").log("Climber L Calibrated?", climberLeftCalibrated);
-      Telemetry.getTable("Climber").log("Climber R Calibrated?", climberRightCalibrated);
-      Telemetry.getTable("Climber").log("Climber L Temp", getClimberTemp(ClimberSide.LEFT));
-      Telemetry.getTable("Climber").log("Climber R Temp", getClimberTemp(ClimberSide.RIGHT));
-      Telemetry.getTable("Climber").log("Climber L Raw Rotations", getClimberPositionRotationsRaw(ClimberSide.LEFT));
-      Telemetry.getTable("Climber").log("Climber R Raw Rotations", getClimberPositionRotationsRaw(ClimberSide.RIGHT));
-      Telemetry.getTable("Climber").log("Climber L Position", getClimberPositionInches(ClimberSide.LEFT));
-      Telemetry.getTable("Climber").log("Climber R Position", getClimberPositionInches(ClimberSide.RIGHT));
-      Telemetry.getTable("Climber").log("Climber Position", getClimberPositionInches());
+      dashboard.log("Climber L LOWER", isSideLimitReached(ClimberSide.LEFT, ClimberLimit.LOWER));
+      dashboard.log("Climber R LOWER", isSideLimitReached(ClimberSide.RIGHT, ClimberLimit.LOWER));
+      dashboard.log("Climber L UPPER", isSideLimitReached(ClimberSide.LEFT, ClimberLimit.UPPER));
+      dashboard.log("Climber R UPPER", isSideLimitReached(ClimberSide.RIGHT, ClimberLimit.UPPER));
+      dashboard.log("Climber Calibrated?", climberCalibrated);
+      dashboard.log("Climber L Calibrated?", climberLeftCalibrated);
+      dashboard.log("Climber R Calibrated?", climberRightCalibrated);
+      dashboard.log("Climber L Temp", getClimberTemp(ClimberSide.LEFT));
+      dashboard.log("Climber R Temp", getClimberTemp(ClimberSide.RIGHT));
+      dashboard.log("Climber L Raw Rotations", getClimberPositionRotationsRaw(ClimberSide.LEFT));
+      dashboard.log("Climber R Raw Rotations", getClimberPositionRotationsRaw(ClimberSide.RIGHT));
+      dashboard.log("Climber L Position", getClimberPositionInches(ClimberSide.LEFT));
+      dashboard.log("Climber R Position", getClimberPositionInches(ClimberSide.RIGHT));
+      dashboard.log("Climber Position", getClimberPositionInches());
     }
   }
 }
