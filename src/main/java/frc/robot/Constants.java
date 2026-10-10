@@ -116,8 +116,8 @@ public final class Constants {
 
     // DIO Ports
     public static final int DIOClimberUpperLimitRightSensor = 0;
-    public static final int DIOClimberLowerLimitRightSensor = 1;
-    public static final int DIOClimberLowerLimitLeftSensor = 2;
+    public static final int DIOClimberLowerLimitRightSensor = 2;
+    public static final int DIOClimberLowerLimitLeftSensor = 1;
     public static final int DIOClimberUpperLimitLeftSensor = 3;
   }
 
