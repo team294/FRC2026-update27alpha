@@ -26,6 +26,7 @@ import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.system.RobotController;
 import org.wpilib.telemetry.Telemetry;
+import org.wpilib.telemetry.TelemetryTable;
 
 import frc.robot.Constants.Ports;
 import frc.robot.Constants.SwerveConstants;
@@ -88,6 +89,9 @@ public class SwerveModule {
   private final SimpleMotorFeedforward driveFeedforward;
   private double priorDriveVelocity = 0;  // Last requested drive speed (m/sec)
   private boolean inVelocityMode = true;  // true = last drive request was velocity control (or stopped), false = last drive request was direct non-zero voltage control
+
+  // Dashboard table
+  private final TelemetryTable dashboard = Telemetry.getTable("SwerveModule");
 
   // Data logging variables
   private final DataLog log = DataLogManager.getLog();
@@ -633,11 +637,11 @@ public class SwerveModule {
    * Updates relevant variables on Elastic.
    */
   public void updateElastic() {
-    Telemetry.getTable("SwerveModule").log(buildString("Swerve FXangle ", swName), MathBCR.normalizeAngle(getTurningEncoderDegrees()));
-    Telemetry.getTable("SwerveModule").log(buildString("Swerve CCangle ", swName), getCanCoderDegrees());
-    Telemetry.getTable("SwerveModule").log(buildString("Swerve FXangle dps", swName), getTurningEncoderVelocityDPS());
-    Telemetry.getTable("SwerveModule").log(buildString("Swerve distance", swName), getDriveEncoderMeters());
-    Telemetry.getTable("SwerveModule").log(buildString("Swerve drive temp ", swName), getDriveTemp());
+    dashboard.log(buildString("Swerve FXangle ", swName), MathBCR.normalizeAngle(getTurningEncoderDegrees()));
+    dashboard.log(buildString("Swerve CCangle ", swName), getCanCoderDegrees());
+    dashboard.log(buildString("Swerve FXangle dps", swName), getTurningEncoderVelocityDPS());
+    dashboard.log(buildString("Swerve distance", swName), getDriveEncoderMeters());
+    dashboard.log(buildString("Swerve drive temp ", swName), getDriveTemp());
   }
 
   /**
