@@ -1,5 +1,5 @@
 {
- "name":"ETU2026",
+ "name":"2027alpha7",
  "version":2,
  "type":"Swerve",
  "variables":{
@@ -7,8 +7,8 @@
    "ballCollect":{
     "dimension":"LinVel",
     "var":{
-     "exp":"1.9 m / s",
-     "val":1.9
+     "exp":"1.52 m / s",
+     "val":1.52
     }
    },
    "maxVel":{
@@ -93,8 +93,8 @@
      "val":3.097996950149536
     },
     "heading":{
-     "exp":"-2.626272981131867 rad",
-     "val":-2.626272981131867
+     "exp":"-90 deg",
+     "val":-1.5707963267948966
     }
    },
    "collectStart":{
@@ -141,8 +141,8 @@
    },
    "shootBump":{
     "x":{
-     "exp":"2.6 m",
-     "val":2.6
+     "exp":"2.45 m",
+     "val":2.45
     },
     "y":{
      "exp":"2.663516032 m",
