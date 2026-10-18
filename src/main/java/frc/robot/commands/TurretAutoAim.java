@@ -7,11 +7,9 @@ package frc.robot.commands;
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
 import org.wpilib.math.geometry.Translation2d;
-import org.wpilib.system.DataLogManager;
 import org.wpilib.telemetry.Telemetry;
+import org.wpilib.telemetry.TelemetryTable;
 import org.wpilib.command2.Command;
-import org.wpilib.datalog.DataLog;
-import org.wpilib.datalog.StructLogEntry;
 
 import frc.robot.Constants.FieldConstants;
 import frc.robot.subsystems.DriveTrain;
@@ -30,6 +28,9 @@ public class TurretAutoAim extends Command {
   private Pose2d ghostTargetPose2d;
 
   private double turretTargetAngle;
+
+  // Dashboard table
+  private final TelemetryTable dashboard = Telemetry.getTable("TurretAutoAim");
 
   /**
    * Calculate target turret angle for shooting depending on robot position on field
@@ -54,9 +55,9 @@ public class TurretAutoAim extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   public void execute() {
     robotPose2d = driveTrain.getPose();
-    Translation2d turretTranslation2d = turret.getTurretAbsolutePose(robotPose2d).getTranslation();
-
     turretPose2d = turret.getTurretAbsolutePose(robotPose2d);
+    Translation2d turretTranslation2d = turretPose2d.getTranslation();
+
     staticTargetPose2d = new Pose2d(field.getStaticShotTarget(turretTranslation2d), Rotation2d.ZERO);
     ghostTargetPose2d = new Pose2d(field.getGhostShotTarget(
                               field.getStaticShotTarget(turretTranslation2d),
@@ -80,11 +81,10 @@ public class TurretAutoAim extends Command {
       turret.setTurretAngle(turretTargetAngle);
     }
 
-    Telemetry.getTable("TurretAutoAim").log("Turret Distance To Blue Hub", turret.getTurretAbsolutePose(robotPose2d).getTranslation().getDistance(FieldConstants.hubPositionBlue));
-    
-    Telemetry.getTable("TurretAutoAim").log("Turret Pose", turretPose2d);
-    Telemetry.getTable("TurretAutoAim").log("Turret Static Shot Target", staticTargetPose2d);
-    Telemetry.getTable("TurretAutoAim").log("Turret Ghost Shot Target", ghostTargetPose2d);
+    dashboard.log("Turret Distance To Blue Hub", turret.getTurretAbsolutePose(robotPose2d).getTranslation().getDistance(FieldConstants.hubPositionBlue));
+    dashboard.log("Turret Pose", turretPose2d);
+    dashboard.log("Turret Static Shot Target", staticTargetPose2d);
+    dashboard.log("Turret Ghost Shot Target", ghostTargetPose2d);
   }
 
   // Returns true when the command should end.
