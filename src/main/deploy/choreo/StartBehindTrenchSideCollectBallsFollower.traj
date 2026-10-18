@@ -31,13 +31,13 @@
     {"x":{"exp":"8.073434829711914 m", "val":8.073434829711914}, "y":{"exp":"2.2317748069763184 m", "val":2.2317748069763184}, "heading":{"exp":"1.6775320225831258 rad", "val":1.6775320225831258}, "intervals":28, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"7.9435014724731445 m", "val":7.943501472473144}, "y":{"exp":"3.2712414264678955 m", "val":3.2712414264678955}, "heading":{"exp":"2.726100557648903 rad", "val":2.726100557648903}, "intervals":27, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"6.971166610717773 m", "val":6.971166610717773}, "y":{"exp":"3.37951922416687 m", "val":3.37951922416687}, "heading":{"exp":"-2.6322913878567524 rad", "val":-2.6322913878567524}, "intervals":13, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"collectEnd.x", "val":6.5705389976501465}, "y":{"exp":"collectEnd.y", "val":3.097996950149536}, "heading":{"exp":"collectEnd.heading", "val":-2.626272981131867}, "intervals":23, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
+    {"x":{"exp":"collectEnd.x", "val":6.514832019805908}, "y":{"exp":"collectEnd.y", "val":2.7}, "heading":{"exp":"collectEnd.heading", "val":-0.7853981633974483}, "intervals":23, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
   "constraints":[
     {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
     {"from":"last", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":false},
     {"from":"first", "to":"last", "data":{"type":"KeepInRectangle", "props":{"x":{"exp":"0 m", "val":0.0}, "y":{"exp":"0 m", "val":0.0}, "w":{"exp":"16.541 m", "val":16.541}, "h":{"exp":"8.0692 m", "val":8.0692}}}, "enabled":false},
     {"from":0, "to":3, "data":{"type":"MaxVelocity", "props":{"max":{"exp":"3 m / s", "val":3.0}}}, "enabled":true},
-    {"from":3, "to":8, "data":{"type":"MaxVelocity", "props":{"max":{"exp":"ballCollect", "val":1.9}}}, "enabled":true},
+    {"from":3, "to":8, "data":{"type":"MaxVelocity", "props":{"max":{"exp":"ballCollect", "val":1.35}}}, "enabled":true},
     {"from":8, "to":8, "data":{"type":"MaxVelocity", "props":{"max":{"exp":"0.5 m / s", "val":0.5}}}, "enabled":true}],
   "targetDt":{
    "exp":"0.05 s",

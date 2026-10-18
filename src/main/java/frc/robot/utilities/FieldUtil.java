@@ -10,6 +10,7 @@ import org.wpilib.fields.Field;
 import org.wpilib.fields.Fields;
 import org.wpilib.math.geometry.Translation2d;
 import org.wpilib.math.kinematics.ChassisVelocities;
+import org.wpilib.telemetry.Telemetry;
 import org.wpilib.driverstation.Alliance;
 import frc.robot.Constants.FieldConstants;
 
@@ -84,7 +85,9 @@ public class FieldUtil {
         double offsetX = (robotFieldRelativeVelocities.vx * estTimeOfFlight);
         double offsetY = (robotFieldRelativeVelocities.vy * estTimeOfFlight);
 
+        Telemetry.getTable("TurretAutoAim").log("EstToF", estTimeOfFlight);
+
         // ghost target = static target + displacement
-        return new Translation2d(staticTargetTranslation2d.getX() + offsetX, staticTargetTranslation2d.getY() + offsetY);
+        return new Translation2d(staticTargetTranslation2d.getX() - offsetX, staticTargetTranslation2d.getY() - offsetY);
     }
 }
