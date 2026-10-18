@@ -19,6 +19,7 @@ import frc.robot.commands.sequences.*;
 import frc.robot.commands.sequences.FeederIntakeFeedShooterSequence.AgitateType;
 import frc.robot.subsystems.*;
 import frc.robot.utilities.*;
+import frc.robot.utilities.DataLogUtil.RotationWhenDisabled;
 import frc.robot.utilities.LEDEventUtil.LEDStripEvents;
 import frc.robot.utilities.TrajectoryCache.TrajectoryName;
 
@@ -29,10 +30,12 @@ import org.wpilib.math.geometry.Rotation2d;
 import org.wpilib.datalog.DataLog;
 import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.system.DataLogManager;
+import org.wpilib.system.RobotController;
 import org.wpilib.driverstation.Alliance;
 import org.wpilib.driverstation.Joystick;
 import org.wpilib.system.Timer;
 import org.wpilib.telemetry.Telemetry;
+import org.wpilib.telemetry.TelemetryTable;
 import org.wpilib.tunable.Tunables;
 import org.wpilib.command2.Command;
 import org.wpilib.command2.CommandScheduler;
@@ -82,6 +85,10 @@ public class RobotContainer {
 
   private boolean trenchSafe = false;
 
+  // Dashboard table
+  private final TelemetryTable dashboard = Telemetry.getTable("RobotContainer");
+  private final int logRotationKey;           // Key to identify the log rotation
+
   // DataLog
   private final DataLog log = DataLogManager.getLog();
   private final DoubleLogEntry dLogRobotHeartBeat = new DoubleLogEntry(log, "/RobotContainer/HeartBeat");
@@ -91,6 +98,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     DataLogUtil.writeMessageEcho("RobotContainer: Constructor, Version =", Constants.bcrRobotCodeVersion);
+    logRotationKey = DataLogUtil.allocateLogRotation();
     SignalLogger.enableAutoLogging(false);
 
     //TODO -- Re-enable if this won't crash the Systemcore
@@ -99,7 +107,7 @@ public class RobotContainer {
     // Start LEDEventUtil
     LEDEventUtil.initialize(led, LEDAnimateRobotDisabled);
 
-    Telemetry.getTable("RobotContainer").log("RobotPrefs Initialized", RobotPreferences.prefsExist());
+    dashboard.log("RobotPrefs Initialized", RobotPreferences.prefsExist());
     if(!RobotPreferences.prefsExist()) {
       RobotPreferences.recordStickyFaults("RobotPreferences");
     }
@@ -476,7 +484,10 @@ public class RobotContainer {
     shiftHelper.periodic();
     autoSelection.periodic();
 
-    Telemetry.getTable("RobotContainer").log("Trench Safe", intake.isIntakeDeploySafeForTrench() && shooter.isHoodSafeForTrench() && climber.isSafeForTrench());
+    if (DataLogUtil.isMyLogRotation(logRotationKey, RotationWhenDisabled.kSlow)) {
+      dashboard.log("Trench Safe", intake.isIntakeDeploySafeForTrench() && shooter.isHoodSafeForTrench() && climber.isSafeForTrench());
+      // dashboard.log("CPU Temp", RobotController.getCPUTemp());       // TODO Check in beta or later releases.  This currently crashes the robot code.
+    }
 
     heartBeat++;
     dLogRobotHeartBeat.append(heartBeat);

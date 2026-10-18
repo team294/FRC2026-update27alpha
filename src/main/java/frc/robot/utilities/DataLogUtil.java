@@ -123,6 +123,10 @@ public class DataLogUtil {
 	/**
 	 * Returns true if the scheduler is currently at the rotationKey.
 	 * @param logRotationKey Key from allocateLogRotation() to check
+	 * @param rotationWhenDisabled 		
+	    <p>kNormal = Every 0.2 sec when robot is disabled
+		<p>kSlow = Every 2sec when robot is disabled
+		<p>kNone = No logging when robot is disabled
 	 * @return true = rotationKey is the current rotation, false = rotationKey is not the current rotation
 	 */
 	public static boolean isMyLogRotation(int logRotationKey, RotationWhenDisabled rotationWhenDisabled) {
