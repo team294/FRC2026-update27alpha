@@ -51,7 +51,7 @@ public class AutonDriveToNeutralZone extends SequentialCommandGroup {
       either(
         sequence(
           // If shooting preload, starts with front of the robot on the start line (one robot's length back)
-          new AutonScore(EndType.waitForSetPoint, intake, feeder, turret, shooter, climber, driveTrain, field), // this currently will never end. don't shoot preload
+          new AutonScore(EndType.waitForSetPoint, false, intake, feeder, turret, shooter, climber, driveTrain, field), // this currently will never end. don't shoot preload
           new DriveToPose(CoordType.kAbsolute, trajectory.getInitialPose(alliance.getAlliance() == Alliance.RED).get(), driveTrain) // TODO would this make it stop? how to make it continously go into the trajectory? 
         ),
         none(),

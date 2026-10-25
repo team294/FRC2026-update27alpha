@@ -27,11 +27,11 @@ import frc.robot.utilities.FieldUtil;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutonScore extends SequentialCommandGroup {
   /** Creates a new AutonScore. */
-  public AutonScore(EndType shooterEndType, Intake intake, Feeder feeder, Turret turret, Shooter shooter, Climber climber, DriveTrain driveTrain, FieldUtil field) {
+  public AutonScore(EndType shooterEndType, boolean shootOnTheMove, Intake intake, Feeder feeder, Turret turret, Shooter shooter, Climber climber, DriveTrain driveTrain, FieldUtil field) {
     addCommands(
       new DataLogMessage(false, "AutonScore: start"),
       parallel(
-        new ShooterTurretScorePrepSequence(false, shooterEndType, turret, shooter, driveTrain, field),
+        new ShooterTurretScorePrepSequence(shootOnTheMove, shooterEndType, turret, shooter, driveTrain, field),
         new FeederIntakeFeedShooterSequence(AgitateType.BOUNCE, feeder, intake, shooter),
         new ClimberSetPercent(ClimberConstants.maxManualPercentOutput, climber)
       )

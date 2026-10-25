@@ -614,7 +614,8 @@ public final class Constants {
     public enum AutoEndType {
       kNone,
       kSecondCycle,
-      kSecondCycleLongerShot
+      kSecondCycleLongerShot,
+      kOutpostOrDepot
     }
 
     /**

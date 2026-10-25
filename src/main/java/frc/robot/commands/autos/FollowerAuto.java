@@ -66,8 +66,8 @@ public class FollowerAuto extends SequentialCommandGroup {
 
           new ParallelDeadlineGroup(
             either(
-              new AutonScore(shootEndType, intake, feeder, turret, shooter, climber, driveTrain, field).withTimeout(6.9),
-              new AutonScore(shootEndType, intake, feeder, turret, shooter, climber, driveTrain, field),
+              new AutonScore(shootEndType, false, intake, feeder, turret, shooter, climber, driveTrain, field).withTimeout(6.9),
+              new AutonScore(shootEndType, false, intake, feeder, turret, shooter, climber, driveTrain, field),
               () -> climb
             ),
             either(

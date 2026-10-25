@@ -66,7 +66,7 @@ public class ShootPreload extends SequentialCommandGroup {
             () -> moveBack
           ),
           new IntakeDeploySetAngle(IntakeDeployAngle.INTAKE, intake),
-          new AutonScore(endType, intake, feeder, turret, shooter, climber, driveTrain, field).withTimeout(8)
+          new AutonScore(endType, false, intake, feeder, turret, shooter, climber, driveTrain, field).withTimeout(8)
           // either(
           //   new DriveTrajectory(CoordType.kAbsolute, StopType.kBrake, trajectory, driveTrain, allianceSelection),
           //   none(),
