@@ -9,7 +9,8 @@ import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.system.RobotController;
 import org.wpilib.command2.Command;
-import org.wpilib.command2.button.CommandXboxController;
+import org.wpilib.command2.button.CommandGamepad;
+import org.wpilib.command2.button.CommandGenericHID;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.Intake;
@@ -17,7 +18,7 @@ import frc.robot.utilities.DataLogUtil;
 
 public class IntakeDeployManualControl extends Command {
   private final Intake intake;
-  private final CommandXboxController xboxController;
+  private final CommandGenericHID xboxController;
 
   // Variables for DataLogging
   private final DataLog log = DataLogManager.getLog();
@@ -28,7 +29,7 @@ public class IntakeDeployManualControl extends Command {
    * @param xboxController Xbox controller
    * @param intake Intake subsystem
    */
-  public IntakeDeployManualControl(CommandXboxController xboxController, Intake intake) {
+  public IntakeDeployManualControl(CommandGenericHID xboxController, Intake intake) {
     this.intake = intake;
     this.xboxController = xboxController;
 
@@ -48,7 +49,7 @@ public class IntakeDeployManualControl extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double intakePercent = -xboxController.getLeftY();
+    double intakePercent = -xboxController.getRawAxis(1);
     if ((Math.abs(intakePercent) < OIConstants.joystickDeadband)) intakePercent = 0;
 
     // Slow the control down
