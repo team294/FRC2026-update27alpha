@@ -696,7 +696,7 @@
                 "height": 128.0,
                 "type": "Boolean Box",
                 "properties": {
-                  "topic": "/Tunables/Drive isBrakeMode",
+                  "topic": "/Telemetry/DriveTrain/Drive isBrakeMode",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -1268,7 +1268,7 @@
                 }
               },
               {
-                "title": "DriveToPose Absolute",
+                "title": " ",
                 "x": 0.0,
                 "y": 0.0,
                 "width": 256.0,
