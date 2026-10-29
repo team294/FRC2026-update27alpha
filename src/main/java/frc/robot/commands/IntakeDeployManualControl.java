@@ -9,7 +9,6 @@ import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.system.DataLogManager;
 import org.wpilib.system.RobotController;
 import org.wpilib.command2.Command;
-import org.wpilib.command2.button.CommandGamepad;
 import org.wpilib.command2.button.CommandGenericHID;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
