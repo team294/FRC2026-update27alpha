@@ -410,8 +410,6 @@ public class Shooter extends SubsystemBase implements Loggable {
    * @param voltage in volts [-12, 12]; positive is up and negative is down
    */
   public void setHoodVoltageBothMotors(double voltage) {
-    if (isHoodLocked) return;
-
     hood1VoltageSetpoint = voltage;
     hood2VoltageSetpoint = voltage;
     hood1PositionControlOn = false;
@@ -425,8 +423,6 @@ public class Shooter extends SubsystemBase implements Loggable {
    * @param voltage in volts [-12, 12]; positive is up and negative is down
    */
   public void setHoodVoltageOneMotor(double voltage, int motorNumber) {
-    if (isHoodLocked) return;
-
     if (motorNumber == 1) {
       hoodMotor1.setControl(hood1VoltageControl.withOutput(voltage));
       hood1VoltageSetpoint = voltage;
@@ -628,6 +624,7 @@ public class Shooter extends SubsystemBase implements Loggable {
       dLogHoodVoltageSetpoint.append(hood2VoltageSetpoint, timeNow);
       dLogHoodPositionControlOn.append(hood2PositionControlOn, timeNow);
       dLogHoodPositionControlOn.append(hood2PositionControlOn, timeNow);
+      dLogHoodLocked.append(isHoodLocked, timeNow);
     }
   }
 
