@@ -40,6 +40,7 @@ import org.wpilib.tunable.Tunables;
 import org.wpilib.command2.Command;
 import org.wpilib.command2.CommandScheduler;
 import org.wpilib.command2.InstantCommand;
+import org.wpilib.command2.button.CommandGenericHID;
 import org.wpilib.command2.button.CommandXboxController;
 import org.wpilib.command2.button.JoystickButton;
 import org.wpilib.command2.button.Trigger;
@@ -72,8 +73,8 @@ public class RobotContainer {
   private final Joystick coPanel = new Joystick(OIConstants.usbCoPanel);
 
   // CommandNiDsXboxController has no POV (d-pad) functionality, so temporarily (i hope) switching to CommandGamepad
-  // private final CommandNiDsXboxController xboxController = new CommandNiDsXboxController(OIConstants.usbXboxController);
-  private final CommandXboxController xboxController = new CommandXboxController(OIConstants.usbXboxController);
+  private final CommandGenericHID xboxController = new CommandGenericHID(OIConstants.usbXboxController);
+  // private final CommandXboxController xboxController = new CommandXboxController(OIConstants.usbXboxController);
 
   // Define other utilities
   private final TrajectoryCache trajectoryCache = new TrajectoryCache();
@@ -253,21 +254,21 @@ public class RobotContainer {
    */
   private void configureXboxButtons() {
     // Triggers for all Xbox buttons
-    Trigger xbLT = xboxController.leftTrigger();
-    Trigger xbRT = xboxController.rightTrigger();
-    Trigger xbA = xboxController.a();
-    Trigger xbB = xboxController.b();
-    Trigger xbY = xboxController.y();
-    Trigger xbX = xboxController.x();
-    Trigger xbLB = xboxController.leftBumper();
-    Trigger xbRB = xboxController.rightBumper();
-    Trigger xbBack = xboxController.view();
-    Trigger xbStart = xboxController.menu();
-    Trigger xbPOVUp = xboxController.dpadUp();
-    Trigger xbPOVRight = xboxController.dpadRight();
-    Trigger xbPOVLeft = xboxController.dpadLeft();
-    Trigger xbPOVDown = xboxController.dpadDown();
-    Trigger xbLJoystickTrigger = xboxController.leftStick();
+    Trigger xbLT = xboxController.axisGreaterThan(2, 0.8);
+    Trigger xbRT = xboxController.axisGreaterThan(3, 0.8);
+    Trigger xbA = xboxController.button(0);
+    Trigger xbB = xboxController.button(1);
+    Trigger xbY = xboxController.button(3);
+    Trigger xbX = xboxController.button(2);
+    Trigger xbLB = xboxController.button(4);
+    Trigger xbRB = xboxController.button(5);
+    Trigger xbBack = xboxController.button(6);
+    Trigger xbStart = xboxController.button(7);
+    Trigger xbPOVUp = xboxController.povUp();
+    Trigger xbPOVRight = xboxController.povRight();
+    Trigger xbPOVLeft = xboxController.povLeft();
+    Trigger xbPOVDown = xboxController.povDown();
+    Trigger xbLJoystickTrigger = xboxController.button(8);
     // Trigger xbRJoystickTrigger = xboxController.rightStick();
 
     // ex: xbA.onTrue(new command(param1, param2, etc));
