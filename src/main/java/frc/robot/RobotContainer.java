@@ -104,6 +104,7 @@ public class RobotContainer {
 
     //TODO -- Re-enable if this won't crash the Systemcore
     // RobotController.setBrownoutVoltage(5.5);      // C5:  Reducing from default (6.3? V) to reduce brownouts
+    RobotController.setBrownoutVoltages(5.5, 6);
 
     // Start LEDEventUtil
     LEDEventUtil.initialize(led, LEDAnimateRobotDisabled);
@@ -429,7 +430,11 @@ public class RobotContainer {
       () -> allianceSelection.getAlliance() == Alliance.RED));
 
     // execute climb when switch flipped forwards
-    coP[7].onTrue(new ClimberSetPosition(ClimberPosition.CLIMB, climber).alongWith(new InstantCommand(() -> LEDEventUtil.sendEvent(LEDStripEvents.CLIMBING))));
+    // coP[7].onTrue(new ClimberSetPosition(ClimberPosition.CLIMB, climber).alongWith(new InstantCommand(() -> LEDEventUtil.sendEvent(LEDStripEvents.CLIMBING))));
+    
+    // lock / unlock hood
+    coP[7].onTrue(new HoodLockInPlace(shooter, true));
+    coP[7].onFalse(new HoodLockInPlace(shooter, false));
 
     // // Manually spin turret CW/CCW while held, stopping when released
     coP[8].whileTrue(new TurretSetPercent(turret, -TurretConstants.maxManualPercentOutput));

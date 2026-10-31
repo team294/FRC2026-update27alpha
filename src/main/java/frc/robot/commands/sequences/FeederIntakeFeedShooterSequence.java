@@ -46,7 +46,7 @@ public class FeederIntakeFeedShooterSequence extends SequentialCommandGroup {
       parallel(
         waitUntil( () -> shooter.isShooterAtGoalVelocity() || Math.abs(shooter.getShooterVelocity())>ShooterConstants.maxShootWaitForRPM )
           .andThen(new DataLogMessage(false, "FeederIntakeFeedShooterSequence: ShooterAtGoal")),
-        waitUntil(() -> shooter.isHoodAtGoalAngle() && shooter.getHoodAngleSetpoint() != ShooterConstants.hoodMinimumAngle)
+        waitUntil(() -> (shooter.isHoodAtGoalAngle() && shooter.getHoodAngleSetpoint() != ShooterConstants.hoodMinimumAngle) || shooter.isHoodLocked())
           .andThen(new DataLogMessage(false, "FeederIntakeFeedShooterSequence: HoodAtGoal"))
       ).handleInterrupt(() -> DataLogUtil.writeMessage("FeederIntakeFeedShooterSequence: Interrupted")),
       parallel(

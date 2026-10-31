@@ -64,6 +64,7 @@ public class Shooter extends SubsystemBase implements Loggable {
   private final TalonFXSConfigurator hoodMotor1Configurator;
   private final TalonFXSConfigurator hoodMotor2Configurator;
   private TalonFXSConfiguration hoodMotorConfiguration;
+  private boolean isHoodLocked = false;
 
   // Live data reported by the motor controller
   private final StatusSignal<Temperature> shooter1Temperature;         // Temperature, in degrees Celsius
@@ -140,6 +141,7 @@ public class Shooter extends SubsystemBase implements Loggable {
   private final DoubleLogEntry dLogHoodAngleSetpoint = new DoubleLogEntry(log, "/Hood/AngleSetpoint");
   private final DoubleLogEntry dLogHoodVoltageSetpoint = new DoubleLogEntry(log, "/Hood/VoltageSetpoint");
   private final BooleanLogEntry dLogHoodPositionControlOn = new BooleanLogEntry(log, "/Hood/PositionControlOn");
+  private final BooleanLogEntry dLogHoodLocked = new BooleanLogEntry(log, "/Hood/Locked");
  
 
   // Sticky Faults
@@ -408,6 +410,8 @@ public class Shooter extends SubsystemBase implements Loggable {
    * @param voltage in volts [-12, 12]; positive is up and negative is down
    */
   public void setHoodVoltageBothMotors(double voltage) {
+    if (isHoodLocked) return;
+
     hood1VoltageSetpoint = voltage;
     hood2VoltageSetpoint = voltage;
     hood1PositionControlOn = false;
@@ -421,6 +425,8 @@ public class Shooter extends SubsystemBase implements Loggable {
    * @param voltage in volts [-12, 12]; positive is up and negative is down
    */
   public void setHoodVoltageOneMotor(double voltage, int motorNumber) {
+    if (isHoodLocked) return;
+
     if (motorNumber == 1) {
       hoodMotor1.setControl(hood1VoltageControl.withOutput(voltage));
       hood1VoltageSetpoint = voltage;
@@ -445,6 +451,8 @@ public class Shooter extends SubsystemBase implements Loggable {
    * @param angle angle to set in degrees
    */
   public void setHoodAnglePID(double angle) {
+    if (isHoodLocked) return;
+
     double safeAngle = Math.clamp(angle, ShooterConstants.hoodMinimumAngle, ShooterConstants.hoodMaximumAngle);
     hoodAngleSetpoint = safeAngle;
     hood1PositionControlOn = true;
@@ -545,6 +553,21 @@ public class Shooter extends SubsystemBase implements Loggable {
   public boolean isHoodSafeForTrench() {
     return Math.abs(getHoodAngle(1) - ShooterConstants.hoodMinimumAngle) < ShooterConstants.hoodAngleErrorTolerance
       && Math.abs(getHoodAngle(2) - ShooterConstants.hoodMinimumAngle) < ShooterConstants.hoodAngleErrorTolerance;
+  }
+
+  /**
+   * Stop both hood motors from moving based on input.
+   * @param lock true = lock, false = unlock
+   */
+  public void lockHood(boolean lock) {
+    isHoodLocked = lock;
+  }
+
+  /**
+   * @return true = hood locked from moving, false = normal
+   */
+  public boolean isHoodLocked() {
+    return isHoodLocked;
   }
 
   // *****  Information methods *****
