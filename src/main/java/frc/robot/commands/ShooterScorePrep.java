@@ -246,7 +246,7 @@ public class ShooterScorePrep extends Command {
       case runForever:
         return false;
       case waitForSetPoint:
-         if ( shooter.isHoodAtGoalAngle() && shooter.isShooterAtGoalVelocity() ) {
+         if ( ( shooter.isHoodAtGoalAngle() || shooter.isHoodLocked() ) && shooter.isShooterAtGoalVelocity() ) {
           toleranceCounter++;
         } else {
           toleranceCounter = 0;

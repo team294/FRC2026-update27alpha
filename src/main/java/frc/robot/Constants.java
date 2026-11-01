@@ -34,7 +34,7 @@ import frc.robot.utilities.TrapezoidProfileBCR;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static final String bcrRobotCodeVersion = "Alpha6-A1";
+  public static final String bcrRobotCodeVersion = "Alpha7-A2";
 
   public enum CoordType {
     kRelative,              // Relative to current robot location/facing
@@ -800,13 +800,13 @@ public final class Constants {
     public static final double hood1VoltageToExtensionLengthSlope = (hood1SlopePointExtensionLength - hoodActuatorMinExtensionLength) / (hood1SlopePointAnalogVoltage - hoodMinimumAnalogVoltage);
     public static final double hood2VoltageToExtensionLengthSlope = (hood2SlopePointExtensionLength - hoodActuatorMinExtensionLength) / (hood2SlopePointAnalogVoltage - hoodMinimumAnalogVoltage);
 
-    public static final double hood1kP = 1.30;   // was 0.26 - volts / error in motor rps
+    public static final double hood1kP = 2.60;   // Beach Blitz Saturday was 1.30 - volts / error in motor rps
     public static final double hood1kI = 0.0;
     public static final double hood1kD = 0.0;
     public static final double hood1kS = 0.0;   // voltage output to overcome static friction (constant added to basic PID control to overcome static friction from having to move the hood)
     public static final double hood1kV = 0.0; // volts / desired motor rps
     public static final double hood1kA = 0.0;
-    public static final double hood2kP = 1.375;  // was 0.275 - volts / error in motor rps
+    public static final double hood2kP = 2.75;  // Beach Blitz Saturday was 1.375 - volts / error in motor rps
     public static final double hood2kI = 0.0;
     public static final double hood2kD = 0.0;
     public static final double hood2kS = 0.0;   // voltage output to overcome static friction (constant added to basic PID control to overcome static friction from having to move the hood)

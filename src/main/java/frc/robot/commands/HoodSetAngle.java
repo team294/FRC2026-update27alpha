@@ -137,7 +137,7 @@ public class HoodSetAngle extends Command {
       case runForever:
         return false;
       case waitForSetPoint:
-        if ( shooter.isHoodAtGoalAngle() ) {
+        if ( shooter.isHoodAtGoalAngle() || shooter.isHoodLocked()) {
           toleranceCounter++;
         } else {
           toleranceCounter = 0;

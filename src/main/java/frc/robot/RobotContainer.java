@@ -27,6 +27,7 @@ import com.ctre.phoenix6.SignalLogger;
 import choreo.util.ChoreoAllianceFlipUtil;
 import org.wpilib.math.geometry.Pose2d;
 import org.wpilib.math.geometry.Rotation2d;
+import org.wpilib.datalog.BooleanLogEntry;
 import org.wpilib.datalog.DataLog;
 import org.wpilib.datalog.DoubleLogEntry;
 import org.wpilib.system.DataLogManager;
@@ -85,6 +86,7 @@ public class RobotContainer {
   private final Command LEDAnimateRobotDisabled = (new LEDAnimateRobotDisabled(led));
 
   private boolean trenchSafe = false;
+  private boolean brownoutActive = false;
 
   // Dashboard table
   private final TelemetryTable dashboard = Telemetry.getTable("RobotContainer");
@@ -93,6 +95,7 @@ public class RobotContainer {
   // DataLog
   private final DataLog log = DataLogManager.getLog();
   private final DoubleLogEntry dLogRobotHeartBeat = new DoubleLogEntry(log, "/RobotContainer/HeartBeat");
+  private final BooleanLogEntry dLogIsBrownout = new BooleanLogEntry(log, "/RobotContainer/isBrownout");
   private long heartBeat = 0;
   private boolean dataLogIntialMessage = false;
 
@@ -104,6 +107,8 @@ public class RobotContainer {
 
     //TODO -- Re-enable if this won't crash the Systemcore
     // RobotController.setBrownoutVoltage(5.5);      // C5:  Reducing from default (6.3? V) to reduce brownouts
+    RobotController.setBrownoutVoltages(5.5, 6);
+    dLogIsBrownout.append(brownoutActive);
 
     // Start LEDEventUtil
     LEDEventUtil.initialize(led, LEDAnimateRobotDisabled);
@@ -429,7 +434,11 @@ public class RobotContainer {
       () -> allianceSelection.getAlliance() == Alliance.RED));
 
     // execute climb when switch flipped forwards
-    coP[7].onTrue(new ClimberSetPosition(ClimberPosition.CLIMB, climber).alongWith(new InstantCommand(() -> LEDEventUtil.sendEvent(LEDStripEvents.CLIMBING))));
+    // coP[7].onTrue(new ClimberSetPosition(ClimberPosition.CLIMB, climber).alongWith(new InstantCommand(() -> LEDEventUtil.sendEvent(LEDStripEvents.CLIMBING))));
+    
+    // lock / unlock hood
+    coP[7].onTrue(new HoodLockInPlace(shooter, true));
+    coP[7].onFalse(new HoodLockInPlace(shooter, false));
 
     // // Manually spin turret CW/CCW while held, stopping when released
     coP[8].whileTrue(new TurretSetPercent(turret, -TurretConstants.maxManualPercentOutput));
@@ -488,6 +497,11 @@ public class RobotContainer {
     if (DataLogUtil.isMyLogRotation(logRotationKey, RotationWhenDisabled.kSlow)) {
       dashboard.log("Trench Safe", intake.isIntakeDeploySafeForTrench() && shooter.isHoodSafeForTrench() && climber.isSafeForTrench());
       // dashboard.log("CPU Temp", RobotController.getCPUTemp());       // TODO Check in beta or later releases.  This currently crashes the robot code.
+    }
+
+    if (brownoutActive != RobotController.isBrownedOut()) {
+      brownoutActive = RobotController.isBrownedOut();
+      dLogIsBrownout.append(brownoutActive);
     }
 
     heartBeat++;
