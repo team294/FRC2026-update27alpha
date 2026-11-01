@@ -34,7 +34,7 @@ import frc.robot.utilities.TrapezoidProfileBCR;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static final String bcrRobotCodeVersion = "Alpha6-A1";
+  public static final String bcrRobotCodeVersion = "Alpha7-A2";
 
   public enum CoordType {
     kRelative,              // Relative to current robot location/facing
